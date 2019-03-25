@@ -2,8 +2,8 @@
 and may not be redistributed without written permission.*/
 
 //Using SDL, SDL_image, standard IO, and strings
-#include <SDL.h>
-#include <SDL_image.h>
+#include <SDL2/DL.h>
+#include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <string>
 
@@ -332,20 +332,28 @@ void Dot::move()
 	mPosX += mVelX;
 
 	//If the dot went too far to the left or right
-	if ((mPosX < 0) || (mPosX + DOT_WIDTH > SCREEN_WIDTH))
+	if ((mPosX < 0))
 	{
 		//Move back
 		mPosX -= mVelX;
+	}
+
+	if(mPosX + DOT_WIDTH > SCREEN_WIDTH){
+		mPosX -= DOT_WIDTH;
 	}
 
 	//Move the dot up or down
 	mPosY += mVelY;
 
 	//If the dot went too far up or down
-	if ((mPosY < 0) || (mPosY + DOT_HEIGHT > SCREEN_HEIGHT))
+	if ((mPosY < 0)))
 	{
 		//Move back
 		mPosY -= mVelY;
+	}
+
+	if(mPosY + DOT_HEIGHT > SCREEN_HEIGHT){
+		mPosY -= DOT_HEIGHT;
 	}
 }
 
@@ -429,7 +437,7 @@ void close()
 	//Free loaded images
 	gDotTexture.free();
 
-	//Destroy window	
+	//Destroy window
 	SDL_DestroyRenderer(gRenderer);
 	SDL_DestroyWindow(gWindow);
 	gWindow = NULL;
