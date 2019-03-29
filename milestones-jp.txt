@@ -1,0 +1,19 @@
+milestones for Project:
+	SDL Goals:
+			- Learn basics of SDL
+	Create an Enemy Class: 
+			- Create a virtual enemy class that can be inherited by each monster
+			- Each monster will be different in their stats and health 	and starting locations
+	Create an Item Class: 
+			- Make a virtual item class 
+			- Each item  will give the player character different stats and or abilities depending on the item
+			- They will be randomly placed on the map 
+
+final project location:
+https://github.com/vjsrinivas/final_project
+
+rubric:
+
+5 - game runs properly 
+20 - SDL used with data structures 
+15 - the code compiles with no errors
