@@ -1,0 +1,15 @@
+Milestones for Project:
+	SDL Goals:
+		- Learn basics of SDL
+		- Create very basic grid (feeds into "Map Goals")
+	
+	Map Goals:
+		- Create a simple map
+		- Create a map with different terrain (limiting character movement)
+		- Create a map that has items that can be picked up
+
+	Enemy Movement Logic (Dijstrika's)
+		- Make enemies move
+		- Calculate shortest path to preset position for one enemy; Make him move to it
+		- Apply this to all enemies
+		- Adjust movement speed based on enemy type and terrain
