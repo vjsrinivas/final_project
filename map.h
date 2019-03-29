@@ -1,5 +1,8 @@
 #include <vector>
 #include <stdio.h>
+#include <map>
+
+using namespace std;
 
 class Node{
 	public:
