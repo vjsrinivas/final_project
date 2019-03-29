@@ -1,6 +1,9 @@
 #include <vector>
 #include <stdio.h>
 #include <map>
+#include <iostream>
+#include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -12,7 +15,7 @@ class Node{
 class Map{
 	public:
 		Map();
-		Map(FILE*);
+		Map(ifstream& FILE);
 		Node* get(int item);
 		void clear();
 		map<int,int> terrain_key;
