@@ -9,7 +9,7 @@ class Heap{
 
 	int max_size;
 	int size;
-	bool ismax;
+	bool ismax = true;
 
 	public:
 
@@ -187,13 +187,13 @@ int main(){
 	Heap h(10);
 
 	h.insertKey(10);
-	h.insertKey(2);
-	h.insertKey(12);
-	h.insertKey(1);
 	h.insertKey(5);
-	h.insertKey(7);
+	h.insertKey(17);
+	h.insertKey(3);
+	h.insertKey(6);
+	h.insertKey(27);
 
-	h.maxHeapify(0);
+	//h.minHeapify(0);
 
 	for(int i = 0; i < 10; i++){
 		cout << h.vec[i] << " ";

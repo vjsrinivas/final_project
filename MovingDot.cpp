@@ -346,7 +346,7 @@ void Dot::move()
 	mPosY += mVelY;
 
 	//If the dot went too far up or down
-	if ((mPosY < 0)))
+	if ((mPosY < 0))
 	{
 		//Move back
 		mPosY -= mVelY;
