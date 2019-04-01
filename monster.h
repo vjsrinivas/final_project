@@ -9,7 +9,7 @@ class Monster{
 	~Monster();
 
 	Private:
-	string name;
+//	string name;
 	int health;
 	int damage;
 	int speed;
