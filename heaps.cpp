@@ -7,7 +7,6 @@ using namespace std;
 class Heap{
 	private:
 
-	vector<int> vec;
 	int max_size;
 	int size;
 	bool ismax;
@@ -15,6 +14,7 @@ class Heap{
 	public:
 
 	Heap(int capacity);
+	vector<int> vec;
 	void minHeapify(int i);
 	void maxHeapify(int i);
 	int parent(int i){
@@ -111,49 +111,94 @@ void Heap::deleteKey(int i){
 }
 
 void Heap::maxHeapify(int i){
-	int r = right(i);
-	int l = left(i);
-	int max = i;
-
-	if(l < size && vec[l] > vec[i]){
-		max = l;
-	}
-	if(r < size && vec[r] > vec[i]){
-		max = r;
-	}
-	if(max != i){
-		int temp = vec[max];
-		vec[max] = vec[i];
-		vec[i] = temp;
-		maxHeapify(max);
-	}
-
+	int r, l;
+	int temp;
 	ismax = true;
+
+	while(1){
+		l = left(i);
+		r = right(i);
+
+		if(l >= size){
+			return;
+		}
+
+		if(r == size || vec[l] >= vec[r]){
+			if(vec[l] > vec[i]){
+				temp = vec[l];
+				vec[l] = vec[i];
+				vec[i] = temp;
+				i = l;
+			}
+			else{
+				return;
+			}
+		}
+		else if(vec[r] > vec[i]){
+			temp = vec[r];
+			vec[r] = vec[i];
+			vec[i] = temp;
+			i = r;
+		}
+		else{
+			return;
+		}
+	}
 }
 
 void Heap::minHeapify(int i){
 
-	int r = right(i);
-	int l = left(i);
-	int min = i;
-
-	if(l < size && vec[l] < vec[i]){
-		min = l;
-	}
-	if(r < size && vec[r] < vec[i]){
-		min = r;
-	}
-	if(min != i){
-		int temp = vec[min];
-		vec[min] = vec[i];
-		vec[i] = temp;
-		minHeapify(min);
-	}
-
+	int r, l;
+	int temp;
 	ismax = false;
+
+	while(1){
+		l = left(i);
+		r = right(i);
+
+		if(l >= size){
+			return;
+		}
+
+		if(r == size || vec[l] <= vec[r]){
+			if(vec[l] < vec[i]){
+				temp = vec[l];
+				vec[l] = vec[i];
+				vec[i] = temp;
+				i = l;
+			}
+			else{
+				return;
+			}
+		}
+		else if(vec[r] < vec[i]){
+			temp = vec[r];
+			vec[r] = vec[i];
+			vec[i] = temp;
+			i = r;
+		}
+		else{
+			return;
+		}
+	}
 }
 
 int main(){
+	Heap h(10);
+
+	h.insertKey(10);
+	h.insertKey(2);
+	h.insertKey(12);
+	h.insertKey(1);
+	h.insertKey(5);
+	h.insertKey(7);
+
+	h.maxHeapify(0);
+
+	for(int i = 0; i < 10; i++){
+		cout << h.vec[i] << " ";
+	}
+	cout << endl;
 
 	return 0;
 }
