@@ -13,6 +13,7 @@ class Monster{
 	int health;
 	int damage;
 	int speed;
-	int position;		   
+	int position;	
+	void attack();
 }
 

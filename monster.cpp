@@ -18,7 +18,7 @@ class Skeleton : public Monster{
 		}
 }
 
-class Zombie : public Monaster{
+class Zombie : public Monster{
 	public:
 		Zombie(){
 //			this->name="Zombie"
@@ -30,6 +30,20 @@ class Zombie : public Monaster{
 		void attack(){
 			if(){
 			
+			}
+		}
+}
+
+class Boss : public Monster{
+	public:
+		Boss(){
+			this->health=4;
+			this->damage=4;
+			this->speed=1;
+		}
+		void attack(){
+			if(){
+
 			}
 		}
 }
