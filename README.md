@@ -16,7 +16,11 @@
 #### Josh Spangler:
 | Date (MM/DD/YY) | Time (hours) 	|
 |--------------------	|--------------------	|
-|                	|                	|
+| 3/22/2019 | 4 hours |
+| 3/25/2019 | 3 hours |
+| 3/26/2019 | 1 hour  |
+| 3/30/2019 | 2 hours |
+| 4/1/2019  | 1 hour  |
 
 #### John Pi:
 | Date (MM/DD/YY) | Time (hours) 	|
