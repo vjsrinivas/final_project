@@ -23,6 +23,10 @@ Rubric:
 	- Make main player move [10 pts]
 	- Create Map class and load it into SDL [10 pts]
  
+Short report on how this challenge went:
+I had difficulty understanding some of instructions (especially creating the rubric), but
+it provided me with some experience in documenting my software development process.
+ 
  Time Log:
 | Date (MM/DD/YY) | Time (hours) 	|
 |----------------	| -------------	|
