@@ -8,11 +8,12 @@ class Heap{
 	private:
 
 	int max_size;
-	int size;
+	//int size;
 	bool ismax = true;
 
 	public:
 
+	int size;
 	Heap(int capacity);
 	vector<int> vec;
 	void minHeapify(int i);
@@ -29,6 +30,8 @@ class Heap{
 	void insertKey(int n);
 	void deleteKey(int i);
 	int extract();
+	void convertMaxHeap();
+	void convertMinHeap();
 };
 
 Heap::Heap(int capacity){
@@ -96,6 +99,7 @@ void Heap::deleteKey(int i){
 		}
 
 		extract();
+
 	}
 	else{
 		vec[i] = INT_MAX;
@@ -111,94 +115,57 @@ void Heap::deleteKey(int i){
 }
 
 void Heap::maxHeapify(int i){
-	int r, l;
-	int temp;
-	ismax = true;
 
-	while(1){
-		l = left(i);
-		r = right(i);
-
-		if(l >= size){
-			return;
-		}
-
-		if(r == size || vec[l] >= vec[r]){
-			if(vec[l] > vec[i]){
-				temp = vec[l];
-				vec[l] = vec[i];
-				vec[i] = temp;
-				i = l;
-			}
-			else{
-				return;
-			}
-		}
-		else if(vec[r] > vec[i]){
-			temp = vec[r];
-			vec[r] = vec[i];
-			vec[i] = temp;
-			i = r;
-		}
-		else{
-			return;
-		}
+	int l = left(i);
+	int r = right(i);
+	int largest = i;
+	if(l < size && vec[l] > vec[i]){
+		largest = l;
+	}
+	if(r < size && vec[r] > vec[largest]){
+		largest = r;
+	}
+	if(largest != i){
+		int temp = vec[i];
+		vec[i] = vec[largest];
+		vec[largest] = temp;
+		maxHeapify(largest);
 	}
 }
 
+void Heap::convertMaxHeap(){
+	for(int i = (size-2)/2; i >= 0; i--){
+		maxHeapify(i);
+	}
+}
 void Heap::minHeapify(int i){
 
-	int r, l;
-	int temp;
-	ismax = false;
+	int l = left(i);
+	int r = right(i);
+	int smallest = i;
 
-	while(1){
-		l = left(i);
-		r = right(i);
+	if(l < size && vec[l] < vec[i]){
+		smallest = l;
+	}
+	if(r < size && vec[r] < vec[smallest]){
+		smallest = r;
+	}
+	if(smallest != i){
+		int temp = vec[i];
+		vec[i] = vec[smallest];
+		vec[smallest] = temp;
+		minHeapify(smallest);
+	}
+}
 
-		if(l >= size){
-			return;
-		}
-
-		if(r == size || vec[l] <= vec[r]){
-			if(vec[l] < vec[i]){
-				temp = vec[l];
-				vec[l] = vec[i];
-				vec[i] = temp;
-				i = l;
-			}
-			else{
-				return;
-			}
-		}
-		else if(vec[r] < vec[i]){
-			temp = vec[r];
-			vec[r] = vec[i];
-			vec[i] = temp;
-			i = r;
-		}
-		else{
-			return;
-		}
+void Heap::convertMinHeap(){
+	for(int i = (size-2)/2; i >= 0; i--){
+		minHeapify(i);
 	}
 }
 
 int main(){
-	Heap h(10);
 
-	h.insertKey(10);
-	h.insertKey(5);
-	h.insertKey(17);
-	h.insertKey(3);
-	h.insertKey(6);
-	h.insertKey(27);
-
-	//h.minHeapify(0);
-
-	for(int i = 0; i < 10; i++){
-		cout << h.vec[i] << " ";
-	}
-	cout << endl;
-
+	//inserts values as max heap automatically, call convertMinHeap to change, then convertMaxheap to change back if necessary
 	return 0;
 }
