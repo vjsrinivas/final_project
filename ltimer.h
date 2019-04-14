@@ -1,3 +1,6 @@
+#pragma once
+#include "game.h"
+
 //The application time based timer
 class LTimer
 {

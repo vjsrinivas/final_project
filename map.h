@@ -1,27 +1,40 @@
+#pragma once
 #include <vector>
 #include <stdio.h>
 #include <map>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "game.h"
+#include "ltexture.h"
 
 using namespace std;
 
 class Node{
 	public:
+		Node();
+		Node(int);
 		int terrain;
 };
 
 class Map{
 	public:
-		Map();
-		Map(ifstream& FILE);
-		Node* get(int item);
-		void clear();
-		map<int,int> terrain_key;
-
+		Map(int,int,SDL_Renderer*);
+		Map(string,SDL_Renderer*);
+		void ClearMap();
+		void LoadMap(int,int);
+		Node* GetNode(int,int);
+		void redraw(int, int);
+	
 	private:
+		void loadtextures(); 
+		SDL_Renderer* render;
 		int width;
 		int height;
-		vector<Node*> node_map;
+		int BOX_HEIGHT;
+		int BOX_WIDTH;
+		vector< vector<Node*> > node_map;
+		SDL_Rect src, dst;
+		map<int,int> terrain_key;
+		vector<LTexture*> textures;
 };

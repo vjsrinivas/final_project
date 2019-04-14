@@ -4,45 +4,14 @@
 	//Using SDL, SDL_image, standard IO, and strings
 #include <stdio.h>
 #include <string>
-#include "map.cpp"
-#include "ltexture.cpp"
+#include "map.h"
+#include "ltexture.h"
 #include "dot.cpp"
+#include "ltimer.h"
 
 	//Screen dimension constants
 	const int SCREEN_WIDTH = 640;
 	const int SCREEN_HEIGHT = 480;
-
-	//The application time based timer
-	class LTimer
-	{
-		public:
-			//Initializes variables
-			LTimer();
-
-			//The various clock actions
-			void start();
-			void stop();
-			void pause();
-			void unpause();
-
-			//Gets the timer's time
-			Uint32 getTicks();
-
-			//Checks the status of the timer
-			bool isStarted();
-			bool isPaused();
-
-		private:
-			//The clock time when the timer started
-			Uint32 mStartTicks;
-
-			//The ticks stored when the timer was paused
-			Uint32 mPausedTicks;
-
-			//The timer status
-			bool mPaused;
-			bool mStarted;
-	};
 
 	//Starts up SDL and creates window
 	bool init();
@@ -150,7 +119,7 @@ void close()
 int main( int argc, char* args[] )
 {
 	// Create map system:
-	Map* map_struct = new Map();
+	Map* map_struct;
 
 	//Start up SDL and create window
 	if( !init() )
@@ -166,6 +135,9 @@ int main( int argc, char* args[] )
 		}
 		else
 		{	
+			//Setup map (move to init later):
+			map_struct = new Map(30,30,gRenderer);
+
 			//Main loop flag
 			bool quit = false;
 
@@ -195,8 +167,8 @@ int main( int argc, char* args[] )
 				dot.move();
 
 				//Clear screen
-				SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
-				SDL_RenderClear( gRenderer );
+				//SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+				//SDL_RenderClear( gRenderer );
 
 				//Render objects
 				dot.render(gDotTexture, gRenderer);

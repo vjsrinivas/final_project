@@ -1,3 +1,6 @@
+#pragma once
+#include "game.h"
+
 //The dot that will move around on the screen
 	class Dot
 	{

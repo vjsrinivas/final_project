@@ -1,13 +1,9 @@
-#OBJS specifies which files to compile as part of the project
-OBJS = main.cpp
+C = g++
+CFLAGS = -Wall
+DEPS = game.h ltexture.h ltimer.h map.h
+OBJ = game.o ltexture.o ltimer.o map.o
 
-CC = g++
-
-COMPILER_FLAGS = -w
-
-LINKER_FLAGS = -lSDL2 -lSDL2_image
-
-OBJ_NAME = main
-
-all : $(OBJS)
-	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+%.o: %.cpp $(DEPS)
+	$(CC) $(CFLAGS) -c -o $@ $<
+main: $(OBJ)
+	g++ $(CFLAGS) -o $@ $^
