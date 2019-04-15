@@ -33,8 +33,8 @@ class Map{
 		int height;
 		int BOX_HEIGHT;
 		int BOX_WIDTH;
+
 		vector< vector<Node*> > node_map;
-		SDL_Rect src, dst;
-		map<int,int> terrain_key;
+		map<int,string> terrain_key;
 		vector<LTexture*> textures;
 };

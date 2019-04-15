@@ -136,8 +136,8 @@ int main( int argc, char* args[] )
 		else
 		{	
 			//Setup map (move to init later):
-			map_struct = new Map(30,30,gRenderer);
-
+			//map_struct = new Map(30,30,gRenderer);
+			map_struct = new Map("test_map.txt", gRenderer);
 			//Main loop flag
 			bool quit = false;
 
