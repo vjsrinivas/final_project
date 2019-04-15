@@ -145,3 +145,7 @@ void Map::ClearMap(){
 Node* Map::GetNode(int x, int y){
 	return node_map[x][y];
 }
+
+void Map::Redraw(int max_x, int max_y){
+	loadtextures();
+}

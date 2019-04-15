@@ -24,8 +24,8 @@ class Map{
 		void ClearMap();
 		void LoadMap(int,int);
 		Node* GetNode(int,int);
-		void redraw(int, int);
-	
+		void Redraw(int, int);
+			
 	private:
 		void loadtextures(); 
 		SDL_Renderer* render;
