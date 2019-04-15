@@ -1,9 +1,10 @@
 C = g++
 CFLAGS = -Wall
-DEPS = game.h ltexture.h ltimer.h map.h
-OBJ = game.o ltexture.o ltimer.o map.o
+LIBS = -lSDL2 -lSDL2_image
+DEPS = main.cpp game.h ltexture.h ltimer.h map.h
+OBJ = main.o game.o ltexture.o ltimer.o map.o
 
 %.o: %.cpp $(DEPS)
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) $(LIBS) -c -o $@ $<
 main: $(OBJ)
-	g++ $(CFLAGS) -o $@ $^
+	g++ $(CFLAGS) $(LIBS) -o $@ $^
