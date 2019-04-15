@@ -10,8 +10,8 @@
 #include "ltimer.h"
 
 	//Screen dimension constants
-	const int SCREEN_WIDTH = 640;
-	const int SCREEN_HEIGHT = 480;
+	const int SCREEN_WIDTH = 600;
+	const int SCREEN_HEIGHT = 600;
 
 	//Starts up SDL and creates window
 	bool init();
@@ -91,7 +91,7 @@
 		bool success = true;
 
 		//Load dot texture
-		if( !gDotTexture.loadFromFile(gRenderer, "cs317_char.bmp") )
+		if( !gDotTexture.loadFromFile(gRenderer, "./assets/characters/cs317_enemy_1.png") )
 	{
 		printf( "Failed to load dot texture!\n" );
 		success = false;

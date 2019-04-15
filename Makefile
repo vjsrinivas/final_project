@@ -8,3 +8,5 @@ OBJ = main.o game.o ltexture.o ltimer.o map.o
 	$(CC) $(CFLAGS) $(LIBS) -c -o $@ $<
 main: $(OBJ)
 	g++ $(CFLAGS) $(LIBS) -o $@ $^
+clean:
+	rm main.o game.o ltexture.o ltimer.o map.o

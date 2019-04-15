@@ -6,11 +6,11 @@
 	{
 		public:
 			//The dimensions of the dot
-			static const int DOT_WIDTH = 20;
-			static const int DOT_HEIGHT = 20;
+			static const int DOT_WIDTH = 30;
+			static const int DOT_HEIGHT = 30;
 
 			//Maximum axis velocity of the dot
-			static const int DOT_VEL = 10;
+			static const int DOT_VEL = 30;
 
 			//Initializes the variables
 			Dot();
