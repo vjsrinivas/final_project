@@ -30,17 +30,21 @@ Map::Map(string filename, SDL_Renderer* gRenderer){
 		
 		int map_buffer;
 		file_in >> map_x >> map_y;
+		cout << "x: " << map_x << "y: " << map_y <<  endl;
 		int tmp_x = 0;
 		vector<Node*> row;
 
+		int test = 0;
+
 		while(file_in >> map_buffer){
 			if(map_buffer != -1){
+				test++;
 				if(tmp_x == map_x){
 					tmp_x = 0;
 					node_map.push_back(row);
 					row.clear();
 				}
-				else{
+				else{	
 					Node* entry = new Node(map_buffer);
 					row.push_back(entry);
 					tmp_x++;
@@ -49,7 +53,7 @@ Map::Map(string filename, SDL_Renderer* gRenderer){
 			else
 				break;
 		}	
-	
+		cout << "Test: " << test << endl;
 		cout << "Map file read" << endl;
 	}
 	else{
@@ -59,7 +63,15 @@ Map::Map(string filename, SDL_Renderer* gRenderer){
 	render = gRenderer;
 	//LoadMap(map_x, map_y);
 	//manually load into node_map
-	//
+	for(int i=0; i < node_map.size(); i++){
+		cout << node_map[i].size() << endl;
+		for(int j=0; j < node_map[i].size(); j++){
+			
+			//cout << node_map[i][j]->terrain << " ";
+		}
+		cout << endl;
+	}
+
 	loadtextures();
 }
 
@@ -132,4 +144,8 @@ void Map::ClearMap(){
 
 Node* Map::GetNode(int x, int y){
 	return node_map[x][y];
+}
+
+void Map::Redraw(int max_x, int max_y){
+	loadtextures();
 }
