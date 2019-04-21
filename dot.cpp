@@ -13,7 +13,7 @@ Dot::Dot()
 	controller = new Player();
 }
 
-Dot::Dot(const int SCREEN_WIDTH, const int SCREEN_HEIGHT){
+Dot::Dot(const int SCREEN_WIDTH, const int SCREEN_HEIGHT, std::string texturePath){
   //Initialize the offsets
 	mPosX = 0;
 	mPosY = 0;
@@ -22,14 +22,14 @@ Dot::Dot(const int SCREEN_WIDTH, const int SCREEN_HEIGHT){
 	mVelX = 0;
 	mVelY = 0;
  
-	controller = new Player();
+	controller = new Player(texturePath);
 
   //set screen size:
   this->SCREEN_WIDTH = SCREEN_WIDTH;
   this->SCREEN_HEIGHT = SCREEN_HEIGHT;
 }
 
-void Dot::handleEvent( SDL_Event& e, int movesLeft )
+void Dot::handleEvent( SDL_Event& e)
 {
 	//If a key was pressed
 	/*
@@ -49,7 +49,7 @@ void Dot::handleEvent( SDL_Event& e, int movesLeft )
 	
 	if(e.type == SDL_KEYUP && e.key.repeat == 0)
 	{
-		movesLeft--;
+		controller->movesLeft--;
 		//cout << "key let go" << endl;
 		//Adjust the velocity
 		switch( e.key.keysym.sym )
@@ -62,14 +62,16 @@ void Dot::handleEvent( SDL_Event& e, int movesLeft )
 	}
 }
 
-void Dot::move(int& player_x, int& player_y)
+void Dot::move()
 {
 	if(mVelX != 0){
 		mPosX += mVelX;
+		controller->pos.x += mVelX/30;
 		mVelX = 0;
 	}
 	else if(mVelY != 0){
 		mPosY += mVelY;
+		controller->pos.y += mVelY/30;
 		mVelY = 0;
 	}
 
@@ -83,6 +85,7 @@ void Dot::move(int& player_x, int& player_y)
 	{
 		//Move back
 		mPosX -= mVelX;
+		controller->pos.y -= mVelX/30;
 	}
 
 	//Move the dot up or down
@@ -93,7 +96,9 @@ void Dot::move(int& player_x, int& player_y)
 	{
 		//Move back
 		mPosY -= mVelY;
+		controller->pos.x -= mVelY/30;
 	}
+	controller->printPos();
 }
 
 void Dot::render(LTexture& gDotTexture, SDL_Renderer* gRenderer)

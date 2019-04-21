@@ -18,13 +18,13 @@
 
 			//Initializes the variables
 			Dot();
-      Dot(const int, const int);
+		    Dot(const int, const int, std::string);
 
 			//Takes key presses and adjusts the dot's velocity
-			void handleEvent( SDL_Event& e, int );
+			void handleEvent( SDL_Event& e);
 
 			//Moves the dot
-			void move(int&, int&);
+			void move();
 
 			//Shows the dot on the screen
 			void render(LTexture& gDotTexture, SDL_Renderer* gRenderer);
