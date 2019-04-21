@@ -55,8 +55,8 @@ LTexture::LTexture()
 		return mTexture != NULL;
 	}
 
-#ifdef _SDL_TTF_H
-	bool LTexture::loadFromRenderedText(SDL_Renderer& gRenderer, std::string textureText, SDL_Color textColor )
+//#ifdef _SDL_TTF_H
+	bool LTexture::loadFromRenderedText(SDL_Renderer* gRenderer, std::string textureText, SDL_Color textColor, TTF_Font* gFont )
 	{
 		//Get rid of preexisting texture
 		free();
@@ -90,7 +90,7 @@ LTexture::LTexture()
 		//Return success
 		return mTexture != NULL;
 	}
-#endif
+//#endif
 
 	void LTexture::free()
 	{

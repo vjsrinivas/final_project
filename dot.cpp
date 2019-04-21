@@ -9,6 +9,8 @@ Dot::Dot()
 	//Initialize the velocity
 	mVelX = 0;
 	mVelY = 0;
+
+	controller = new Player();
 }
 
 Dot::Dot(const int SCREEN_WIDTH, const int SCREEN_HEIGHT){
@@ -20,12 +22,14 @@ Dot::Dot(const int SCREEN_WIDTH, const int SCREEN_HEIGHT){
 	mVelX = 0;
 	mVelY = 0;
  
+	controller = new Player();
+
   //set screen size:
   this->SCREEN_WIDTH = SCREEN_WIDTH;
   this->SCREEN_HEIGHT = SCREEN_HEIGHT;
 }
 
-void Dot::handleEvent( SDL_Event& e )
+void Dot::handleEvent( SDL_Event& e, int movesLeft )
 {
 	//If a key was pressed
 	/*
@@ -42,9 +46,11 @@ void Dot::handleEvent( SDL_Event& e )
 	}*/
 	//If a key was released
 	//else if( e.type == SDL_KEYUP && e.key.repeat == 0 )
+	
 	if(e.type == SDL_KEYUP && e.key.repeat == 0)
 	{
-		cout << "key let go" << endl;
+		movesLeft--;
+		//cout << "key let go" << endl;
 		//Adjust the velocity
 		switch( e.key.keysym.sym )
 		{
@@ -56,7 +62,7 @@ void Dot::handleEvent( SDL_Event& e )
 	}
 }
 
-void Dot::move()
+void Dot::move(int& player_x, int& player_y)
 {
 	if(mVelX != 0){
 		mPosX += mVelX;

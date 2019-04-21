@@ -1,5 +1,6 @@
 #pragma once
 #include "game.h"
+#include <SDL2/SDL_ttf.h>
 
 class LTexture
 	{
@@ -13,10 +14,10 @@ class LTexture
 			//Loads image at specified path
 			bool loadFromFile(SDL_Renderer* gRenderer, std::string path );
 			
-			#ifdef _SDL_TTF_H
+			//#ifdef _SDL_TTF_H
 			//Creates image from font string
-			bool loadFromRenderedText(SDL_Renderer& gRenderer, std::string textureText, SDL_Color textColor );
-			#endif
+			bool loadFromRenderedText(SDL_Renderer* gRenderer, std::string textureText, SDL_Color textColor, TTF_Font* );
+			//#endif
 
 			//Deallocates texture
 			void free();

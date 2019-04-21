@@ -4,13 +4,32 @@
 	//Using SDL, SDL_image, standard IO, and strings
 #include <stdio.h>
 #include <string>
-#include "map.h"
-#include "ltexture.h"
 #include "dot.cpp"
 #include "ltimer.h"
+#include "ltexture.h"
+#include "map.h"
+	class GameState{
+		public:
+			bool playing = 1;
+			bool isPlayOver = 0;
+			int movesLeft = 0;
+			int score;
+			void calculateMoves(Map* map);
+		private:
+	};
+
+	void GameState::calculateMoves(Map* map){
+		
+	}
+
+	struct KillLog{
+		string enemyName;
+		int enemeyID;
+	};
+
 
 	//Screen dimension constants
-	const int SCREEN_WIDTH = 600;
+	const int SCREEN_WIDTH = 1200;
 	const int SCREEN_HEIGHT = 600;
 
 	//Starts up SDL and creates window
@@ -116,6 +135,25 @@ void close()
 	SDL_Quit();
 }
 
+void HUD(LTexture& text, string str_say){
+	TTF_Init();
+	TTF_Font *gFont = TTF_OpenFont("lazy.ttf", 28);
+	
+	if(gFont == NULL){
+		printf("TTF_Init: %s\n", TTF_GetError());
+		exit(2);
+	}
+
+	string score_text = "score: ";        
+	SDL_Color textColor = { 255, 255, 255, 0 };
+	/*
+	if(!text.loadFromRenderedText(gRenderer, str_say, textColor, gFont)){
+		
+	}*/
+
+
+}
+
 int main( int argc, char* args[] )
 {
 	// Create map system:
@@ -138,44 +176,71 @@ int main( int argc, char* args[] )
 			//Setup map (move to init later):
 			//map_struct = new Map(30,30,gRenderer);
 			map_struct = new Map("test_map.txt", gRenderer);
-			//Main loop flag
-			bool quit = false;
 
 			//Event handler
 			SDL_Event e;
 
 			//The dot that will be moving around on the screen
 			Dot dot(SCREEN_WIDTH, SCREEN_HEIGHT);
+			SDL_Rect bottomViewport;
+			SDL_Rect upperViewport;
+
+			GameState* game = new GameState();
+			Player* mainPlayer = new Player();
+			LTexture text_place;
 
 			//While application is running
-			while( !quit )
+			while( game->playing )
 			{
 				//Handle events on queue
-				while( SDL_PollEvent( &e ) != 0 )
-				{
-					//User requests quit
-					if( e.type == SDL_QUIT )
+				if(game->isPlayOver){
+					// do combat stuff here:
+
+				}
+				else{
+					while( SDL_PollEvent( &e ) != 0 )
 					{
-						quit = true;
+						//User requests quit
+						if( e.type == SDL_QUIT )
+						{
+							game->playing = true;
+						}	
+
+						//Handle input for the dot
+						dot.handleEvent( e, game->movesLeft );
 					}
 
-					//Handle input for the dot
-					dot.handleEvent( e );
+					//Move the dot
+					dot.move(mainPlayer->pos.x, mainPlayer->pos.y);
+					game->calculateMoves(map_struct);
 				}
-
-				//Move the dot
-				dot.move();
-
-				//Clear screen
-				//SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
-				//SDL_RenderClear( gRenderer );
+					
+				//Clear screen	
+				SDL_RenderClear( gRenderer );
 				map_struct->Redraw(0,0);
+
 				//Render objects
 				dot.render(gDotTexture, gRenderer);
 
+				/*
+				upperViewport.x = 0;
+				upperViewport.y = 0;
+				upperViewport.w = SCREEN_WIDTH;
+				upperViewport.h = (SCREEN_HEIGHT*4)/5;
+				SDL_RenderSetViewport(gRenderer, &upperViewport);
+
+				bottomViewport.x = 0;
+				bottomViewport.y = SCREEN_HEIGHT-(SCREEN_HEIGHT/5);
+				bottomViewport.w = SCREEN_WIDTH;
+				bottomViewport.h = SCREEN_HEIGHT/5;
+				SDL_RenderSetViewport(gRenderer, &bottomViewport);
+				*/
+
+				HUD(text_place, "hey");
 				//Update screen
 				SDL_RenderPresent( gRenderer );
 			}
+			delete game;
 		}
 	}
 

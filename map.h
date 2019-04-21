@@ -25,7 +25,7 @@ class Map{
 		void LoadMap(int,int);
 		Node* GetNode(int,int);
 		void Redraw(int, int);
-			
+
 	private:
 		void loadtextures(); 
 		SDL_Renderer* render;

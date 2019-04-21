@@ -1,8 +1,8 @@
 C = g++
 CFLAGS = -Wall
 LIBS = -lSDL2 -lSDL2_image -lSDL2_ttf
-DEPS = ltexture.h ltimer.h map.h game.h main.cpp
-OBJ =  ltexture.o ltimer.o map.o game.o main.o
+DEPS = 16_true_type_fonts.cpp 
+OBJ = 16_true_type_fonts.o
 
 %.o: %.cpp $(DEPS)
 	$(CC) $(CFLAGS) $(LIBS) -c -o $@ $<
