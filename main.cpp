@@ -4,22 +4,36 @@
 	//Using SDL, SDL_image, standard IO, and strings
 #include <stdio.h>
 #include <string>
-#include "dot.cpp"
+#include "dot.h"
 #include "ltimer.h"
 #include "ltexture.h"
 #include "map.h"
+	
 	class GameState{
 		public:
+			~GameState();
+			GameState();
+			GameState(string enemyFile);
 			bool playing = 1;
-			bool isPlayOver = 0;
-			int movesLeft = 0;
 			int score;
-			void calculateMoves(Map* map);
+			void moveEnemies(Map* map);
+			bool isPlayOver;
+			void addEnemy(string texturePath);
+			void removeEnemy(int position);
 		private:
+			vector<Player*> enemies;
 	};
 
-	void GameState::calculateMoves(Map* map){
-		
+	GameState::GameState() {}
+	GameState::~GameState() {}
+
+	void GameState::moveEnemies(Map* map){
+		//dijistraks movement	
+	}
+
+	void GameState::addEnemy(string texturePath){
+		Player* newEnemy = new Player(texturePath);
+		enemies.push_back(newEnemy);
 	}
 
 	struct KillLog{
@@ -108,13 +122,9 @@
 	{
 		//Loading success flag
 		bool success = true;
-
-		//Load dot texture
-		if( !gDotTexture.loadFromFile(gRenderer, "./assets/characters/cs317_enemy_1.png") )
-	{
+	
 		printf( "Failed to load dot texture!\n" );
-		success = false;
-	}
+		//success = false;
 
 	return success;
 }
@@ -152,6 +162,7 @@ void HUD(LTexture& text, string str_say){
 	}*/
 
 
+
 }
 
 int main( int argc, char* args[] )
@@ -181,12 +192,14 @@ int main( int argc, char* args[] )
 			SDL_Event e;
 
 			//The dot that will be moving around on the screen
-			Dot dot(SCREEN_WIDTH, SCREEN_HEIGHT);
+			Dot dot(SCREEN_WIDTH, SCREEN_HEIGHT, "./assets/characters/cs317_enemy_1.png");
+			printf("loading main character.. path: %s\n", dot.controller->texturePath.c_str());
+			if(!gDotTexture.loadFromFile(gRenderer, dot.controller->texturePath))
+				exit(-1);
 			SDL_Rect bottomViewport;
 			SDL_Rect upperViewport;
 
 			GameState* game = new GameState();
-			Player* mainPlayer = new Player();
 			LTexture text_place;
 
 			//While application is running
@@ -207,12 +220,12 @@ int main( int argc, char* args[] )
 						}	
 
 						//Handle input for the dot
-						dot.handleEvent( e, game->movesLeft );
+						dot.handleEvent( e );
 					}
 
 					//Move the dot
-					dot.move(mainPlayer->pos.x, mainPlayer->pos.y);
-					game->calculateMoves(map_struct);
+					dot.move();
+					game->moveEnemies(map_struct);
 				}
 					
 				//Clear screen	
