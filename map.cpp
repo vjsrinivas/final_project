@@ -1,5 +1,4 @@
 #include "map.h"
-#include "ltexture.h"
 
 Node::Node(){}
 
@@ -118,7 +117,6 @@ void Map::loadtextures(){
 	}
 	else{
 		for(map<int,string>::iterator it=terrain_key.begin(); it != terrain_key.end(); it++){
-			cout << it->second << endl;
 			LTexture* texture = new LTexture();
 
 			if(texture->loadFromFile(render, it->second)){

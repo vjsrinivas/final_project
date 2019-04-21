@@ -1,5 +1,7 @@
 #pragma once
 #include "game.h"
+#include "player.h"
+#include "ltexture.h"
 
 //The dot that will move around on the screen
 	class Dot
@@ -11,16 +13,18 @@
 
 			//Maximum axis velocity of the dot
 			static const int DOT_VEL = 30;
+			
+			Player* controller;
 
 			//Initializes the variables
 			Dot();
       Dot(const int, const int);
 
 			//Takes key presses and adjusts the dot's velocity
-			void handleEvent( SDL_Event& e );
+			void handleEvent( SDL_Event& e, int );
 
 			//Moves the dot
-			void move();
+			void move(int&, int&);
 
 			//Shows the dot on the screen
 			void render(LTexture& gDotTexture, SDL_Renderer* gRenderer);
