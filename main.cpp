@@ -188,7 +188,7 @@ int main( int argc, char* args[] )
 		{	
 			//Setup map (move to init later):
 			//map_struct = new Map(30,30,gRenderer);
-			map_struct = new Map("test_map.txt", gRenderer);
+			map_struct = new Map(SCREEN_WIDTH, SCREEN_HEIGHT, "test_map.txt", gRenderer);
 
 			//Event handler
 			SDL_Event e;
@@ -232,24 +232,10 @@ int main( int argc, char* args[] )
 					
 				//Clear screen	
 				SDL_RenderClear( gRenderer );
-				map_struct->Redraw(0,0);
+				map_struct->Redraw(dot.controller->pos.x,dot.controller->pos.y);
 
 				//Render objects
 				dot.render(gDotTexture, gRenderer);
-
-				/*
-				upperViewport.x = 0;
-				upperViewport.y = 0;
-				upperViewport.w = SCREEN_WIDTH;
-				upperViewport.h = (SCREEN_HEIGHT*4)/5;
-				SDL_RenderSetViewport(gRenderer, &upperViewport);
-
-				bottomViewport.x = 0;
-				bottomViewport.y = SCREEN_HEIGHT-(SCREEN_HEIGHT/5);
-				bottomViewport.w = SCREEN_WIDTH;
-				bottomViewport.h = SCREEN_HEIGHT/5;
-				SDL_RenderSetViewport(gRenderer, &bottomViewport);
-				*/
 
 				//HUD(text_place, "hey");
 				//Update screen

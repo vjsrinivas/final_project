@@ -6,12 +6,13 @@ Node::Node(int terr){
 	terrain = terr;
 }
 
-Map::Map(string filename, SDL_Renderer* gRenderer){
+Map::Map(int width, int height, string filename, SDL_Renderer* gRenderer){
+	WIN_WIDTH = width;
+	WIN_HEIGHT = height;
+
 	ifstream file_in(filename.c_str());
 	int map_x, map_y;
 
-	cout << "Trying to open file" << endl;
-	
 	if(file_in.is_open()){
 		cout << "Opened up file" << endl;
 		//read in texture paths:
@@ -29,48 +30,37 @@ Map::Map(string filename, SDL_Renderer* gRenderer){
 		
 		int map_buffer;
 		file_in >> map_x >> map_y;
-		cout << "x: " << map_x << "y: " << map_y <<  endl;
+		
 		int tmp_x = 0;
-		vector<Node*> row;
-
-		int test = 0;
+		int tmp_y = 0;
+		
+		//resize vector<vector> 3x3:
+		for(int i=0; i < map_y; i++){
+			vector<Node*> row;
+			row.resize(map_y,NULL);
+			node_map.push_back(row);
+		}
 
 		while(file_in >> map_buffer){
 			if(map_buffer != -1){
-				test++;
 				if(tmp_x == map_x){
-					tmp_x = 0;
-					node_map.push_back(row);
-					row.clear();
+					tmp_x=0;
+					tmp_y++;
 				}
-				else{	
-					Node* entry = new Node(map_buffer);
-					row.push_back(entry);
-					tmp_x++;
-				}
+
+				tmp_x++;
+				Node* entry = new Node(map_buffer);
+				node_map[tmp_y][tmp_x-1] = entry;
 			}
 			else
 				break;
 		}	
-		cout << "Test: " << test << endl;
-		cout << "Map file read" << endl;
 	}
 	else{
 		printf("Error: file is not opened\n");	
 	}
 
 	render = gRenderer;
-	//LoadMap(map_x, map_y);
-	//manually load into node_map
-	for(int i=0; i < node_map.size(); i++){
-		//cout << node_map[i].size() << endl;
-		for(int j=0; j < node_map[i].size(); j++){
-			
-			//cout << node_map[i][j]->terrain << " ";
-		}
-		cout << endl;
-	}
-
 	loadtextures();
 }
 
@@ -126,10 +116,28 @@ void Map::loadtextures(){
 				cout << "err" << endl;
 		}
 
-		for(int i=0; i < node_map.size(); i++){
-			for(int j=0; j < node_map[i].size(); j++){
-				LTexture* texture = textures[node_map[i][j]->terrain];
-				texture->render(render,j*30,i*30);
+		if(node_map.size() < WIN_WIDTH){
+			for(int i=0; i < node_map.size(); i++){
+				if(node_map[i].size() < WIN_HEIGHT){
+					for(int j=0; j < node_map[i].size(); j++){
+						LTexture* texture = textures[node_map[i][j]->terrain];
+						texture->render(render, j*30,i*30);
+					}
+				}
+				else{
+					for(int j=0; j < WIN_HEIGHT; j++){
+						LTexture* texture = textures[node_map[i][j]->terrain];
+						texture->render(render, j*30,i*30);
+					}
+				}
+			}
+		}
+		else{
+			for(int i=0; i < WIN_WIDTH; i++){
+				for(int j=0; j < WIN_HEIGHT; j++){
+					LTexture* texture = textures[node_map[i][j]->terrain];
+					texture->render(render,j*30,i*30);
+				}
 			}
 		}
 	}
@@ -145,7 +153,9 @@ Node* Map::GetNode(int x, int y){
 }
 
 void Map::Redraw(int max_x, int max_y){
-	//loadtextures();
+	
+
+
 	for(int i=0; i < node_map.size(); i++){
 		for(int j=0; j < node_map[i].size(); j++){
 			LTexture* texture = textures[node_map[i][j]->terrain];

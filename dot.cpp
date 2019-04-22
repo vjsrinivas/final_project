@@ -83,7 +83,7 @@ void Dot::move()
 	{
 		//Move back
 		mPosX -= mVelX;
-		controller->pos.y -= mVelX/30;
+		controller->pos.x -= mVelX/30;
 	}
 
 	//Move the dot up or down
@@ -94,12 +94,12 @@ void Dot::move()
 	{
 		//Move back
 		mPosY -= mVelY;
-		controller->pos.x -= mVelY/30;
+		controller->pos.y -= mVelY/30;
 	}
 
-	printf("mposx: %i | mposy: %i | mvelx: %i | mvely: %i | dotheight: %i | screenheight %i\n", mPosX, mPosY, mVelX, mVelY, DOT_HEIGHT, SCREEN_HEIGHT);
-	controller->printPos();
-	printf("Real location is: %i %i\n", mPosX, mPosY);
+	//printf("mposx: %i | mposy: %i | mvelx: %i | mvely: %i | dotheight: %i | screenheight %i\n", mPosX, mPosY, mVelX, mVelY, DOT_HEIGHT, SCREEN_HEIGHT);
+	//controller->printPos();
+	//printf("Real location is: %i %i\n", mPosX, mPosY);
 	mVelX = 0;
 	mVelY = 0;
 }
