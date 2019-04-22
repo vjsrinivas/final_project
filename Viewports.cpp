@@ -54,7 +54,7 @@ class LButton{
 	public:
 		LButton();
 
-		void setPosition(int x, int y)
+		void setPosition(int x, int y);
 
 		void handleEvent(SDL_Event *e);
 
