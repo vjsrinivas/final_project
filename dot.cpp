@@ -67,12 +67,10 @@ void Dot::move()
 	if(mVelX != 0){
 		mPosX += mVelX;
 		controller->pos.x += mVelX/30;
-		mVelX = 0;
 	}
 	else if(mVelY != 0){
 		mPosY += mVelY;
 		controller->pos.y += mVelY/30;
-		mVelY = 0;
 	}
 
 	////
@@ -94,13 +92,16 @@ void Dot::move()
 	//If the dot went too far up or down
 	if( ( mPosY < 0 ) || ( mPosY + DOT_HEIGHT > SCREEN_HEIGHT ) )
 	{
-		printf("moving back.. %i | %i | %i\n", mVelY, DOT_HEIGHT, SCREEN_HEIGHT);
 		//Move back
 		mPosY -= mVelY;
 		controller->pos.x -= mVelY/30;
 	}
+
+	printf("mposx: %i | mposy: %i | mvelx: %i | mvely: %i | dotheight: %i | screenheight %i\n", mPosX, mPosY, mVelX, mVelY, DOT_HEIGHT, SCREEN_HEIGHT);
 	controller->printPos();
 	printf("Real location is: %i %i\n", mPosX, mPosY);
+	mVelX = 0;
+	mVelY = 0;
 }
 
 void Dot::render(LTexture& gDotTexture, SDL_Renderer* gRenderer)
