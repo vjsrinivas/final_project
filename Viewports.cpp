@@ -17,9 +17,9 @@ const int TOTAL_BUTTONS = 10;
 //button constants, ten along bottom viewport
 
 enum LButtonSprite{
-	BUTTON_SPRITE_MOUSE_DOWN = 0;
-	BUTTON_SPRITE_MOUSE_UP = 1;
-}
+	BUTTON_SPRITE_MOUSE_DOWN = 0,
+	BUTTON_SPRITE_MOUSE_UP = 1
+};
 //handles events for clicking
 
 //Texture wrapper class
@@ -38,17 +38,17 @@ class LTexture{
 
 		void setAlpha(Uint8 alpha);
 
-		void render(int x, int y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RenderFlip flip = SDL_FLIP_NONE);
+		void render(int x, int y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
-		int GetWidth();
-		int GetHeight();
+		int getWidth();
+		int getHeight();
 
 	private:
 		SDL_Texture* mTexture;
 
 		int mWidth;
 		int mHeight;
-}
+};
 
 class LButton{
 	public:
@@ -63,7 +63,7 @@ class LButton{
 	private:
 		SDL_Point mPosition;
 		LButtonSprite mCurrentSprite;
-}
+};
 
 //Starts up SDL and creates window
 bool init();
@@ -86,7 +86,7 @@ SDL_Renderer* gRenderer = NULL;
 //Current displayed texture
 SDL_Texture* gTexture = NULL;
 
-SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL];
+SDL_Rect gSpriteClips[4];
 LTexture gButtonSpriteSheetTexture;
 
 LButton gButtons[TOTAL_BUTTONS];
@@ -174,7 +174,7 @@ int LTexture::getHeight(){
 	return mHeight;
 }
 
-LButton::Lbutton(){
+LButton::LButton(){
 	mPosition.x = 0;
 	mPosition.y = 0;
 
@@ -297,7 +297,7 @@ bool loadMedia()
 		success = false;
 	}
 	else{
-		for(int i = 0; i < BUTTON_SPRITE_TOTAL; i++){
+		for(int i = 0; i < 4; i++){
 			gSpriteClips[i].x = 0;
 			gSpriteClips[i].y = SCREEN_HEIGHT / 5;
 			gSpriteClips[i].w = BUTTON_WIDTH;
@@ -447,7 +447,7 @@ int main(int argc, char* args[])
 				//SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);
 
 				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-				SDL_renderClear(gRenderer);
+				SDL_RenderClear(gRenderer);
 
 				for(int i = 0; i < TOTAL_BUTTONS; i++){
 					gButtons[i].render();
