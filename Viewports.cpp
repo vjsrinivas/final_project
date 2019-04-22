@@ -285,14 +285,14 @@ bool loadMedia()
 	bool success = true;
 
 	//Load texture
-	gTexture = loadTexture("viewport2.png");
+	gTexture = loadTexture("viewport.png");
 	if (gTexture == NULL)
 	{
 		printf("Failed to load texture image!\n");
 		success = false;
 	}
 
-	if(!gButtonSpriteSheetTexture.loadFromFile("button2.png")){
+	if(!gButtonSpriteSheetTexture.loadFromFile("button.png")){
 		printf("Failed to load button sprite texture!\n");
 		success = false;
 	}
@@ -441,11 +441,11 @@ int main(int argc, char* args[])
 				bottomViewport.w = SCREEN_WIDTH;
 				bottomViewport.h = SCREEN_HEIGHT / 5;
 				SDL_RenderSetViewport(gRenderer, &bottomViewport);
-				*/
+
 
 				//Render texture to screen
-				//SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);
-
+				SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);
+				*/
 				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 				SDL_RenderClear(gRenderer);
 
