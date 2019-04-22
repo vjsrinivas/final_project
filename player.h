@@ -4,13 +4,13 @@
 
 struct Item{
 	std::string itemName;
-	int damage;
-	int defense;
+	int damage = 0;
+	int defense = 0;
 };
 
 struct Position{
-	int x;
-	int y;
+	int x = 0;
+	int y = 0;
 };
 
 class Player{

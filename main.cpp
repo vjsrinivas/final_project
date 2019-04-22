@@ -43,7 +43,7 @@
 
 
 	//Screen dimension constants
-	const int SCREEN_WIDTH = 1200;
+	const int SCREEN_WIDTH = 600;
 	const int SCREEN_HEIGHT = 600;
 
 	//Starts up SDL and creates window
@@ -93,7 +93,9 @@
 			else
 			{
 				//Create vsynced renderer for window
-				gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+				//gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+				
+				gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED);
 				if( gRenderer == NULL )
 				{
 					printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -200,6 +202,7 @@ int main( int argc, char* args[] )
 			SDL_Rect upperViewport;
 
 			GameState* game = new GameState();
+			game->isPlayOver = false;
 			LTexture text_place;
 
 			//While application is running
@@ -208,7 +211,7 @@ int main( int argc, char* args[] )
 				//Handle events on queue
 				if(game->isPlayOver){
 					// do combat stuff here:
-
+					game->moveEnemies(map_struct);
 				}
 				else{
 					while( SDL_PollEvent( &e ) != 0 )
@@ -216,7 +219,7 @@ int main( int argc, char* args[] )
 						//User requests quit
 						if( e.type == SDL_QUIT )
 						{
-							game->playing = true;
+							game->playing = false;
 						}	
 
 						//Handle input for the dot
@@ -225,7 +228,6 @@ int main( int argc, char* args[] )
 
 					//Move the dot
 					dot.move();
-					game->moveEnemies(map_struct);
 				}
 					
 				//Clear screen	
@@ -249,7 +251,7 @@ int main( int argc, char* args[] )
 				SDL_RenderSetViewport(gRenderer, &bottomViewport);
 				*/
 
-				HUD(text_place, "hey");
+				//HUD(text_place, "hey");
 				//Update screen
 				SDL_RenderPresent( gRenderer );
 			}

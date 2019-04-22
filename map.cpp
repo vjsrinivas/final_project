@@ -63,7 +63,7 @@ Map::Map(string filename, SDL_Renderer* gRenderer){
 	//LoadMap(map_x, map_y);
 	//manually load into node_map
 	for(int i=0; i < node_map.size(); i++){
-		cout << node_map[i].size() << endl;
+		//cout << node_map[i].size() << endl;
 		for(int j=0; j < node_map[i].size(); j++){
 			
 			//cout << node_map[i][j]->terrain << " ";
@@ -145,5 +145,11 @@ Node* Map::GetNode(int x, int y){
 }
 
 void Map::Redraw(int max_x, int max_y){
-	loadtextures();
+	//loadtextures();
+	for(int i=0; i < node_map.size(); i++){
+		for(int j=0; j < node_map[i].size(); j++){
+			LTexture* texture = textures[node_map[i][j]->terrain];
+			texture->render(render,j*30,i*30);
+		}
+	}
 }
