@@ -14,6 +14,6 @@ class Item{
 	string Name;
 	int damage;
 	int health;
-	int location;
-
+//	int location;
+	void pickup();
 }
