@@ -1,6 +1,7 @@
 #include<iostream>
 #include <climits>
 #include <vector>
+#include "item.h"
 
 using namespace std;
 
@@ -15,7 +16,7 @@ class Heap{
 
 	int size;
 	Heap(int capacity);
-	vector<int> vec;
+	vector<Item> vec;
 	void minHeapify(int i);
 	void maxHeapify(int i);
 	int parent(int i){
@@ -47,7 +48,7 @@ void Heap::insertKey(int n){
 
 	if(ismax == false){
 
-		while(i != 0 && vec[parent(i)] > vec[i]){
+		while(i != 0 && vec[parent(i)]->damage > vec[i]->damage){
 			int temp = vec[i];
 			vec[i] = vec[parent(i)];
 			vec[parent(i)] = temp;
@@ -55,7 +56,7 @@ void Heap::insertKey(int n){
 		}
 	}
 	else{
-		while(i != 0 && vec[i] > vec[parent(i)]){
+		while(i != 0 && vec[i]->damage > vec[parent(i)]->damage){
 			int temp = vec[i];
 			vec[i] = vec[parent(i)];
 			vec[parent(i)] = temp;
@@ -91,7 +92,7 @@ int Heap::extract(){
 void Heap::deleteKey(int i){
 	if(ismax == false){
 		vec[i] = INT_MIN;
-		while(i != 0 && vec[parent(i)] > vec[i]){
+		while(i != 0 && vec[parent(i)]->damage > vec[i]->damage){
 			int temp = vec[i];
 			vec[i] = vec[parent(i)];
 			vec[parent(i)] = temp;
@@ -103,7 +104,7 @@ void Heap::deleteKey(int i){
 	}
 	else{
 		vec[i] = INT_MAX;
-		while(i != 0 && vec[parent(i)] < vec[i]){
+		while(i != 0 && vec[parent(i)]->damage < vec[i]->damage){
 			int temp = vec[i];
 			vec[i] = vec[parent(i)];
 			vec[parent(i)] = temp;
@@ -119,10 +120,10 @@ void Heap::maxHeapify(int i){
 	int l = left(i);
 	int r = right(i);
 	int largest = i;
-	if(l < size && vec[l] > vec[i]){
+	if(l < size && vec[l]->damage > vec[i]->damage){
 		largest = l;
 	}
-	if(r < size && vec[r] > vec[largest]){
+	if(r < size && vec[r]->damage > vec[largest]->damage){
 		largest = r;
 	}
 	if(largest != i){
@@ -144,10 +145,10 @@ void Heap::minHeapify(int i){
 	int r = right(i);
 	int smallest = i;
 
-	if(l < size && vec[l] < vec[i]){
+	if(l < size && vec[l]->damage < vec[i]->damage){
 		smallest = l;
 	}
-	if(r < size && vec[r] < vec[smallest]){
+	if(r < size && vec[r]->damage < vec[smallest]->damage){
 		smallest = r;
 	}
 	if(smallest != i){

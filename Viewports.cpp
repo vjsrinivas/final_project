@@ -109,7 +109,7 @@ void close()
 	SDL_DestroyTexture(gTexture);
 	gTexture = NULL;
 
-	//Destroy window	
+	//Destroy window
 	SDL_DestroyRenderer(gRenderer);
 	SDL_DestroyWindow(gWindow);
 	gWindow = NULL;
