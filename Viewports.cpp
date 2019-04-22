@@ -285,14 +285,14 @@ bool loadMedia()
 	bool success = true;
 
 	//Load texture
-	gTexture = loadTexture("viewport.png");
+	gTexture = loadTexture("viewport2.png");
 	if (gTexture == NULL)
 	{
 		printf("Failed to load texture image!\n");
 		success = false;
 	}
 
-	if(!gButtonSpriteSheetTexture.loadFromFile("button.png")){
+	if(!gButtonSpriteSheetTexture.loadFromFile("button2.png")){
 		printf("Failed to load button sprite texture!\n");
 		success = false;
 	}
