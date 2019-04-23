@@ -17,8 +17,10 @@ const int TOTAL_BUTTONS = 10;
 //button constants, ten along bottom viewport
 
 enum LButtonSprite{
-	BUTTON_SPRITE_MOUSE_DOWN = 0,
-	BUTTON_SPRITE_MOUSE_UP = 1
+	BUTTON_SPRITE_MOUSE_OUT = 0,
+	BUTTON_SPRITE_MOUSE_OVER_MOTION = 1,
+  BUTTON_SPRITE_MOUSE_UP = 2,
+  BUTTON_SPRITE_MOUSE_DOWN = 3
 };
 //handles events for clicking
 
@@ -188,10 +190,10 @@ void LButton::setPosition(int x, int y){
 
 void LButton::handleEvent(SDL_Event* e){
 
-	if(e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP){
+	if(e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP){
 		int x, y;
 		SDL_GetMouseState(&x, &y);
-
+   
 		bool inside = true;
 		//check if mouse is inside buttons
 		if(x < mPosition.x){
@@ -210,11 +212,24 @@ void LButton::handleEvent(SDL_Event* e){
 		}
 
 		if(!inside){
-			mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
-		}
+			mCurrentSprite = BUTTON_SPRITE_MOUSE_OUT;
+    }
 
 		else{
-			mCurrentSprite = BUTTON_SPRITE_MOUSE_DOWN;
+      switch(e->type){
+        
+        case SDL_MOUSEMOTION:
+          mCurrentSprite = BUTTON_SPRITE_MOUSE_OVER_MOTION;
+          break;
+        
+        case SDL_MOUSEBUTTONDOWN:
+          mCurrentSprite = BUTTON_SPRITE_MOUSE_DOWN;
+          break;
+          
+        case SDL_MOUSEBUTTONUP:
+          mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
+          break;
+			}
 		}
 	}
 }
@@ -222,6 +237,7 @@ void LButton::handleEvent(SDL_Event* e){
 
 void LButton::render(){
 	gButtonSpriteSheetTexture.render(mPosition.x, mPosition.y, &gSpriteClips[mCurrentSprite]);
+ printf("hewwo\n");
 }
 
 
@@ -368,20 +384,21 @@ SDL_Texture* loadTexture(std::string path)
 int main(int argc, char* args[])
 {
 	//Start up SDL and create window
+ 
 	if (!init())
 	{
 		printf("Failed to initialize!\n");
 	}
 	else
 	{
-		//Load media
+    //Load media
 		if (!loadMedia())
 		{
 			printf("Failed to load media!\n");
 		}
 		else
 		{
-			//Main loop flag
+      //Main loop flag
 			bool quit = false;
 
 			//Event handler
@@ -393,14 +410,14 @@ int main(int argc, char* args[])
 				//Handle events on queue
 				while (SDL_PollEvent(&e) != 0)
 				{
-					//User requests quit
+          //User requests quit
 					if (e.type == SDL_QUIT)
 					{
 						quit = true;
 					}
 
 					for(int i = 0; i < TOTAL_BUTTONS; i++){
-						gButtons[i].handleEvent(&e);
+            gButtons[i].handleEvent(&e);
 					}
 
 				}
@@ -434,7 +451,7 @@ int main(int argc, char* args[])
 
 
 				//Bottom viewport
-				/*
+				
 				SDL_Rect bottomViewport;
 				bottomViewport.x = 0;
 				bottomViewport.y = SCREEN_HEIGHT-(SCREEN_HEIGHT / 5);
@@ -445,7 +462,7 @@ int main(int argc, char* args[])
 
 				//Render texture to screen
 				SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);
-				*/
+				
 				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 				SDL_RenderClear(gRenderer);
 
