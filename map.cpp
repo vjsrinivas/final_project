@@ -173,15 +173,17 @@ void Map::Redraw(int x, int y, int radius){
 	}
 
 	step_x=0;
-	step_y=0;
+	step_y=1;
 
-	for(int i=0; i <node_map.size()*node_map[0].size(); i++){
-		if(node_map[0].size()-1==step_x){
+	for(int i=0; i < node_map.size()*node_map[0].size(); i++){
+		if(node_map[0].size()==step_x){
 			step_x=0;
 			step_y++;
 		}
 		step_x++;
 
+		LTexture* texture = textures[textures.size()-1];
+		texture->render(render, (step_x-1)*30,(step_y-1)*30);
 		std::cout << "("<<step_x<<" "<<step_y<<")"<<std::endl;
 	}
 
