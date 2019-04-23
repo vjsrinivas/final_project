@@ -4,11 +4,12 @@
 		//Using SDL, SDL_image, standard IO, and strings
 #include <stdio.h>
 #include <string>
-#include "dot.h"
 #include "ltimer.h"
 #include "ltexture.h"
 #include "map.h"
-		
+	
+using namespace std;
+
 		class GameState{
 			public:
 				~GameState();
@@ -232,7 +233,7 @@
 						}
 
 						//Move the dot
-						dot.move();
+						dot.move(map_struct);
 					}
 						
 					//Clear screen	
