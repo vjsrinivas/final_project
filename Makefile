@@ -1,15 +1,15 @@
  C = g++
  CFLAGS = -Wall
  LIBS = -lSDL2 -lSDL2_image -lSDL2_ttf
- DEPS = Viewports.cpp
- OBJ = Viewports.o
+ DEPS = Windows.cpp
+ OBJ = Windows.o
 
 %.o: %.cpp $(DEPS)
 	$(CC) $(CFLAGS) $(LIBS) -c -o $@ $<
-main: $(OBJ)
+Windows: $(OBJ)
 	g++ $(CFLAGS) $(LIBS) -o $@ $^
 clean:
-	rm Viewports.o
+	rm Windows.o
 
 
 
