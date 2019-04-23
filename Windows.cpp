@@ -604,7 +604,7 @@ void LButton::handleEvent(SDL_Event* e)
 			case SDL_MOUSEBUTTONUP:
         //call equip function here????
 				mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
-        printf("sword was selected\n");
+        printf("item was equipped\n");
 				break;
 			}
 		}
