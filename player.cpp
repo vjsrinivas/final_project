@@ -1,7 +1,7 @@
 #include "player.h"
 
 void Player::printPos(){
-	printf("Player is at: [x=%i, y=%i]\n",pos.x, pos.y); 
+	printf("Player is at: [x=%i, y=%i]\n",pos.x, pos.y);
 }
 
 Player::Player(){

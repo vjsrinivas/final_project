@@ -7,6 +7,7 @@
 #include <string>
 #include "game.h"
 #include "ltexture.h"
+#include "dot.h"
 
 using namespace std;
 
@@ -15,24 +16,32 @@ class Node{
 		Node();
 		Node(int);
 		int terrain;
+		Player* currChar = NULL;
 };
 
 class Map{
 	public:
 		Map(int,int,SDL_Renderer*);
-		Map(string,SDL_Renderer*);
+		Map(int,int,int,string,SDL_Renderer*);
 		void ClearMap();
 		void LoadMap(int,int);
 		Node* GetNode(int,int);
-		void Redraw(int, int);
-
-	private:
-		void loadtextures(); 
-		SDL_Renderer* render;
+		void Redraw(int, int, int);
 		int width;
 		int height;
-		int BOX_HEIGHT;
-		int BOX_WIDTH;
+
+	private:
+		void loadtextures();
+		void loadtextures(int,int,int);
+		SDL_Renderer* render;
+		
+		int min_render_x = 0;
+		int min_render_y = 0;
+		int max_render_x = 0;
+		int max_render_y = 0;
+
+		int WIN_HEIGHT = 0;
+		int WIN_WIDTH = 0;
 
 		vector< vector<Node*> > node_map;
 		map<int,string> terrain_key;
