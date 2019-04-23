@@ -153,29 +153,11 @@ Node* Map::GetNode(int x, int y){
 	return node_map[x][y];
 }
 
-void Map::Redraw(int x, int y, int radius){
-	//compute which blocks to render:
-	vector<Position> torender;
-	Position original; original.x = 0; original.y = 0;
-	torender.resize((2*radius+1)*(2*radius+1), original);
-	
-	int step_x = -1*(radius);
-	int step_y = -1*(radius);
-
-	for(int i=0; i < (2*radius+1); i++){
-		for(int j=0; j < (2*radius+1); j++){
-			Position pos; pos.x = step_x; pos.y = step_y+y;
-			torender[j+(2*radius+1)*i] = pos;
-			step_x++;
-		}
-		step_x = -1*radius+1;
-		step_y++;
-	}
-
+void Map::Redraw(int x, int y){
 	for(int i=0; i < node_map.size(); i++){
 		for(int j=0; j < node_map[i].size(); j++){
 			//cout << "trying: [" << i << ", " << j << "]" <<  endl;
-				if((j < y+radius && j > y-radius) && (i < x+radius && i > x-radius)){
+				if(j < y+radius && j > y-radius && i < x+radius || i > x-radius){
 					LTexture* texture = textures[node_map[i][j]->terrain];
 					texture->render(render,j*30,i*30);
 				}
