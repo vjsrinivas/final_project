@@ -21,7 +21,7 @@
 				void addEnemy(string texturePath);
 				void removeEnemy(int position);
 			private:
-				vector<Player*> enemies;
+				vector<Dot*> enemies;
 		};
 
 		GameState::GameState() {}
