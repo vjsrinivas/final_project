@@ -30,6 +30,7 @@
 | 4/14/2019 | 2 hours |
 | 4/15/2019 | 2 hours |
 | 4/22/2019 | 4 hours |
+| 4/23/2019 | 2 hours |
 
 #### John Pi:
 | Date (MM/DD/YY) | Time (hours) 	|
