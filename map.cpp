@@ -6,20 +6,20 @@
 		terrain = terr;
 	}
 
-	Map::Map(int x, int y, int radius, string filename, SDL_Renderer* gRenderer){
-		ifstream file_in(filename.c_str());
+	Map::Map(int x, int y, int radius, std::string filename, SDL_Renderer* gRenderer){
+		std::ifstream file_in(filename.c_str());
 		int map_x, map_y;
 
 		if(file_in.is_open()){
-			cout << "Opened up file" << endl;
+			std::cout << "Opened up file" << std::endl;
 			//read in texture paths:
 			int texture_id = 0;
-			string texture_path;
+			std::string texture_path;
 			
 			while(file_in >> texture_id){
 				if(texture_id != -1){
 					file_in >> texture_path;
-					terrain_key.insert(pair<int,string>(texture_id,texture_path));
+					terrain_key.insert(std::pair<int,std::string>(texture_id,texture_path));
 				}
 				else
 					break;
@@ -29,14 +29,14 @@
 			file_in >> map_x >> map_y;
 			width = map_x;
 			height = map_y;
-			//cout << "x:y:" << map_x << " " << map_y << endl;
+			//std::cout << "x:y:" << map_x << " " << map_y << std::endl;
 
 			int tmp_x = 0;
 			int tmp_y = 0;
 			
 			//resize vector<vector> 3x3:
 			for(int i=0; i < map_y; i++){
-				vector<Node*> row;
+				std::vector<Node*> row;
 				row.resize(map_x,NULL);
 				node_map.push_back(row);
 			}
@@ -51,7 +51,7 @@
 				tmp_x++;
 				Node* entry = new Node(map_buffer);
 				node_map[tmp_y][tmp_x-1] = entry;
-				//cout << "tmpx: " << tmp_x << " tmpy: " << tmp_y << endl;
+				//std::cout << "tmpx: " << tmp_x << " tmpy: " << tmp_y << std::endl;
 			}
 			else
 				break;
@@ -61,14 +61,14 @@
 		printf("Error: file is not opened\n");	
 	}
 
-	//cout << "test" << endl;
+	//std::cout << "test" << std::endl;
 
 	/*
 	for(int i=0; i < node_map.size(); i++){
 		for(int j=0; j < node_map[i].size(); j++){
-			cout << node_map[i][j]->terrain << " ";
+			std::cout << node_map[i][j]->terrain << " ";
 		}
-		cout << endl;
+		std::cout << std::endl;
 	}*/
 
 	render = gRenderer;
@@ -84,7 +84,7 @@ Map::Map(int width, int height, SDL_Renderer* gRenderer){
 void Map::LoadMap(int width, int height){
 	if(width > 0 && height > 0){
      for(int i=0; i < height; i++){
-			vector<Node*> width_v;
+			std::vector<Node*> width_v;
 			for(int j=0; j < width; j++){
 				Node* default_value = new Node(0); 
 				width_v.push_back(default_value);
@@ -93,7 +93,7 @@ void Map::LoadMap(int width, int height){
 		}
 	}
 	else{
-		cout << "Error! Map size is not above zero" << endl;
+		std::cout << "Error! Map size is not above zero" << std::endl;
 		exit(-1);
 	}
 
@@ -106,7 +106,7 @@ void Map::loadtextures(){
 	if(dirt->loadFromFile(render, "./assets/dirt.png"))
 		textures.push_back(dirt);
 	else
-		cout << "err" << endl;
+		std::cout << "err" << std::endl;
 
 	for(int i=0; i < node_map.size(); i++){
 		for(int j=0; j < node_map[i].size(); j++){
@@ -116,23 +116,23 @@ void Map::loadtextures(){
 }
 
 void Map::loadtextures(int x, int y, int radius){
-		for(map<int,string>::iterator it=terrain_key.begin(); it != terrain_key.end(); it++){
+		for(std::map<int,std::string>::iterator it=terrain_key.begin(); it != terrain_key.end(); it++){
 			LTexture* texture = new LTexture();
 
 			if(texture->loadFromFile(render, it->second)){
 				textures.push_back(texture);
 			}
 			else
-				cout << "err" << endl;
+				std::cout << "err" << std::endl;
 		}
 
-		cout << "node size: " << node_map.size() << " " << node_map[0].size() << endl;
+		std::cout << "node size: " << node_map.size() << " " << node_map[0].size() << std::endl;
 		
 		//i <- y
 		//j <- x
 		for(int i=0; i < node_map.size(); i++){
 			for(int j=0; j < node_map[i].size(); j++){
-				//cout << "trying: [" << i << ", " << j << "]" <<  endl;
+				//std::cout << "trying: [" << i << ", " << j << "]" <<  std::endl;
 				if(j < y+radius && j > y-radius && i < x+radius || i > x-radius){
 					LTexture* texture = textures[node_map[i][j]->terrain];
 					texture->render(render,j*30,i*30);
@@ -155,7 +155,7 @@ Node* Map::GetNode(int x, int y){
 
 void Map::Redraw(int x, int y, int radius){
 	//compute which blocks to render:
-	vector<Position> torender;
+	std::vector<Position> torender;
 	Position original; original.x = 0; original.y = 0;
 	torender.resize((2*radius+1)*(2*radius+1), original);
 	
@@ -172,31 +172,137 @@ void Map::Redraw(int x, int y, int radius){
 		step_y++;
 	}
 
-	
+	step_x=0;
+	step_y=0;
+
+	for(int i=0; i <node_map.size()*node_map[0].size(); i++){
+		if(node_map[0].size()-1==step_x){
+			step_x=0;
+			step_y++;
+		}
+		step_x++;
+
+		std::cout << "("<<step_x<<" "<<step_y<<")"<<std::endl;
+	}
 
 	for(int i=0; i < torender.size(); i++){
 		Position resultpos;
 		resultpos.x = x+torender[i].x; resultpos.y = y+torender[i].y;
 		if(resultpos.x >= 0 && resultpos.y >= 0){
-			//cout << resultpos.x << " " << resultpos.y << endl;
+			//std::cout << resultpos.x << " " << resultpos.y << std::endl;
 			LTexture* texture = textures[node_map[resultpos.x][resultpos.y]->terrain];
 			texture->render(render, resultpos.x*30, resultpos.y*30);
 		}
 	}
-//	cout << endl;
+}
 
+
+Dot::Dot()
+{
+	//Initialize the offsets
+	mPosX = 0;
+	mPosY = 0;
+
+	//Initialize the velocity
+	mVelX = 0;
+	mVelY = 0;
+
+	controller = new Player();
+}
+
+Dot::Dot(const int SCREEN_WIDTH, const int SCREEN_HEIGHT, std::string texturePath){
+  //Initialize the offsets
+	mPosX = 0;
+	mPosY = 0;
+
+	//Initialize the velocity
+	mVelX = 0;
+	mVelY = 0;
+ 
+	controller = new Player(texturePath);
+
+  //set screen size:
+  this->SCREEN_WIDTH = SCREEN_WIDTH;
+  this->SCREEN_HEIGHT = SCREEN_HEIGHT;
+}
+
+void Dot::handleEvent( SDL_Event& e)
+{
+	//If a key was pressed
 	/*
-	for(int i=0; i < node_map.size(); i++){
-		for(int j=0; j < node_map[i].size(); j++){
-			//cout << "trying: [" << i << ", " << j << "]" <<  endl;
-				if((j < y+radius && j > y-radius) && (i < x+radius && i > x-radius)){
-					LTexture* texture = textures[node_map[i][j]->terrain];
-					texture->render(render,j*30,i*30);
-				}
-				else{
-					LTexture* texture = textures[textures.size()-1];
-					texture->render(render,j*30,i*30);
-				}
+	if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
+	{
+		//Adjust the velocity
+		switch( e.key.keysym.sym )
+		{
+			case SDLK_UP: mVelY -= DOT_VEL; break;
+			case SDLK_DOWN: mVelY += DOT_VEL; break;
+			case SDLK_LEFT: mVelX -= DOT_VEL; break;
+			case SDLK_RIGHT: mVelX += DOT_VEL; break;
 		}
 	}*/
+	//If a key was released
+	//else if( e.type == SDL_KEYUP && e.key.repeat == 0 )
+	
+	if(e.type == SDL_KEYUP && e.key.repeat == 0)
+	{
+		controller->movesLeft--;
+		//std::cout << "key let go" << std::endl;
+		//Adjust the velocity
+		switch( e.key.keysym.sym )
+		{
+			case SDLK_UP: mVelY -= DOT_VEL; break;
+			case SDLK_DOWN: mVelY += DOT_VEL; break;
+			case SDLK_LEFT: mVelX -= DOT_VEL; break;
+			case SDLK_RIGHT: mVelX += DOT_VEL; break;
+		}
+	}
+}
+
+void Dot::move(Map* map)
+{
+	if(mVelX != 0){
+		mPosX += mVelX;
+		controller->pos.x += mVelX/30;
+	}
+	else if(mVelY != 0){
+		mPosY += mVelY;
+		controller->pos.y += mVelY/30;
+	}
+
+	////
+	////
+	//Move the dot left or right
+	//mPosX += mVelX;
+
+	//If the dot went too far to the left or right
+	if( ( mPosX < 0 ) || ( mPosX + DOT_WIDTH > SCREEN_WIDTH ) )
+	{
+		//Move back
+		mPosX -= mVelX;
+		controller->pos.x -= mVelX/30;
+	}
+
+	//Move the dot up or down
+	//mPosY += mVelY;
+
+	//If the dot went too far up or down
+	if( ( mPosY < 0 ) || ( mPosY + DOT_HEIGHT > SCREEN_HEIGHT ) )
+	{
+		//Move back
+		mPosY -= mVelY;
+		controller->pos.y -= mVelY/30;
+	}
+
+	//printf("mposx: %i | mposy: %i | mvelx: %i | mvely: %i | dotheight: %i | screenheight %i\n", mPosX, mPosY, mVelX, mVelY, DOT_HEIGHT, SCREEN_HEIGHT);
+	//controller->printPos();
+	//printf("Real location is: %i %i\n", mPosX, mPosY);
+	mVelX = 0;
+	mVelY = 0;
+}
+
+void Dot::render(LTexture& gDotTexture, SDL_Renderer* gRenderer)
+{
+	//Show the dot
+	gDotTexture.render(gRenderer, mPosX, mPosY );
 }
