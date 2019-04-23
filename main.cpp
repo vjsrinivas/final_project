@@ -32,7 +32,7 @@
 		}
 
 		void GameState::addEnemy(string texturePath){
-			Player* newEnemy = new Player(texturePath);
+			Dot* newEnemy = new Dot(1080,1080, texturePath);
 			enemies.push_back(newEnemy);
 		}
 
