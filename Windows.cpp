@@ -14,7 +14,7 @@ const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
 //Total windows
-const int TOTAL_WINDOWS = 3;
+const int TOTAL_WINDOWS = 2;
 
 class LWindow
 {
@@ -23,7 +23,7 @@ public:
 	LWindow();
 
 	//Creates window
-	bool init();
+	bool init(int i);
 
 	//Handles window events
 	void handleEvent(SDL_Event& e);
@@ -177,15 +177,19 @@ LWindow::LWindow(){
   mHeight = 0;
 }
 
-bool LWindow::init(){
+bool LWindow::init(int i){
   mWindow = SDL_CreateWindow("Button Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
   
   if(mWindow != NULL){
     mMouseFocus = true;
     mKeyboardFocus = true;
     mWidth = SCREEN_WIDTH;
-    mHeight = SCREEN_HEIGHT;
-    
+    if(i == 1){
+      mHeight = 240;
+    }
+    else{
+      mHeight = SCREEN_HEIGHT;
+    }
     mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     
     if(mRenderer == NULL){
@@ -621,7 +625,7 @@ bool init()
 		}
 
 		//Create window
-		if (!gWindows[0].init())
+		if (!gWindows[0].init(0))
 		{
 			printf("Window 0 could not be created!\n");
 			success = false;
@@ -658,10 +662,10 @@ bool loadMedia()
 		//gButtons[1].setPosition(SCREEN_WIDTH - BUTTON_WIDTH, 0);
 		//gButtons[2].setPosition(0, SCREEN_HEIGHT - BUTTON_HEIGHT);
 		//gButtons[3].setPosition(SCREEN_WIDTH - BUTTON_WIDTH, SCREEN_HEIGHT - BUTTON_HEIGHT);
-    gButtons[0].setPosition(0, SCREEN_HEIGHT / 2);
-    gButtons[1].setPosition(BUTTON_WIDTH, SCREEN_HEIGHT / 2);
-    gButtons[2].setPosition(BUTTON_WIDTH * 2, SCREEN_HEIGHT / 2);
-    gButtons[3].setPosition(BUTTON_WIDTH * 3, SCREEN_HEIGHT / 2);	
+    gButtons[0].setPosition(0, 0);
+    gButtons[1].setPosition(BUTTON_WIDTH, 0);
+    gButtons[2].setPosition(BUTTON_WIDTH * 2, 0);
+    gButtons[3].setPosition(BUTTON_WIDTH * 3, 0);	
   }
 
 	return success;
@@ -694,7 +698,7 @@ int main(int argc, char* args[])
 	{
 		for (int i = 1; i < TOTAL_WINDOWS; ++i)
 		{
-			gWindows[i].init();
+			gWindows[i].init(i);
 		}
     
     //Load media
