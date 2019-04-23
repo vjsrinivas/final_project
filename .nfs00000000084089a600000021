@@ -68,22 +68,17 @@ private:
 };
 
 //Button constants
-const int BUTTON_WIDTH = 128;
-const int BUTTON_HEIGHT = 128;
-const int TOTAL_BUTTONS = 10;
+const int BUTTON_WIDTH = SCREEN_WIDTH / 4;
+const int BUTTON_HEIGHT = 200;
+const int TOTAL_BUTTONS = 4;
 
 enum LButtonSprite
 {
-  BUTTON_SPRITE_MOUSE_DOWN = 0,
-  BUTTON_SPRITE_MOUSE_UP = 1,
-  BUTTON_SPRITE_TOTAL = 2
-  /*
 	BUTTON_SPRITE_MOUSE_OUT = 0,
 	BUTTON_SPRITE_MOUSE_OVER_MOTION = 1,
 	BUTTON_SPRITE_MOUSE_DOWN = 2,
 	BUTTON_SPRITE_MOUSE_UP = 3,
 	BUTTON_SPRITE_TOTAL = 4
-  */
 };
 
 //Texture wrapper class
@@ -146,10 +141,8 @@ public:
 	void handleEvent(SDL_Event* e);
 
 	//Shows button sprite
-	void swordRender();
+	void render();
 
-  void shieldRender();
-  
 private:
 	//Top left position
 	SDL_Point mPosition;
@@ -381,8 +374,6 @@ SDL_Window* gWindow = NULL;
 //Mouse button sprites
 SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL];
 LTexture gButtonSpriteSheetTexture;
-LTexture shieldTexture;
-LTexture swordTexture;
 
 //Buttons objects
 LButton gButtons[TOTAL_BUTTONS];
@@ -539,7 +530,7 @@ LButton::LButton()
 	mPosition.x = 0;
 	mPosition.y = 0;
 
-	mCurrentSprite = BUTTON_SPRITE_MOUSE_UP; //was out
+	mCurrentSprite = BUTTON_SPRITE_MOUSE_OUT;
 }
 
 void LButton::setPosition(int x, int y)
@@ -584,41 +575,34 @@ void LButton::handleEvent(SDL_Event* e)
 		//Mouse is outside button
 		if (!inside)
 		{
-			mCurrentSprite = BUTTON_SPRITE_MOUSE_UP; //was out 
+			mCurrentSprite = BUTTON_SPRITE_MOUSE_OUT;
 		}
 		//Mouse is inside button
 		else
 		{
-       
 			//Set mouse over sprite
 			switch (e->type)
 			{
-			//case SDL_MOUSEMOTION:
-				//mCurrentSprite = BUTTON_SPRITE_MOUSE_OVER_MOTION;
-				//break;
+			case SDL_MOUSEMOTION:
+				mCurrentSprite = BUTTON_SPRITE_MOUSE_OVER_MOTION;
+				break;
 
 			case SDL_MOUSEBUTTONDOWN:
 				mCurrentSprite = BUTTON_SPRITE_MOUSE_DOWN;
 				break;
 
 			case SDL_MOUSEBUTTONUP:
-        //call equip function here????
 				mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
-        printf("sword was selected\n");
 				break;
 			}
 		}
 	}
 }
 
-void LButton::swordRender()
+void LButton::render()
 {
 	//Show current button sprite
-	swordTexture.render(mPosition.x, mPosition.y, &gSpriteClips[mCurrentSprite]);//was gButtonSpriteSheetTexture
-}
-
-void LButton::shieldRender(){
-  shieldTexture.render(mPosition.x, mPosition.y, &gSpriteClips[mCurrentSprite]);
+	gButtonSpriteSheetTexture.render(mPosition.x, mPosition.y, &gSpriteClips[mCurrentSprite]);
 }
 
 bool init()
@@ -657,47 +641,31 @@ bool loadMedia()
 	bool success = true;
 
 	//Load sprites
-	if (!swordTexture.loadFromFile("sword.png")) //was gButtonSpriteSheetTexture
+	if (!gButtonSpriteSheetTexture.loadFromFile("button2.png"))
 	{
-		printf("Failed to load sword sprite texture!\n");
+		printf("Failed to load button sprite texture!\n");
 		success = false;
 	}
-  else if(!shieldTexture.loadFromFile("shield.png")){
-    printf("Failed to load shield sprite texture!\n");
-    success = false;
-  }
 	else
 	{
 		//Set sprites
-		/*for (int i = 0; i < BUTTON_SPRITE_TOTAL; ++i)
+		for (int i = 0; i < BUTTON_SPRITE_TOTAL; ++i)
 		{
 			gSpriteClips[i].x = 0;
 			gSpriteClips[i].y = i * 200;
 			gSpriteClips[i].w = BUTTON_WIDTH;
 			gSpriteClips[i].h = BUTTON_HEIGHT;
-		}*/
-    gSpriteClips[0].x = 0;
-    gSpriteClips[0].y = 0;
-    gSpriteClips[0].w = BUTTON_WIDTH;
-    gSpriteClips[0].h = BUTTON_HEIGHT;
-    gSpriteClips[1].x = 0;
-    gSpriteClips[1].y = 0;
-    gSpriteClips[1].w = BUTTON_WIDTH;
-    gSpriteClips[1].h = BUTTON_HEIGHT;
+		}
 
 		//Set buttons in corners
 		//gButtons[0].setPosition(0, 0);
 		//gButtons[1].setPosition(SCREEN_WIDTH - BUTTON_WIDTH, 0);
 		//gButtons[2].setPosition(0, SCREEN_HEIGHT - BUTTON_HEIGHT);
 		//gButtons[3].setPosition(SCREEN_WIDTH - BUTTON_WIDTH, SCREEN_HEIGHT - BUTTON_HEIGHT);
-    for(int i = 0; i < TOTAL_BUTTONS; i++){
-      if(i < 5){
-        gButtons[i].setPosition(BUTTON_WIDTH * i, 0);
-      }
-      else{
-        gButtons[i].setPosition(BUTTON_WIDTH * (i-5), BUTTON_HEIGHT * 2);
-      }
-    }
+    gButtons[0].setPosition(0, 0);
+    gButtons[1].setPosition(BUTTON_WIDTH, 0);
+    gButtons[2].setPosition(BUTTON_WIDTH * 2, 0);
+    gButtons[3].setPosition(BUTTON_WIDTH * 3, 0);	
   }
 
 	return success;
@@ -817,14 +785,8 @@ int main(int argc, char* args[])
 				//Render buttons
 				for (int i = 0; i < TOTAL_BUTTONS; ++i)
 				{
-          //if item is shield render shield if item is sword render sword
-					if(i < 5){
-            gButtons[i].swordRender();
-				  }
-          else{
-            gButtons[i].shieldRender();
-          }
-        }
+					gButtons[i].render();
+				}
 
 				//Update screen
 				SDL_RenderPresent(gWindows[1].mRenderer);
