@@ -46,11 +46,13 @@ public:
 	bool hasKeyboardFocus();
 	bool isMinimized();
 	bool isShown();
+ 
+  SDL_Renderer* mRenderer;
 
 private:
 	//Window data
 	SDL_Window* mWindow;
-	SDL_Renderer* mRenderer;
+	//SDL_Renderer* mRenderer;
 	int mWindowID;
 
 	//Window dimensions
@@ -66,7 +68,7 @@ private:
 };
 
 //Button constants
-const int BUTTON_WIDTH = 300;
+const int BUTTON_WIDTH = SCREEN_WIDTH / 4;
 const int BUTTON_HEIGHT = 200;
 const int TOTAL_BUTTONS = 4;
 
@@ -363,7 +365,7 @@ bool LWindow::isShown()
 SDL_Window* gWindow = NULL;
 
 //The window renderer
-SDL_Renderer* gRenderer = NULL;
+//SDL_Renderer* gWindows[1].mRenderer = NULL;
 
 //Mouse button sprites
 SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL];
@@ -406,7 +408,7 @@ bool LTexture::loadFromFile(std::string path)
 		SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
 
 		//Create texture from surface pixels
-		newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
+		newTexture = SDL_CreateTextureFromSurface(gWindows[1].mRenderer, loadedSurface);
 		if (newTexture == NULL)
 		{
 			printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
@@ -442,7 +444,7 @@ bool LTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor
 	else
 	{
 		//Create texture from surface pixels
-		mTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
+		mTexture = SDL_CreateTextureFromSurface(gWindows[1].mRenderer, textSurface);
 		if (mTexture == NULL)
 		{
 			printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
@@ -506,7 +508,7 @@ void LTexture::render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* cen
 	}
 
 	//Render to screen
-	SDL_RenderCopyEx(gRenderer, mTexture, clip, &renderQuad, angle, center, flip);
+	SDL_RenderCopyEx(gWindows[1].mRenderer, mTexture, clip, &renderQuad, angle, center, flip);
 }
 
 int LTexture::getWidth()
@@ -652,11 +654,15 @@ bool loadMedia()
 		}
 
 		//Set buttons in corners
-		gButtons[0].setPosition(0, 0);
-		gButtons[1].setPosition(SCREEN_WIDTH - BUTTON_WIDTH, 0);
-		gButtons[2].setPosition(0, SCREEN_HEIGHT - BUTTON_HEIGHT);
-		gButtons[3].setPosition(SCREEN_WIDTH - BUTTON_WIDTH, SCREEN_HEIGHT - BUTTON_HEIGHT);
-	}
+		//gButtons[0].setPosition(0, 0);
+		//gButtons[1].setPosition(SCREEN_WIDTH - BUTTON_WIDTH, 0);
+		//gButtons[2].setPosition(0, SCREEN_HEIGHT - BUTTON_HEIGHT);
+		//gButtons[3].setPosition(SCREEN_WIDTH - BUTTON_WIDTH, SCREEN_HEIGHT - BUTTON_HEIGHT);
+	  gButtons[0].setPosition(0, SCREEN_HEIGHT / 2);
+    gButtons[1].setPosition(BUTTON_WIDTH, SCREEN_HEIGHT / 2);
+    gButtons[2].setPosition(BUTTON_WIDTH * 2, SCREEN_HEIGHT / 2);
+    gButtons[3].setPosition(BUTTON_WIDTH * 3, SCREEN_HEIGHT / 2);
+  }
 
 	return success;
 }
@@ -769,8 +775,8 @@ int main(int argc, char* args[])
 				quit = true;
 			}
 				//Clear screen
-				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-				SDL_RenderClear(gRenderer);
+				SDL_SetRenderDrawColor(gWindows[1].mRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+				SDL_RenderClear(gWindows[1].mRenderer);
 
 				//Render buttons
 				for (int i = 0; i < TOTAL_BUTTONS; ++i)
@@ -779,7 +785,7 @@ int main(int argc, char* args[])
 				}
 
 				//Update screen
-				SDL_RenderPresent(gRenderer);
+				SDL_RenderPresent(gWindows[1].mRenderer);
 			}
 		}
 	}

@@ -68,7 +68,7 @@ private:
 };
 
 //Button constants
-const int BUTTON_WIDTH = 300;
+const int BUTTON_WIDTH = SCREEN_WIDTH / 4;
 const int BUTTON_HEIGHT = 200;
 const int TOTAL_BUTTONS = 4;
 
@@ -654,11 +654,15 @@ bool loadMedia()
 		}
 
 		//Set buttons in corners
-		gButtons[0].setPosition(0, 0);
-		gButtons[1].setPosition(SCREEN_WIDTH - BUTTON_WIDTH, 0);
-		gButtons[2].setPosition(0, SCREEN_HEIGHT - BUTTON_HEIGHT);
-		gButtons[3].setPosition(SCREEN_WIDTH - BUTTON_WIDTH, SCREEN_HEIGHT - BUTTON_HEIGHT);
-	}
+		//gButtons[0].setPosition(0, 0);
+		//gButtons[1].setPosition(SCREEN_WIDTH - BUTTON_WIDTH, 0);
+		//gButtons[2].setPosition(0, SCREEN_HEIGHT - BUTTON_HEIGHT);
+		//gButtons[3].setPosition(SCREEN_WIDTH - BUTTON_WIDTH, SCREEN_HEIGHT - BUTTON_HEIGHT);
+    gButtons[0].setPosition(0, SCREEN_HEIGHT / 2);
+    gButtons[1].setPosition(BUTTON_WIDTH, SCREEN_HEIGHT / 2);
+    gButtons[2].setPosition(BUTTON_WIDTH * 2, SCREEN_HEIGHT / 2);
+    gButtons[3].setPosition(BUTTON_WIDTH * 3, SCREEN_HEIGHT / 2);	
+  }
 
 	return success;
 }
