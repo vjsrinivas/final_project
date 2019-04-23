@@ -164,14 +164,28 @@ void Map::Redraw(int x, int y, int radius){
 
 	for(int i=0; i < (2*radius+1); i++){
 		for(int j=0; j < (2*radius+1); j++){
-			Position pos; pos.x = step_x; pos.y = step_y+y;
+			Position pos; pos.x = step_x; pos.y = step_y;
 			torender[j+(2*radius+1)*i] = pos;
 			step_x++;
 		}
-		step_x = -1*radius+1;
+		step_x = -1*radius;
 		step_y++;
 	}
 
+	
+
+	for(int i=0; i < torender.size(); i++){
+		Position resultpos;
+		resultpos.x = x+torender[i].x; resultpos.y = y+torender[i].y;
+		if(resultpos.x >= 0 && resultpos.y >= 0){
+			//cout << resultpos.x << " " << resultpos.y << endl;
+			LTexture* texture = textures[node_map[resultpos.x][resultpos.y]->terrain];
+			texture->render(render, resultpos.x*30, resultpos.y*30);
+		}
+	}
+//	cout << endl;
+
+	/*
 	for(int i=0; i < node_map.size(); i++){
 		for(int j=0; j < node_map[i].size(); j++){
 			//cout << "trying: [" << i << ", " << j << "]" <<  endl;
@@ -184,5 +198,5 @@ void Map::Redraw(int x, int y, int radius){
 					texture->render(render,j*30,i*30);
 				}
 		}
-	}
+	}*/
 }
