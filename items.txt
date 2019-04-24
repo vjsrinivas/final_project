@@ -1,0 +1,25 @@
+4
+Normal_Sword
+./assets/items/sword_1.png
+dmg: 100
+def: 0
+func: None
+type: weapon
+Sword_of_Raj
+./assets/items/sword_1.png
+dmg: 100
+def: 0
+func: None
+type: weapon
+Ultimate_Sword_of_John
+./assets/items/sword_1.jpg
+dmg: 100
+def: 0
+func: None
+type: weapon
+Light_Potion
+./assets/items/cs317_potion.png
+dmg: -1
+def: -1
+func: LightPotion
+type: other

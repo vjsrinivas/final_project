@@ -11,21 +11,49 @@
 using namespace std;
 
 		class GameState{
-			public:
-				~GameState();
+			public:	
 				GameState();
-				GameState(string enemyFile);
+				GameState(string filename,string enemyFile, SDL_Renderer*);
+				~GameState();
 				bool playing = 1;
-				int score;
+				int score = 0;
 				void moveEnemies(Map* map);
 				bool isPlayOver;
 				void addEnemy(string texturePath);
 				void removeEnemy(int position);
+				void placeItem(int item_pos, int x, int y);
+				vector<Item*> get_items();
 			private:
+				vector<Item*> items;
+				SDL_Renderer* render;
 				vector<Dot*> enemies;
 		};
 
+		vector<Item*> GameState::get_items(){
+			return items;
+		}
+
+		void GameState::placeItem(int item_pos, int x, int y){
+			LTexture item_icon;
+			if(item_icon.loadFromFile(render, items[item_pos]->texturePath)){
+				item_icon.render(render,x*30,y*30);
+			}
+			else{
+				printf("Error! failed to load texture for: %s\n", items[item_pos]->itemName.c_str());
+			}
+
+		}
+
 		GameState::GameState() {}
+		
+		GameState::GameState(string filename, string enemyFile, SDL_Renderer* gRenderer){
+			loadItemFile(filename, items);
+			render = gRenderer;
+			for(int i=0; i < items.size(); i++){
+				cout << items[i]->itemName << endl;
+			}
+		}
+			
 		GameState::~GameState() {}
 
 		void GameState::moveEnemies(Map* map){
@@ -85,7 +113,7 @@ using namespace std;
 				}
 
 				//Create window
-				gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+				gWindow = SDL_CreateWindow( "SDL Tutorial", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS );
 				if( gWindow == NULL )
 				{
 					printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -94,9 +122,9 @@ using namespace std;
 				else
 				{
 					//Create vsynced renderer for window
-					//gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+					gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 					
-					gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED);
+					//gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED);
 					if( gRenderer == NULL )
 					{
 						printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -114,6 +142,13 @@ using namespace std;
 							printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
 							success = false;
 						}
+              
+            //Initialize SDL_ttf
+    				if( TTF_Init() == -1 )
+    				{
+    					printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+    					success = false;
+    				}
 					}
 				}
 			}
@@ -148,24 +183,29 @@ using namespace std;
 		SDL_Quit();
 	}
 
-	void HUD(LTexture& text, string str_say){
-		TTF_Init();
-		TTF_Font *gFont = TTF_OpenFont("lazy.ttf", 28);
+  void HUD(string str_say, TTF_Font* gFont, int offset=0){
+    LTexture text_place;
+		//TTF_Font *gFont = TTF_OpenFont("OpenSans-Bold.ttf", 14);
 		
-		if(gFont == NULL){
-			printf("TTF_Init: %s\n", TTF_GetError());
-			exit(2);
-		}
-
-		string score_text = "score: ";        
-		SDL_Color textColor = { 255, 255, 255, 0 };
-		/*
-		if(!text.loadFromRenderedText(gRenderer, str_say, textColor, gFont)){
-			
-		}*/
-
-
-
+	  if( gFont == NULL )
+  	{
+  		printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
+  	}
+  	else
+  	{
+  		//Render text
+  		SDL_Color textColor = { 0, 0, 0 };
+  		if( !text_place.loadFromRenderedText( gRenderer, str_say, textColor, gFont ) )
+  		{
+  			printf( "Failed to render text texture!\n" );
+  		}
+  	}
+   //draw rectangle:
+   SDL_Rect bg; bg.x = 900; bg.y = 0+offset; bg.w = 150; bg.h = 48;
+   SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF,0xFF);
+   SDL_RenderFillRect(gRenderer, &bg);
+    //place text over it:
+    text_place.render(gRenderer, 910, 15+offset);
 	}
 
 	int main( int argc, char* args[] )
@@ -189,27 +229,21 @@ using namespace std;
 			{	
 				//Setup map (move to init later):
 				//map_struct = new Map(30,30,gRenderer);
-				map_struct = new Map(0, 0, 2, "test_map.txt", gRenderer);
+				//map_struct = new Map(0, 0, 2, "test_map.txt", gRenderer);
 
 				//Event handler
 				SDL_Event e;
 
 				//The dot that will be moving around on the screen
 				Dot dot(SCREEN_WIDTH, SCREEN_HEIGHT, "./assets/characters/cs317_enemy_1.png");
-				printf("loading main character.. path: %s\n", dot.controller->texturePath.c_str());
 				if(!gDotTexture.loadFromFile(gRenderer, dot.controller->texturePath))
 					exit(-1);
-				SDL_Rect bottomViewport;
-				SDL_Rect upperViewport;
 
-				GameState* game = new GameState();
+				GameState* game = new GameState("items.txt", "enemies.txt", gRenderer);
 				game->isPlayOver = false;
-				LTexture text_place;
+				TTF_Font* gFont = TTF_OpenFont("OpenSans-Bold.ttf", 14);
 
-				int min_render_x = 0;
-				int min_render_y = 0;
-				int max_render_x = SCREEN_WIDTH/30;
-				int max_render_y = SCREEN_HEIGHT/30;
+				map_struct = new Map(0,0,2,"test_map.txt", gRenderer, game->get_items());
 
 				//While application is running
 				while( game->playing )
@@ -239,15 +273,16 @@ using namespace std;
 					//Clear screen	
 					SDL_RenderClear( gRenderer );
 
-				map_struct->Redraw(dot.controller->pos.x, dot.controller->pos.y, 2);
-
-				//Render objects
-				dot.render(gDotTexture, gRenderer);
-
-				//HUD(text_place, "hey");
-				//Update screen
-				SDL_RenderPresent( gRenderer );
-			}
+					map_struct->Redraw(dot.controller->pos.x, dot.controller->pos.y, 2);
+	
+					//Render objects
+					dot.render(gDotTexture, gRenderer);
+		    
+					HUD("health: " + to_string(dot.controller->health), gFont);
+					HUD("score: " + to_string(game->score), gFont, 30);
+					//Update screen
+					SDL_RenderPresent( gRenderer );
+				}
 			delete game;
 		}
 	}

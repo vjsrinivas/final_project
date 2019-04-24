@@ -26,3 +26,34 @@ Item Player::getItem(std::string name){
 	Item newItem;
 	return newItem;
 }
+
+void loadItemFile(std::string filename, std::vector<Item*>& items){
+	std::ifstream file(filename.c_str());
+
+	if(file.is_open()){
+		int numofitems = 0;
+		file >> numofitems;
+		std::string holder;
+		for(int i=0; i < numofitems; i++){
+			Item* new_item = new Item();
+			file >> new_item->itemName;
+			file >> new_item->texturePath;
+			if(file >> holder)
+				printf("Entering %s of %s\n", holder.c_str(), new_item->itemName.c_str());
+			file >> new_item->damage;
+			if(file>> holder)
+				printf("Entering %s of %s\n", holder.c_str(), new_item->itemName.c_str());
+			file >> new_item->defense;
+			if(file >> holder)
+				printf("Entering %s of %s\n", holder.c_str(), new_item->itemName.c_str());
+			file >> new_item->func;
+			if(file >> holder)
+				printf("Entering %s of %s\n", holder.c_str(), new_item->itemName.c_str());
+			file >> new_item->type;
+			items.push_back(new_item);
+		}
+	}
+	else{
+		printf("Item file did not open\n");
+	}
+}
