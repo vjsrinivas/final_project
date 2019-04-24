@@ -263,8 +263,6 @@ void Dot::handleEvent( SDL_Event& e)
 
 void Dot::move(Map* map)
 {
-	bool isBorder = false;
-
 	if(mVelX != 0){
 		mPosX += mVelX;
 		controller->pos.x += mVelX/30;
@@ -280,12 +278,12 @@ void Dot::move(Map* map)
 	//mPosX += mVelX;
 
 	//If the dot went too far to the left or right
-	if( ( mPosX < 0 ) || ( mPosX + DOT_WIDTH > SCREEN_WIDTH ))
+ 	Node* curr_node = map->GetNode(controller->pos.x, controller->pos.y);
+	if( ( mPosX < 0 ) || ( mPosX + DOT_WIDTH > SCREEN_WIDTH ) || (curr_node->terrain == 2))
 	{
 		//Move back
 		mPosX -= mVelX;
 		controller->pos.x -= mVelX/30;
-		isBorder = true;
 	}
 
 	//Move the dot up or down
@@ -297,20 +295,8 @@ void Dot::move(Map* map)
 		//Move back
 		mPosY -= mVelY;
 		controller->pos.y -= mVelY/30;
-		isBorder = true;
 	}
 
-
-	if(!isBorder){
-		Node* curr_node = map->GetNode(controller->pos.x, controller->pos.y);
-		if(curr_node->terrain == 2){
-			mPosX -= mVelX;
-			controller->pos.x -= mVelX/30;
-
-			mPosY -= mVelY;
-			controller->pos.y -= mVelY/30;
-		}
-	}
 	//printf("mposx: %i | mposy: %i | mvelx: %i | mvely: %i | dotheight: %i | screenheight %i\n", mPosX, mPosY, mVelX, mVelY, DOT_HEIGHT, SCREEN_HEIGHT);
 	//controller->printPos();
 	//printf("Real location is: %i %i\n", mPosX, mPosY);

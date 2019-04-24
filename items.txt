@@ -1,0 +1,11 @@
+4
+Normal Sword
+./assets/items/sword_1.png
+dmg: 100
+def: 0
+Sword of Raj
+./assests/items/sword_1.png
+dmg: 100
+def: 0
+Light Potion
+./

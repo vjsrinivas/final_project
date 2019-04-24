@@ -18,7 +18,7 @@ class Player{
 		Player();
 		Player(std::string path);
 		
-		int health;
+		int health = 100;
 		void printPos();
 		Position pos;
 		int movesLeft;

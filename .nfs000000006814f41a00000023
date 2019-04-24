@@ -114,13 +114,6 @@ using namespace std;
 							printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
 							success = false;
 						}
-              
-            //Initialize SDL_ttf
-    				if( TTF_Init() == -1 )
-    				{
-    					printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
-    					success = false;
-    				}
 					}
 				}
 			}
@@ -155,29 +148,21 @@ using namespace std;
 		SDL_Quit();
 	}
 
-  void HUD(string str_say){
-    LTexture text_place;
-		TTF_Font *gFont = TTF_OpenFont("OpenSans-Bold.ttf", 14);
+	void HUD(LTexture& text, string str_say){
+		TTF_Init();
+		TTF_Font *gFont = TTF_OpenFont("lazy.ttf", 28);
 		
-	  if( gFont == NULL )
-  	{
-  		printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
-  	}
-  	else
-  	{
-  		//Render text
-  		SDL_Color textColor = { 0, 0, 0 };
-  		if( !text_place.loadFromRenderedText( gRenderer, str_say, textColor, gFont ) )
-  		{
-  			printf( "Failed to render text texture!\n" );
-  		}
-  	}
-   //draw rectangle:
-   SDL_Rect bg; bg.x = 900; bg.y = 0; bg.w = 150; bg.h = 48;
-   SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF,0xFF);
-   SDL_RenderFillRect(gRenderer, &bg);
-    //place text over it:
-    text_place.render(gRenderer, 900, 15);
+		if(gFont == NULL){
+			printf("TTF_Init: %s\n", TTF_GetError());
+			exit(2);
+		}
+
+		string score_text = "score: ";        
+		SDL_Color textColor = { 255, 255, 255, 0 };
+
+		if(!text.loadFromRenderedText(gRenderer, str_say, textColor, gFont)){
+			cout << "test" << endl;	
+		}	
 	}
 
 	int main( int argc, char* args[] )
@@ -216,6 +201,7 @@ using namespace std;
 
 				GameState* game = new GameState();
 				game->isPlayOver = false;
+				LTexture text_place;
 
 				int min_render_x = 0;
 				int min_render_y = 0;
@@ -249,13 +235,14 @@ using namespace std;
 						
 					//Clear screen	
 					SDL_RenderClear( gRenderer );
-
+/*
 				map_struct->Redraw(dot.controller->pos.x, dot.controller->pos.y, 2);
 
 				//Render objects
 				dot.render(gDotTexture, gRenderer);
-        
-				HUD("health: " + to_string(dot.controller->health));
+*/
+				HUD(text_place, "hey");
+				text_place.render(gRenderer, ( SCREEN_WIDTH - text_place.getWidth() ) / 2, ( SCREEN_HEIGHT - text_place.getHeight() ) / 2);
 				//Update screen
 				SDL_RenderPresent( gRenderer );
 			}
