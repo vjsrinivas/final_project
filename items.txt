@@ -12,7 +12,7 @@ def: 0
 func: None
 type: weapon
 Ultimate_Sword_of_John
-./assets/items/sword_1.jpg
+./assets/items/sword_1.png
 dmg: 100
 def: 0
 func: None
