@@ -291,7 +291,7 @@ using namespace std;
 					//Clear screen	
 					SDL_RenderClear( gRenderer );
 
-					map_struct->Redraw(dot.controller->pos.x, dot.controller->pos.y, 2);
+					map_struct->Redraw(dot.controller->pos.x, dot.controller->pos.y, dot.controller->radius);
 	
 					//Render objects
 					dot.render(gDotTexture, gRenderer);

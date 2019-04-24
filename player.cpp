@@ -57,3 +57,24 @@ void loadItemFile(SDL_Renderer* render, std::string filename, std::vector<Item*>
 		printf("Item file did not open\n");
 	}
 }
+
+void executeItem(Item* item, Player*& controller){
+	std::string type = item->type;
+
+	if(type == "weapon"){
+		//do nothing? maybe add 
+	}
+	else if(type == "other"){
+		//execute function immediately
+		if(item->func == "LightPotion"){
+			LightPotion(controller);
+		}
+	}
+	else{
+		printf("error! item type not right!\n");
+	}
+}
+
+void LightPotion(Player*& controller){
+	controller->radius += 1;
+}

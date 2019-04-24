@@ -351,7 +351,9 @@ void Dot::move(Map*& map)
 
 //add to player's inventory, use if potion
 void Dot::itemPickup(Map*& map, int y, int x){
-	controller->addItem(map->GetNode(y,x)->currItem);
+	Item* item = map->GetNode(y,x)->currItem;
+	executeItem(item, controller);
+	controller->addItem(item);
 	map->RemoveItem(y,x);
 }
 
