@@ -292,17 +292,20 @@ using namespace std;
 						
 					//Clear screen	
 					SDL_RenderClear( gRenderer );
-
+          SDL_RenderClear(bRenderer);
+          
 					map_struct->Redraw(dot.controller->pos.x, dot.controller->pos.y, 2);
 	
 					//Render objects
 					dot.render(gDotTexture, gRenderer);
-		    
+		      //button render statement here
+                
 					HUD("health: " + to_string(dot.controller->health), gFont);
 					HUD("score: " + to_string(game->score), gFont, 30);
 					//Update screen
 					SDL_RenderPresent( gRenderer );
-				}
+				  SDL_RenderPresent(bRenderer);
+        }
 			delete game;
 		}
 	}
