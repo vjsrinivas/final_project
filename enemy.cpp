@@ -1,6 +1,3 @@
-#include <cstdio>
-#include <string>
-//#include "player.h"
 #include "enemy.h"
 
 void Enemy::printPos(){
@@ -24,7 +21,7 @@ Enemy::Enemy(std::string path){
 //}
 
 void loadEnemyFile(std::string filename, std::vector<Enemy*>& enemy){
-	ifstream file(filename.c_str());
+	std::ifstream file(filename.c_str());
 	
 	if(file.is_open()){
 		int numofenemies;
@@ -36,6 +33,7 @@ void loadEnemyFile(std::string filename, std::vector<Enemy*>& enemy){
 			Enemy* new_enemy = new Enemy();
 			file >> new_enemy->name;
 			file >> new_enemy->texturePath;
+			enemy.push_back(new_enemy);
 		}
 	}
 	else{
