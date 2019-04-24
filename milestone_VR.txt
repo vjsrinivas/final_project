@@ -1,0 +1,35 @@
+Name: Vijay Rajagopal
+Github Repo: https://github.com/vjsrinivas/final_project
+Compilable Task Link: https://github.com/vjsrinivas/final_project/tree/vijay_wip
+
+Overall Milestones for Project:
+	SDL Goals:
+		- Learn basics of SDL
+		- Create very basic grid (feeds into "Map Goals")
+	
+	Map Goals:
+		- Create a simple map
+		- Create a map with different terrain (limiting character movement)
+		- Create a map that has items that can be picked up
+
+	Enemy Movement Logic (Dijstrika's)
+		- Make enemies move
+		- Calculate shortest path to preset position for one enemy; Make him move to it
+		- Apply this to all enemies
+		- Adjust movement speed based on enemy type and terrain
+
+Rubric:
+	- Get SDL program to compile [20 pts]
+	- Make main player move [10 pts]
+	- Create Map class and load it into SDL [10 pts]
+ 
+Short report on how this challenge went:
+I had difficulty understanding some of instructions (especially creating the rubric), but
+it provided me with some experience in documenting my software development process.
+ 
+ Time Log:
+| Date (MM/DD/YY) | Time (hours) 	|
+|----------------	| -------------	|
+| 03/25/2019      | 3 hours       |
+| 03/27/2019      | 2 hours       |
+| 03/28/2019      | 2 hours       |
