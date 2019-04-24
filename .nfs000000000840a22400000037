@@ -391,6 +391,7 @@ void LButton::handleEvent(SDL_Event* e)
 
         shieldTexture.loadFromFile(bRenderer, "./assets/items/shield.png");
         swordTexture.loadFromFile(bRenderer, "./assets/items/sword.png");
+        //work on making them buttons
 
         gSpriteClips[0].x = 0;
         gSpriteClips[0].y = 0;
