@@ -47,8 +47,9 @@ using namespace std;
 		GameState::GameState() {}
 
 		GameState::GameState(string filename, string enemyFile, SDL_Renderer* gRenderer){
-			loadItemFile(filename, items);
 			render = gRenderer;
+			loadItemFile(render, filename, items);
+			//render = gRenderer;
 			for(int i=0; i < items.size(); i++){
 				cout << items[i]->itemName << endl;
 			}
@@ -294,7 +295,7 @@ using namespace std;
 					SDL_RenderClear( gRenderer );
           //SDL_RenderClear(bRenderer);
 
-					map_struct->Redraw(dot.controller->pos.x, dot.controller->pos.y, 2);
+					map_struct->Redraw(dot.controller->pos.x, dot.controller->pos.y, dot.controller->radius);
 
 					//Render objects
 					dot.render(gDotTexture, gRenderer);

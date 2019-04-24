@@ -1,0 +1,5 @@
+2
+Grunt1
+./assets/characters/cs317_enemy_1.png
+Grunt2
+./assets/characters/cs317_enemy_1.png

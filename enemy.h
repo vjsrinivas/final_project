@@ -17,3 +17,5 @@ class Enemy{
 	private:
 //		void attack();
 }
+
+void loadEnemyFile(std::string, std::vector<Enemy*>&);
