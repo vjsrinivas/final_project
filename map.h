@@ -15,12 +15,13 @@ class Node{
 		Node(int);
 		int terrain;
 		Player* currChar = NULL;
+		Item* currItem = NULL;
 };
 
 class Map{
 	public:
 		Map(int,int,SDL_Renderer*);
-		Map(int,int,int,std::string,SDL_Renderer*);
+		Map(int,int,int,std::string,SDL_Renderer*, std::vector<Item*>);
 		void ClearMap();
 		void LoadMap(int,int);
 		Node* GetNode(int,int);
@@ -33,14 +34,6 @@ class Map{
 		void loadtextures(int,int,int);
 		SDL_Renderer* render;
 		
-		int min_render_x = 0;
-		int min_render_y = 0;
-		int max_render_x = 0;
-		int max_render_y = 0;
-
-		int WIN_HEIGHT = 0;
-		int WIN_WIDTH = 0;
-
 		std::vector< std::vector<Node*> > node_map;
 		std::map<int,std::string> terrain_key;
 		std::vector<LTexture*> textures;

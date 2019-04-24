@@ -5,7 +5,7 @@ DEPS = ltexture.h ltimer.h map.h game.h player.h main.cpp
 OBJ =  ltexture.o ltimer.o map.o game.o player.o main.o
 
 %.o: %.cpp $(DEPS)
-	$(CC) $(CFLAGS) $(LIBS) -c -o $@ $<
+	$(CC) $(CFLAGS) $(LIBS) -c -g -o $@ $<
 main: $(OBJ)
 	g++ $(CFLAGS) $(LIBS) -o $@ $^
 clean:

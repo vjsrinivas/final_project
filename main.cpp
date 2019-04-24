@@ -22,11 +22,16 @@ using namespace std;
 				void addEnemy(string texturePath);
 				void removeEnemy(int position);
 				void placeItem(int item_pos, int x, int y);
+				vector<Item*> get_items();
 			private:
 				vector<Item*> items;
 				SDL_Renderer* render;
 				vector<Dot*> enemies;
 		};
+
+		vector<Item*> GameState::get_items(){
+			return items;
+		}
 
 		void GameState::placeItem(int item_pos, int x, int y){
 			LTexture item_icon;
@@ -108,7 +113,7 @@ using namespace std;
 				}
 
 				//Create window
-				gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+				gWindow = SDL_CreateWindow( "SDL Tutorial", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS );
 				if( gWindow == NULL )
 				{
 					printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -224,7 +229,7 @@ using namespace std;
 			{	
 				//Setup map (move to init later):
 				//map_struct = new Map(30,30,gRenderer);
-				map_struct = new Map(0, 0, 2, "test_map.txt", gRenderer);
+				//map_struct = new Map(0, 0, 2, "test_map.txt", gRenderer);
 
 				//Event handler
 				SDL_Event e;
@@ -237,6 +242,8 @@ using namespace std;
 				GameState* game = new GameState("items.txt", "enemies.txt", gRenderer);
 				game->isPlayOver = false;
 				TTF_Font* gFont = TTF_OpenFont("OpenSans-Bold.ttf", 14);
+
+				map_struct = new Map(0,0,2,"test_map.txt", gRenderer, game->get_items());
 
 				//While application is running
 				while( game->playing )
@@ -266,16 +273,16 @@ using namespace std;
 					//Clear screen	
 					SDL_RenderClear( gRenderer );
 
-				map_struct->Redraw(dot.controller->pos.x, dot.controller->pos.y, 2);
-
-				//Render objects
-				dot.render(gDotTexture, gRenderer);
-        
-				HUD("health: " + to_string(dot.controller->health), gFont);
-				HUD("score: " + to_string(game->score), gFont, 30);
-				//Update screen
-				SDL_RenderPresent( gRenderer );
-			}
+					map_struct->Redraw(dot.controller->pos.x, dot.controller->pos.y, 2);
+	
+					//Render objects
+					dot.render(gDotTexture, gRenderer);
+		    
+					HUD("health: " + to_string(dot.controller->health), gFont);
+					HUD("score: " + to_string(game->score), gFont, 30);
+					//Update screen
+					SDL_RenderPresent( gRenderer );
+				}
 			delete game;
 		}
 	}
