@@ -38,6 +38,8 @@ class Map{
 		std::vector< std::vector<Node*> > node_map;
 		std::map<int,std::string> terrain_key;
 		std::vector<LTexture*> textures;
+	
+		LTexture* shimmer = new LTexture();
 };
 
 
