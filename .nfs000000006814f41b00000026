@@ -217,6 +217,11 @@ using namespace std;
 				GameState* game = new GameState();
 				game->isPlayOver = false;
 
+				int min_render_x = 0;
+				int min_render_y = 0;
+				int max_render_x = SCREEN_WIDTH/30;
+				int max_render_y = SCREEN_HEIGHT/30;
+
 				//While application is running
 				while( game->playing )
 				{

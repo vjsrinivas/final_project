@@ -3,9 +3,23 @@ Normal Sword
 ./assets/items/sword_1.png
 dmg: 100
 def: 0
+func: None
+type: weapon
 Sword of Raj
-./assests/items/sword_1.png
+./assets/items/sword_1.png
 dmg: 100
 def: 0
+func: None
+type: weapon
+Ultimate Sword of John
+./assets/items/sword_1.jpg
+dmg: 100
+def: 0
+func: None
+type: weapon
 Light Potion
-./
+./assets/items/cs317_potion.png
+dmg: -1
+def: -1
+func: LightPotion
+type: other
