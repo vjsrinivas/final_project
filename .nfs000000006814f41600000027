@@ -50,7 +50,6 @@ void loadItemFile(std::string filename, std::vector<Item*>& items){
 			if(file >> holder)
 				printf("Entering %s of %s\n", holder.c_str(), new_item->itemName.c_str());
 			file >> new_item->type;
-			items.push_back(new_item);
 		}
 	}
 	else{

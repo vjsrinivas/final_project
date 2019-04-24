@@ -11,21 +11,44 @@
 using namespace std;
 
 		class GameState{
-			public:
-				~GameState();
+			public:	
 				GameState();
-				GameState(string enemyFile);
+				GameState(string filename,string enemyFile, SDL_Renderer*);
+				~GameState();
 				bool playing = 1;
-				int score;
+				int score = 0;
 				void moveEnemies(Map* map);
 				bool isPlayOver;
 				void addEnemy(string texturePath);
 				void removeEnemy(int position);
+				void placeItem(int item_pos, int x, int y);
 			private:
+				vector<Item*> items;
+				SDL_Renderer* render;
 				vector<Dot*> enemies;
 		};
 
+		void GameState::placeItem(int item_pos, int x, int y){
+			LTexture item_icon;
+			if(item_icon.loadFromFile(render, items[item_pos]->texturePath)){
+				item_icon.render(render,x*30,y*30);
+			}
+			else{
+				printf("Error! failed to load texture for: %s\n", items[item_pos]->itemName.c_str());
+			}
+
+		}
+
 		GameState::GameState() {}
+		
+		GameState::GameState(string filename, string enemyFile, SDL_Renderer* gRenderer){
+			loadItemFile(filename, items);
+			render = gRenderer;
+			for(int i=0; i < items.size(); i++){
+				cout << items[i]->itemName << endl;
+			}
+		}
+			
 		GameState::~GameState() {}
 
 		void GameState::moveEnemies(Map* map){
@@ -94,9 +117,9 @@ using namespace std;
 				else
 				{
 					//Create vsynced renderer for window
-					//gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+					gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 					
-					gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED);
+					//gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED);
 					if( gRenderer == NULL )
 					{
 						printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -155,9 +178,9 @@ using namespace std;
 		SDL_Quit();
 	}
 
-  void HUD(string str_say){
+  void HUD(string str_say, TTF_Font* gFont, int offset=0){
     LTexture text_place;
-		TTF_Font *gFont = TTF_OpenFont("OpenSans-Bold.ttf", 14);
+		//TTF_Font *gFont = TTF_OpenFont("OpenSans-Bold.ttf", 14);
 		
 	  if( gFont == NULL )
   	{
@@ -173,11 +196,11 @@ using namespace std;
   		}
   	}
    //draw rectangle:
-   SDL_Rect bg; bg.x = 900; bg.y = 0; bg.w = 150; bg.h = 48;
+   SDL_Rect bg; bg.x = 900; bg.y = 0+offset; bg.w = 150; bg.h = 48;
    SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF,0xFF);
    SDL_RenderFillRect(gRenderer, &bg);
     //place text over it:
-    text_place.render(gRenderer, 900, 15);
+    text_place.render(gRenderer, 910, 15+offset);
 	}
 
 	int main( int argc, char* args[] )
@@ -208,14 +231,12 @@ using namespace std;
 
 				//The dot that will be moving around on the screen
 				Dot dot(SCREEN_WIDTH, SCREEN_HEIGHT, "./assets/characters/cs317_enemy_1.png");
-				printf("loading main character.. path: %s\n", dot.controller->texturePath.c_str());
 				if(!gDotTexture.loadFromFile(gRenderer, dot.controller->texturePath))
 					exit(-1);
-				SDL_Rect bottomViewport;
-				SDL_Rect upperViewport;
 
-				GameState* game = new GameState();
+				GameState* game = new GameState("items.txt", "enemies.txt", gRenderer);
 				game->isPlayOver = false;
+				TTF_Font* gFont = TTF_OpenFont("OpenSans-Bold.ttf", 14);
 
 				//While application is running
 				while( game->playing )
@@ -250,7 +271,8 @@ using namespace std;
 				//Render objects
 				dot.render(gDotTexture, gRenderer);
         
-				HUD("health: " + to_string(dot.controller->health));
+				HUD("health: " + to_string(dot.controller->health), gFont);
+				HUD("score: " + to_string(game->score), gFont, 30);
 				//Update screen
 				SDL_RenderPresent( gRenderer );
 			}
