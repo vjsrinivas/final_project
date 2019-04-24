@@ -86,12 +86,16 @@ using namespace std;
 
 		//The window we'll be rendering to
 		SDL_Window* gWindow = NULL;
-
+    //SDL_Window* bWindow = NULL;
+    
 		//The window renderer
 		SDL_Renderer* gRenderer = NULL;
-
-		//Scene textures
+    //SDL_Renderer* bRenderer = NULL;
+		
+    //Scene textures
 		LTexture gDotTexture;
+    //LTexture shieldTexture;
+    //LTexture swordTexture;
 
 		bool init()
 		{
@@ -114,7 +118,9 @@ using namespace std;
 
 				//Create window
 				gWindow = SDL_CreateWindow( "SDL Tutorial", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS );
-				if( gWindow == NULL )
+				//bWindow = SDL_CreateWindow( "Inventory", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS);
+        
+        if( gWindow == NULL )//|| bWindow == NULL)
 				{
 					printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
 					success = false;
@@ -123,18 +129,21 @@ using namespace std;
 				{
 					//Create vsynced renderer for window
 					gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
-					
+					//bRenderer = SDL_CreateRenderer(bWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 					//gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED);
-					if( gRenderer == NULL )
+					
+          if( gRenderer == NULL )//|| //bRenderer == NULL )
 					{
 						printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
 						success = false;
 					}
+    
 					else
 					{
 						//Initialize renderer color
 						SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
-
+            //SDL_SetRenderDrawColor(bRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+            
 						//Initialize PNG loading
 						int imgFlags = IMG_INIT_PNG;
 						if( !( IMG_Init( imgFlags ) & imgFlags ) )
@@ -171,13 +180,20 @@ using namespace std;
 	{
 		//Free loaded images
 		gDotTexture.free();
+    //shieldTexture.free();
+    //swordTexture.free();
 
 		//Destroy window	
 		SDL_DestroyRenderer( gRenderer );
 		SDL_DestroyWindow( gWindow );
 		gWindow = NULL;
 		gRenderer = NULL;
-
+    
+    //SDL_DestroyRenderer(bRenderer);
+    //SDL_DestroyWindow(bWindow);
+    //bWindow = NULL;
+    //bRenderer = NULL;
+    
 		//Quit SDL subsystems
 		IMG_Quit();
 		SDL_Quit();
@@ -239,6 +255,10 @@ using namespace std;
 				if(!gDotTexture.loadFromFile(gRenderer, dot.controller->texturePath))
 					exit(-1);
 
+        //shieldTexture.loadFromFile(bRenderer, "./assets/items/shield.png");
+        //swordTexture.loadFromFile(bRenderer, "./assets/items/sword.png");
+        //work on making them buttons
+        
 				GameState* game = new GameState("items.txt", "enemies.txt", gRenderer);
 				game->isPlayOver = false;
 				TTF_Font* gFont = TTF_OpenFont("OpenSans-Bold.ttf", 14);
