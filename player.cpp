@@ -1,5 +1,11 @@
 #include "player.h"
 
+Item::Item(SDL_Renderer* gRenderer, std::string path){
+	if(!texture->loadFromFile(gRenderer, path))
+		printf("Error loading texture!\n");
+	//if(texture == NULL) { printf("Error loading texture!\n");
+}
+
 void Player::printPos(){
 	printf("Player is at: [x=%i, y=%i]\n",pos.x, pos.y);
 }
@@ -12,32 +18,26 @@ Player::Player(std::string path){
 	texturePath = path;
 }
 
-void Player::addItem(std::string name, int damage, int defense){
-	Item newItem;
-	newItem.itemName = name;
-	newItem.damage = damage;
-	newItem.defense = defense;
-	items.push_back(newItem);
+void Player::addItem(Item* currItem){
+	items.push_back(currItem);
 }
 
-Item Player::getItem(std::string name){
-	//search or whatever;
-	//
-	Item newItem;
-	return newItem;
-}
-
-void loadItemFile(std::string filename, std::vector<Item*>& items){
+void loadItemFile(SDL_Renderer* render, std::string filename, std::vector<Item*>& items){
 	std::ifstream file(filename.c_str());
 
 	if(file.is_open()){
 		int numofitems = 0;
 		file >> numofitems;
+
 		std::string holder;
+		std::string name;
+
 		for(int i=0; i < numofitems; i++){
-			Item* new_item = new Item();
-			file >> new_item->itemName;
-			file >> new_item->texturePath;
+			file >> name >> holder;
+			Item* new_item = new Item(render, holder);
+			new_item->itemName = name;
+			new_item->texturePath = holder;
+
 			if(file >> holder)
 				printf("Entering %s of %s\n", holder.c_str(), new_item->itemName.c_str());
 			file >> new_item->damage;
@@ -56,4 +56,25 @@ void loadItemFile(std::string filename, std::vector<Item*>& items){
 	else{
 		printf("Item file did not open\n");
 	}
+}
+
+void executeItem(Item* item, Player*& controller){
+	std::string type = item->type;
+
+	if(type == "weapon"){
+		//do nothing? maybe add 
+	}
+	else if(type == "other"){
+		//execute function immediately
+		if(item->func == "LightPotion"){
+			LightPotion(controller);
+		}
+	}
+	else{
+		printf("error! item type not right!\n");
+	}
+}
+
+void LightPotion(Player*& controller){
+	controller->radius += 1;
 }

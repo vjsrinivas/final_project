@@ -47,8 +47,9 @@ using namespace std;
 		GameState::GameState() {}
 
 		GameState::GameState(string filename, string enemyFile, SDL_Renderer* gRenderer){
-			loadItemFile(filename, items);
 			render = gRenderer;
+			loadItemFile(render, filename, items);
+			//render = gRenderer;
 			for(int i=0; i < items.size(); i++){
 				cout << items[i]->itemName << endl;
 			}
@@ -75,16 +76,6 @@ using namespace std;
 		const int SCREEN_WIDTH = 1080;
 		const int SCREEN_HEIGHT = 1080;
 
-    /*const int BUTTON_WIDTH = 128;
-    const int BUTTON_HEIGHT = 128;
-    const int TOTAL_BUTTONS = 10;
-    
-    enum LButtonSprite{
-      BUTTON_SPRITE_MOUSE_DOWN = 0,
-      BUTTON_SPRITE_MOUSE_UP = 1,
-      BUTTON_SPRITE_TOTAL = 2
-    };*/
-    
 		//Starts up SDL and creates window
 		bool init();
 
@@ -105,7 +96,7 @@ using namespace std;
     //Scene textures
 		LTexture gDotTexture;
     //LTexture shieldTexture;
-    //LTexture swordTexture;
+   // LTexture swordTexture;
 
 		bool init()
 		{
@@ -128,7 +119,7 @@ using namespace std;
 
 				//Create window
 				gWindow = SDL_CreateWindow( "SDL Tutorial", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS );
-				//bWindow = SDL_CreateWindow( "Inventory", 0, 0, SCREEN_WIDTH-440, SCREEN_HEIGHT-600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+				//bWindow = SDL_CreateWindow( "Inventory", 0, 0, SCREEN_WIDTH-440, SCREEN_HEIGHT-600, SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS);
 
         if( gWindow == NULL )//|| bWindow == NULL)
 				{
@@ -233,124 +224,7 @@ using namespace std;
     //place text over it:
     text_place.render(gRenderer, 910, 15+offset);
 	}
-  
-  //SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL];
-  
-  //The mouse button
-  /*class LButton
-  {
-  public:
-	  //Initializes internal variables
-	  LButton();
 
-	  //Sets top left position
-	  void setPosition(int x, int y);
-
-	  //Handles mouse event
-	  void handleEvent(SDL_Event* e);
-
-	  //Shows button sprite
-	  void swordRender();
-
-    void shieldRender();
-  
-  private:
-	  //Top left position
-	  SDL_Point mPosition;
-
-	  //Currently used global sprite
-	  LButtonSprite mCurrentSprite;
-  };
-  
-  LButton::LButton()
-{
-	mPosition.x = 0;
-	mPosition.y = 0;
-
-	mCurrentSprite = BUTTON_SPRITE_MOUSE_UP; //was out
-}
-
-void LButton::setPosition(int x, int y)
-{
-	mPosition.x = x;
-	mPosition.y = y;
-}
-
-void LButton::handleEvent(SDL_Event* e)
-{
-	//If mouse event happened
-	if (e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP)
-	{
-		//Get mouse position
-		int x, y;
-		SDL_GetMouseState(&x, &y);
-
-		//Check if mouse is in button
-		bool inside = true;
-
-		//Mouse is left of the button
-		if (x < mPosition.x)
-		{
-			inside = false;
-		}
-		//Mouse is right of the button
-		else if (x > mPosition.x + BUTTON_WIDTH)
-		{
-			inside = false;
-		}
-		//Mouse above the button
-		else if (y < mPosition.y)
-		{
-			inside = false;
-		}
-		//Mouse below the button
-		else if (y > mPosition.y + BUTTON_HEIGHT)
-		{
-			inside = false;
-		}
-
-		//Mouse is outside button
-		if (!inside)
-		{
-			mCurrentSprite = BUTTON_SPRITE_MOUSE_UP; //was out 
-		}
-		//Mouse is inside button
-		else
-		{
-       
-			//Set mouse over sprite
-			switch (e->type)
-			{
-			//case SDL_MOUSEMOTION:
-				//mCurrentSprite = BUTTON_SPRITE_MOUSE_OVER_MOTION;
-				//break;
-
-			case SDL_MOUSEBUTTONDOWN:
-				mCurrentSprite = BUTTON_SPRITE_MOUSE_DOWN;
-				break;
-
-			case SDL_MOUSEBUTTONUP:
-        //call equip function here????
-				mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
-        printf("item was equipped\n");
-				break;
-			}
-		}
-	}
-}
-
-  void LButton::swordRender()
-  {
-	  //Show current button sprite
-	  swordTexture.render(bRenderer, mPosition.x, mPosition.y);//was gSpriteClips[mCurrentSprite]
-  }
-
-  void LButton::shieldRender(){
-    shieldTexture.render(bRenderer, mPosition.x, mPosition.y);
-  }
-  
-  LButton gButtons[TOTAL_BUTTONS];
-  */
 	int main( int argc, char* args[] )
 	{
 		// Create map system:
@@ -382,29 +256,11 @@ void LButton::handleEvent(SDL_Event* e)
 				if(!gDotTexture.loadFromFile(gRenderer, dot.controller->texturePath))
 					exit(-1);
 
-        /*shieldTexture.loadFromFile(bRenderer, "./assets/items/shield.png");
-        swordTexture.loadFromFile(bRenderer, "./assets/items/sword.png");
+        //shieldTexture.loadFromFile(bRenderer, "./assets/items/shield.png");
+        //swordTexture.loadFromFile(bRenderer, "./assets/items/sword.png");
         //work on making them buttons
 
-				gSpriteClips[0].x = 0;
-        gSpriteClips[0].y = 0;
-        gSpriteClips[0].w = BUTTON_WIDTH;
-        gSpriteClips[0].h = BUTTON_HEIGHT;
-        gSpriteClips[1].x = 0;
-        gSpriteClips[1].y = 0;
-        gSpriteClips[1].w = BUTTON_WIDTH;
-        gSpriteClips[1].h = BUTTON_HEIGHT;
-        
-        for(int i = 0; i < TOTAL_BUTTONS; i++){
-          if(i < 5){
-            gButtons[i].setPosition(BUTTON_WIDTH * i, 0);
-          }
-          else{
-            gButtons[i].setPosition(BUTTON_WIDTH * (i-5), BUTTON_HEIGHT * 2);
-          }
-        }
-        */
-        GameState* game = new GameState("items.txt", "enemies.txt", gRenderer);
+				GameState* game = new GameState("items.txt", "enemies.txt", gRenderer);
 				game->isPlayOver = false;
 				TTF_Font* gFont = TTF_OpenFont("OpenSans-Bold.ttf", 14);
 
@@ -426,17 +282,10 @@ void LButton::handleEvent(SDL_Event* e)
 							{
 								game->playing = false;
 							}
-              
-              /*if(e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP){
-                for(int i = 0; i < TOTAL_BUTTONS; i++){
-                  gButtons[i].handleEvent(&e);
-                }
-              }*/
-              //else{
+
 							//Handle input for the dot
-							  dot.handleEvent( e );
-						  //}
-            }
+							dot.handleEvent( e );
+						}
 
 						//Move the dot
 						dot.move(map_struct);
@@ -446,19 +295,11 @@ void LButton::handleEvent(SDL_Event* e)
 					SDL_RenderClear( gRenderer );
           //SDL_RenderClear(bRenderer);
 
-					map_struct->Redraw(dot.controller->pos.x, dot.controller->pos.y, 2);
+					map_struct->Redraw(dot.controller->pos.x, dot.controller->pos.y, dot.controller->radius);
 
 					//Render objects
 					dot.render(gDotTexture, gRenderer);
 		      //button render statement here
-          /*for(int i = 0; i < TOTAL_BUTTONS; i++){
-            if(i < 5){
-              gButtons[i].swordRender();
-            }
-            else{
-              gButtons[i].shieldRender();
-            }
-          }*/
 
 					HUD("health: " + to_string(dot.controller->health), gFont);
 					HUD("score: " + to_string(game->score), gFont, 30);
