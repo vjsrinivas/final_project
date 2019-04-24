@@ -203,8 +203,8 @@ void Map::Redraw(int x, int y, int radius){
 		LTexture* texture = textures[textures.size()-1];
 		texture->render(render, (step_x-1)*30,(step_y-1)*30);
 
-		if(node_map[step_y-1][step_x-1]->currItem != NULL){	
-			shimmer->render(render, (step_x-1)*30, (step_y-1)*30);
+    if(node_map[step_y-1][step_x-1]->currItem != NULL){
+			shimmer->render(render, (step_x-1)*30, (step_y-1*30))
 		}
 	}
 
