@@ -47,7 +47,7 @@ using namespace std;
 		GameState::GameState() {}
 		
 		GameState::GameState(string filename, string enemyFile, SDL_Renderer* gRenderer){
-			loadItemFile(filename, items);
+			loadItemFile(gRenderer,filename, items);
 			render = gRenderer;
 			for(int i=0; i < items.size(); i++){
 				cout << items[i]->itemName << endl;
@@ -169,8 +169,6 @@ using namespace std;
 		{
 			//Loading success flag
 			bool success = true;
-		
-			printf( "Failed to load dot texture!\n" );
 			//success = false;
 
 		return success;

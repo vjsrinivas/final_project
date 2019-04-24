@@ -25,6 +25,7 @@ class Map{
 		void ClearMap();
 		void LoadMap(int,int);
 		Node* GetNode(int,int);
+		void RemoveItem(int y, int x);
 		void Redraw(int, int, int);
 		int width;
 		int height;
@@ -61,17 +62,17 @@ class Map{
 			void handleEvent( SDL_Event& e);
 
 			//Moves the dot
-			void move(Map*);
+			void move(Map*&);
 
 			//Shows the dot on the screen
 			void render(LTexture& gDotTexture, SDL_Renderer* gRenderer);
 
 		private:
 			//The X and Y offsets of the dot
-			int mPosX, mPosY;
-
+			int mPosX, mPosY;	
 			//The velocity of the dot
 			int mVelX, mVelY;
-      int SCREEN_WIDTH;
-      int SCREEN_HEIGHT;
+			int SCREEN_WIDTH;
+			int SCREEN_HEIGHT;
+			void itemPickup(Map*&, int, int);
 	};

@@ -52,16 +52,29 @@
 				std::cout << std::endl;
 			}	
 
+			file_in >> map_buffer;
 			while(file_in >> map_buffer){
+				//std::cout << map_buffer << std::endl;
 				if(map_buffer != -1){
 					int coor_x = 0; 
 					int coor_y = 0;
 					file_in >> coor_x >> coor_y;
-					//std::cout << "id: " << map_buffer << " " << coor_x << " " << coor_y << std::endl;
+					std::cout << "id: " << map_buffer << " " << coor_x << " " << coor_y << std::endl;
 					node_map[coor_x][coor_y]->currItem = items[map_buffer];
+					std::cout << node_map[coor_x][coor_y]->currItem << std::endl;
 				}
 				else
 					break;
+			}
+			std::cout << std::endl;
+			for(int i=0; i < node_map.size(); i++){
+				for(int j=0; j < node_map[i].size(); j++){
+					if(node_map[i][j]->currItem != NULL)
+						std::cout << "1 ";
+					else
+						std::cout << "0 ";
+				}
+				std::cout << std::endl;
 			}
 	}
 	else{
@@ -71,6 +84,10 @@
 
 	render = gRenderer;
 	loadtextures(x,y,radius);
+}
+
+void Map::RemoveItem(int y, int x){
+	node_map[y][x]->currItem = NULL;
 }
 
 Map::Map(int width, int height, SDL_Renderer* gRenderer){
@@ -189,9 +206,16 @@ void Map::Redraw(int x, int y, int radius){
 		resultpos.x = x+torender[i].x; 
 		resultpos.y = y+torender[i].y;
 		if(resultpos.x >= 0 && resultpos.y >= 0 && resultpos.x < node_map[0].size() && resultpos.y < node_map.size()){
-			std::cout << resultpos.x << " " << resultpos.y << std::endl;
+			//std::cout << resultpos.x << " " << resultpos.y << std::endl;
 			LTexture* texture = textures[node_map[resultpos.y][resultpos.x]->terrain];
 			texture->render(render, resultpos.x*30, resultpos.y*30);
+			if(node_map[resultpos.y][resultpos.x]->currItem != NULL){
+				//std::cout << "item: " << node_map[resultpos.y][resultpos.x]->currItem->itemName << std::endl;
+				//LTexture* itemTexture;
+				//itemTexture->loadFromFile(render, node_map[resultpos.y][resultpos.x]->currItem->texturePath);
+				LTexture* itemTexture = node_map[resultpos.y][resultpos.x]->currItem->texture;
+				itemTexture->render(render, resultpos.x*30, resultpos.y*30);
+			}
 		}
 	}
 }
@@ -259,7 +283,7 @@ void Dot::handleEvent( SDL_Event& e)
 	}
 }
 
-void Dot::move(Map* map)
+void Dot::move(Map*& map)
 {
 	bool isBorder = false;
 
@@ -300,7 +324,7 @@ void Dot::move(Map* map)
 
 
 	if(!isBorder){
-		std::cout << "trying at positon: " << controller->pos.y << ", " << controller->pos.x << std::endl;
+		//std::cout << "trying at positon: " << controller->pos.y << ", " << controller->pos.x << std::endl;
 		Node* curr_node = map->GetNode(controller->pos.y, controller->pos.x);
 		if(curr_node->terrain == 2){
 			mPosX -= mVelX;
@@ -313,8 +337,22 @@ void Dot::move(Map* map)
 	//printf("mposx: %i | mposy: %i | mvelx: %i | mvely: %i | dotheight: %i | screenheight %i\n", mPosX, mPosY, mVelX, mVelY, DOT_HEIGHT, SCREEN_HEIGHT);
 	//controller->printPos();
 	//printf("Real location is: %i %i\n", mPosX, mPosY);
+	
+	// Item detection:
+	// maybe move to seperate function:
+	if(map->GetNode(controller->pos.y, controller->pos.x)->currItem != NULL){
+		itemPickup(map, controller->pos.y, controller->pos.x);
+		printf("item picked up!\n");
+	}
+
 	mVelX = 0;
 	mVelY = 0;
+}
+
+//add to player's inventory, use if potion
+void Dot::itemPickup(Map*& map, int y, int x){
+	controller->addItem(map->GetNode(y,x)->currItem);
+	map->RemoveItem(y,x);
 }
 
 void Dot::render(LTexture& gDotTexture, SDL_Renderer* gRenderer)
