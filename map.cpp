@@ -86,6 +86,10 @@
 	loadtextures(x,y,radius);
 }
 
+void Map::RemoveItem(int y, int x){
+	node_map[y][x]->currItem = NULL;
+}
+
 Map::Map(int width, int height, SDL_Renderer* gRenderer){
 	render = gRenderer;
 
@@ -279,7 +283,7 @@ void Dot::handleEvent( SDL_Event& e)
 	}
 }
 
-void Dot::move(Map* map)
+void Dot::move(Map*& map)
 {
 	bool isBorder = false;
 
@@ -333,8 +337,22 @@ void Dot::move(Map* map)
 	//printf("mposx: %i | mposy: %i | mvelx: %i | mvely: %i | dotheight: %i | screenheight %i\n", mPosX, mPosY, mVelX, mVelY, DOT_HEIGHT, SCREEN_HEIGHT);
 	//controller->printPos();
 	//printf("Real location is: %i %i\n", mPosX, mPosY);
+	
+	// Item detection:
+	// maybe move to seperate function:
+	if(map->GetNode(controller->pos.y, controller->pos.x)->currItem != NULL){
+		itemPickup(map, controller->pos.y, controller->pos.x);
+		printf("item picked up!\n");
+	}
+
 	mVelX = 0;
 	mVelY = 0;
+}
+
+//add to player's inventory, use if potion
+void Dot::itemPickup(Map*& map, int y, int x){
+	controller->addItem(map->GetNode(y,x)->currItem);
+	map->RemoveItem(y,x);
 }
 
 void Dot::render(LTexture& gDotTexture, SDL_Renderer* gRenderer)
