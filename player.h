@@ -33,10 +33,15 @@ class Player{
 		std::string texturePath;
 
 		void addItem(Item*);
-
+		int radius = 1;
 	private:
 		std::vector<Item*> items;
 };
 
 // Function reads a file and adds to vector of items for retrieval later
 void loadItemFile(SDL_Renderer*, std::string filename, std::vector<Item*>& items);
+
+void executeItem(Item* item, Player*& controller);
+
+// Functions for item catergories:
+void LightPotion(Player*& controller);
