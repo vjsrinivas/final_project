@@ -22,6 +22,10 @@ void Player::addItem(Item* currItem){
 	items.push_back(currItem);
 }
 
+std::vector<Item*> Player::getItems(){
+	return items;
+}
+
 void loadItemFile(SDL_Renderer* render, std::string filename, std::vector<Item*>& items){
 	std::ifstream file(filename.c_str());
 
@@ -112,7 +116,7 @@ void executeItem(Item* item, Player*& controller){
 	std::string type = item->type;
 
 	if(type == "weapon"){
-		//do nothing? maybe add 
+		//do nothing? maybe add
 	}
 	else if(type == "other"){
 		//execute function immediately

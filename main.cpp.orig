@@ -4,9 +4,12 @@
 		//Using SDL, SDL_image, standard IO, and strings
 #include <stdio.h>
 #include <string>
+<<<<<<< HEAD
 #include <vector>
+=======
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
+>>>>>>> master
 #include "ltimer.h"
 #include "ltexture.h"
 #include "map.h"
@@ -72,7 +75,7 @@ using namespace std;
 
 				if(controller->health <= 0){
 					printf("\n\nYou lost the game :(\n\n");
-					return false;
+					return false;	
 				}
 			}
 			return true;
@@ -104,7 +107,7 @@ using namespace std;
 			loadItemFile(render, filename, items);
 			loadEnemyFile("enemy.txt", enemies);
 			loadenemytextures();
-
+			
 			for(int i=0; i < items.size(); i++){
 				cout << items[i]->itemName << endl;
 			}
@@ -130,13 +133,13 @@ using namespace std;
     const int BUTTON_WIDTH = 128;
     const int BUTTON_HEIGHT = 128;
     const int TOTAL_BUTTONS = 10;
-
+    
     enum LButtonSprite{
-      BUTTON_SPRITE_MOUSE_DOWN = 0,
+      BUTTON_SPRITE_MOUSE_DOWN = 0, 
       BUTTON_SPRITE_MOUSE_UP = 1,
       BUTTON_SPRITE_TOTAL = 2
     };
-
+    
 		//Starts up SDL and creates window
 		bool init();
 
@@ -260,7 +263,7 @@ using namespace std;
 		IMG_Quit();
 		SDL_Quit();
 	}
-
+	
 
   bool checkBattle(Player* controller, Map*& map, vector<Position>& battle){
 		//compute which blocks to render:
@@ -268,10 +271,10 @@ using namespace std;
   	std::vector<Position> torender;
   	Position original; original.x = 0; original.y = 0;
   	torender.resize((2*radius+1)*(2*radius+1), original);
-
+  	
   	int step_x = -1*(radius);
   	int step_y = -1*(radius);
-
+  
   	for(int i=0; i < (2*radius+1); i++){
   		for(int j=0; j < (2*radius+1); j++){
   			Position pos; pos.x = step_x; pos.y = step_y;
@@ -281,14 +284,14 @@ using namespace std;
   		step_x = -1*radius;
   		step_y++;
   	}
-
+  
   	step_x=0;
   	step_y=1;
     bool havetobattle = false;
-
+   
      for(int i=0; i < torender.size(); i++){
   		Position resultpos;
-  		resultpos.x = controller->pos.x+torender[i].x;
+  		resultpos.x = controller->pos.x+torender[i].x; 
   		resultpos.y = controller->pos.y+torender[i].y;
   		if(resultpos.x >= 0 && resultpos.y >= 0 && resultpos.x < map->width && resultpos.y < map->height){
   			if(map->GetNode(resultpos.y, resultpos.x)->currChar != NULL){
@@ -297,7 +300,7 @@ using namespace std;
        }
   		}
   	}
-
+   
      return havetobattle;
   }
 
@@ -325,9 +328,9 @@ using namespace std;
     //place text over it:
     text_place.render(gRenderer, 910, 15+offset);
 	}
-
+  
   SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL];
-
+  
   //The mouse button
   class LButton
   {
@@ -345,7 +348,7 @@ using namespace std;
 	  void swordRender();
 
     void shieldRender();
-
+  
   private:
 	  //Top left position
 	  SDL_Point mPosition;
@@ -353,7 +356,7 @@ using namespace std;
 	  //Currently used global sprite
 	  LButtonSprite mCurrentSprite;
   };
-
+  
   LButton::LButton()
   {
 	  mPosition.x = 0;
@@ -404,12 +407,12 @@ using namespace std;
 		  //Mouse is outside button
 		  if (!inside)
 		  {
-			  mCurrentSprite = BUTTON_SPRITE_MOUSE_UP; //was out
+			  mCurrentSprite = BUTTON_SPRITE_MOUSE_UP; //was out 
 		  }
 		  //Mouse is inside button
 		  else
 		  {
-
+       
 			//Set mouse over sprite
 			  switch (e->type)
 			  {
@@ -440,9 +443,9 @@ using namespace std;
   void LButton::shieldRender(){
     shieldTexture.render(bRenderer, mPosition.x, mPosition.y);
   }
-
+  
   LButton gButtons[TOTAL_BUTTONS];
-
+  
 	int main( int argc, char* args[] )
 	{
 		// Create map system:
@@ -486,7 +489,7 @@ using namespace std;
         gSpriteClips[1].y = 0;
         gSpriteClips[1].w = BUTTON_WIDTH;
         gSpriteClips[1].h = BUTTON_HEIGHT;
-
+        
         for(int i = 0; i < TOTAL_BUTTONS; i++){
           if(i < 5){
             gButtons[i].setPosition(BUTTON_WIDTH * i, 0);
@@ -495,7 +498,7 @@ using namespace std;
             gButtons[i].setPosition(BUTTON_WIDTH * (i-5), BUTTON_HEIGHT * 2);
           }
         }
-
+        
 				GameState* game = new GameState("items.txt", "enemies.txt", gRenderer);
 				game->isPlayOver = false;
 				TTF_Font* gFont = TTF_OpenFont("OpenSans-Bold.ttf", 14);
@@ -520,7 +523,7 @@ using namespace std;
 							{
 								game->playing = false;
 							}
-
+              
               if(e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP){
                 for(int i = 0; i < TOTAL_BUTTONS; i++){
                   gButtons[i].handleEvent(&e);
@@ -547,14 +550,14 @@ using namespace std;
 					dot.render(gDotTexture, gRenderer);
 		      //button render statement here
           vector<Item*> playerstuff = dot.controller->getItems();
-
+          
           for(int i = 0; i < playerstuff.size(); i++){
             if(playerstuff[i]->type == "weapon"){
               swordTexture.loadFromFile(bRenderer, playerstuff[i]->texturePath);
               gButtons[i].swordRender();
             }
           }
-
+          
 					HUD("health: " + to_string(dot.controller->health), gFont);
 					HUD("score: " + to_string(game->score), gFont, 30);
 					//Update screen
