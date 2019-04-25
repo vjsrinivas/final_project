@@ -104,6 +104,9 @@ void loadEnemyFile(std::string filename, std::vector<Enemy*>& enemy){
 			if(file >> holder)
 				printf("looking for %s...\n", holder.c_str());
 			file >> new_enemy->maxdmg;
+			if(file >> holder)
+				printf("looking for %s...\n", holder.c_str());
+			file >> new_enemy->maxdef;
 			enemy.push_back(new_enemy);
 		}
 	}
