@@ -24,13 +24,13 @@ def: 0
 func: None
 type: weapon
 Shield_1
-./assets/items/shield.png
+./assets/items/shield_1.png
 dmg: 0
 def: 60
 func: None
 type: shield
 Shield_2
-./assets/items/shield_1.png
+./assets/items/shield_2.png
 dmg: 0
 def: 100
 func: None
