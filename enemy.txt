@@ -1,5 +1,9 @@
 2
 Grunt1
-./assets/characters/cs317_enemy_1.png
+./assets/characters/enemy_2.png
+health: 50
+maxdmg: 25
 Grunt2
 ./assets/characters/cs317_enemy_1.png
+health: 60
+maxdmg: 10

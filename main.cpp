@@ -4,6 +4,8 @@
 		//Using SDL, SDL_image, standard IO, and strings
 #include <stdio.h>
 #include <string>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 #include "ltimer.h"
 #include "ltexture.h"
 #include "map.h"
@@ -17,20 +19,70 @@ using namespace std;
 				~GameState();
 				bool playing = 1;
 				int score = 0;
-				void moveEnemies(Map* map);
+				bool fightEnemies(Player*& controller, vector<Position>& pos, Map*& map);
 				bool isPlayOver;
 				void addEnemy(string texturePath);
 				void removeEnemy(int position);
 				void placeItem(int item_pos, int x, int y);
 				vector<Item*> get_items();
+				vector<Enemy*> get_enemies();
 			private:
+				void loadenemytextures();
 				vector<Item*> items;
 				SDL_Renderer* render;
-				vector<Dot*> enemies;
+				vector<Enemy*> enemies;
 		};
+
+		void GameState::loadenemytextures(){
+			for(int i=0; i < enemies.size(); i++){
+				enemies[i]->texture->loadFromFile(render, enemies[i]->texturePath);
+			}
+		}
+
+		bool GameState::fightEnemies(Player*& controller, vector<Position>& pos, Map*& map){
+			//fight one and then the other:
+			srand(time(NULL));
+			while(pos.size() != 0){
+				for(int i=0; i < pos.size(); i++){
+					// attack player
+					Node* enemy_node = map->GetNode(pos[i].y, pos[i].x);
+					int damageTaken = rand()%enemy_node->currChar->maxdmg + 1;
+					int damageBlocked = 0; //shield value
+					damageTaken -= damageBlocked;
+					controller->health -= damageTaken;
+
+					//attack enemy:
+					if(controller->currWeap != NULL){
+						int damageGiven = controller->currWeap->damage;
+						if(controller->currShield != NULL){
+							int damageLost = 0; //shield
+							damageGiven -= damageLost;
+						}
+						if(damageGiven != 0)
+							enemy_node->currChar->health -= rand()%damageGiven+1;
+					}
+
+					if(enemy_node->currChar->health <= 0){
+						delete enemy_node->currChar;
+						enemy_node->currChar = NULL;
+						pos.erase(pos.begin()+i);
+					}
+				}
+
+				if(controller->health <= 0){
+					printf("\n\nYou lost the game :(\n\n");
+					return false;	
+				}
+			}
+			return true;
+		}
 
 		vector<Item*> GameState::get_items(){
 			return items;
+		}
+
+		vector<Enemy*> GameState::get_enemies(){
+			return enemies;
 		}
 
 		void GameState::placeItem(int item_pos, int x, int y){
@@ -49,7 +101,9 @@ using namespace std;
 		GameState::GameState(string filename, string enemyFile, SDL_Renderer* gRenderer){
 			render = gRenderer;
 			loadItemFile(render, filename, items);
-			//render = gRenderer;
+			loadEnemyFile("enemy.txt", enemies);
+			loadenemytextures();
+			
 			for(int i=0; i < items.size(); i++){
 				cout << items[i]->itemName << endl;
 			}
@@ -57,12 +111,8 @@ using namespace std;
 
 		GameState::~GameState() {}
 
-		void GameState::moveEnemies(Map* map){
-			//dijistraks movement
-		}
-
 		void GameState::addEnemy(string texturePath){
-			Dot* newEnemy = new Dot(1080,1080, texturePath);
+			Enemy* newEnemy = new Enemy(texturePath);
 			enemies.push_back(newEnemy);
 		}
 
@@ -199,6 +249,46 @@ using namespace std;
 		IMG_Quit();
 		SDL_Quit();
 	}
+	
+
+  bool checkBattle(Player* controller, Map*& map, vector<Position>& battle){
+		//compute which blocks to render:
+    int radius = 1;
+  	std::vector<Position> torender;
+  	Position original; original.x = 0; original.y = 0;
+  	torender.resize((2*radius+1)*(2*radius+1), original);
+  	
+  	int step_x = -1*(radius);
+  	int step_y = -1*(radius);
+  
+  	for(int i=0; i < (2*radius+1); i++){
+  		for(int j=0; j < (2*radius+1); j++){
+  			Position pos; pos.x = step_x; pos.y = step_y;
+  			torender[j+(2*radius+1)*i] = pos;
+  			step_x++;
+  		}
+  		step_x = -1*radius;
+  		step_y++;
+  	}
+  
+  	step_x=0;
+  	step_y=1;
+    bool havetobattle = false;
+   
+     for(int i=0; i < torender.size(); i++){
+  		Position resultpos;
+  		resultpos.x = controller->pos.x+torender[i].x; 
+  		resultpos.y = controller->pos.y+torender[i].y;
+  		if(resultpos.x >= 0 && resultpos.y >= 0 && resultpos.x < map->width && resultpos.y < map->height){
+  			if(map->GetNode(resultpos.y, resultpos.x)->currChar != NULL){
+          battle.push_back(resultpos);
+          havetobattle = true;
+       }
+  		}
+  	}
+   
+     return havetobattle;
+  }
 
   void HUD(string str_say, TTF_Font* gFont, int offset=0){
     LTexture text_place;
@@ -263,8 +353,8 @@ using namespace std;
 				GameState* game = new GameState("items.txt", "enemies.txt", gRenderer);
 				game->isPlayOver = false;
 				TTF_Font* gFont = TTF_OpenFont("OpenSans-Bold.ttf", 14);
-
-				map_struct = new Map(0,0,2,"test_map.txt", gRenderer, game->get_items());
+        vector<Position> battle;
+				map_struct = new Map(0,0,2,"test_map.txt", gRenderer, game->get_items(), game->get_enemies());
 
 				//While application is running
 				while( game->playing )
@@ -272,7 +362,9 @@ using namespace std;
 					//Handle events on queue
 					if(game->isPlayOver){
 						// do combat stuff here:
-						game->moveEnemies(map_struct);
+						game->playing = game->fightEnemies(dot.controller, battle, map_struct);
+						if(battle.size() == 0)
+							game->isPlayOver = false;
 					}
 					else{
 						while( SDL_PollEvent( &e ) != 0 )
@@ -289,6 +381,7 @@ using namespace std;
 
 						//Move the dot
 						dot.move(map_struct);
+						game->isPlayOver = checkBattle(dot.controller, map_struct, battle);
 					}
 
 					//Clear screen
