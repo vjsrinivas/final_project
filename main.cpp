@@ -385,7 +385,7 @@ using namespace std;
 					exit(-1);
 
         shieldTexture.loadFromFile(bRenderer, "./assets/items/shield.png");
-        swordTexture.loadFromFile(bRenderer, "./assets/items/sword.png");
+        //swordTexture.loadFromFile(bRenderer, "./assets/items/sword.png");
         //work on making them buttons
 
         gSpriteClips[0].x = 0;
@@ -456,11 +456,9 @@ using namespace std;
           vector<Item*> playerstuff = dot.controller->getItems();
           
           for(int i = 0; i < playerstuff.size(); i++){
-            if(i < 5){
+            if(playerstuff[i]->type == "weapon"){
+              swordTexture.loadFromFile(bRenderer, playerstuff[i]->texturePath);
               gButtons[i].swordRender();
-            }
-            else{
-              gButtons[i].shieldRender();
             }
           }
           
