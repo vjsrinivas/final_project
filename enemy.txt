@@ -1,9 +1,21 @@
 2
-Grunt1
+Grunt
 ./assets/characters/enemy_2.png
 health: 50
 maxdmg: 25
-Grunt2
-./assets/characters/cs317_enemy_1.png
-health: 60
-maxdmg: 10
+maxdef: 4
+Excommunicator
+./assets/characters/enemy_3.png
+health: 130
+maxdmg: 100
+maxdef: 30
+Eye_of_Emrich
+./assets/characters/enemy_4.png
+health: 1000
+maxdmg: 5
+maxdef: 100
+Key_Boy
+./assets/characters/enemy_5.png
+health: 20
+maxdmg: 90
+maxdef: 100

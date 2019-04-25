@@ -1,6 +1,6 @@
 5
 Normal_Sword
-./assets/items/sword_2.png
+./assets/items/sword_5.png
 dmg: 100
 def: 0
 func: None
@@ -17,6 +17,24 @@ dmg: 100
 def: 0
 func: None
 type: weapon
+Bayonet_of_Bros
+./assets/items/sword_4.png
+dmg: 90
+def: 0
+func: None
+type: weapon
+Shield_1
+./assets/items/shield.png
+dmg: 0
+def: 60
+func: None
+type: shield
+Shield_2
+./assets/items/shield_1.png
+dmg: 0
+def: 100
+func: None
+type: shield
 Light_Potion
 ./assets/items/light_potion.png
 dmg: -1
