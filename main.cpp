@@ -55,7 +55,7 @@ using namespace std;
 					if(controller->currWeap != NULL){
 						int damageGiven = controller->currWeap->damage;
 						if(controller->currShield != NULL){
-							int damageLost = 0; //shield
+							int damageLost = rand()%enemy_node->currChar->maxdef+1; //shield
 							damageGiven -= damageLost;
 						}
 						if(damageGiven != 0)
@@ -67,6 +67,7 @@ using namespace std;
 						enemy_node->currChar = NULL;
 						pos.erase(pos.begin()+i);
 					}
+					SDL_Delay(500);
 				}
 
 				if(controller->health <= 0){

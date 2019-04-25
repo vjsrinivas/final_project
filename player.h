@@ -50,6 +50,7 @@ class Enemy{
 		std::string texturePath;
 		LTexture* texture = new LTexture();
 		int maxdmg = 0;
+		int maxdef = 0;
 	private:
 		std::vector<Item*> items;
 };
