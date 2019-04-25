@@ -15,7 +15,7 @@
 			//read in texture paths:
 			int texture_id = 0;
 			std::string texture_path;
-			
+
 			while(file_in >> texture_id){
 				if(texture_id != -1){
 					file_in >> texture_path;
@@ -24,15 +24,15 @@
 				else
 					break;
 			}
-			
+
 			int map_buffer;
 			file_in >> map_x >> map_y;
 			width = map_x;
 			height = map_y;
-			
+
 			int tmp_x = 0;
 			int tmp_y = 0;
-			
+
 			//resize vector:
 			for(int i=0; i < map_y; i++){
 				std::vector<Node*> row;
@@ -50,14 +50,14 @@
 					std::cout << map_buffer << " ";
 				}
 				std::cout << std::endl;
-			}	
+			}
 
 			file_in >> map_buffer;
 
 			while(file_in >> map_buffer){
 				//std::cout << map_buffer << std::endl;
 				if(map_buffer != -1){
-					int coor_x = 0; 
+					int coor_x = 0;
 					int coor_y = 0;
 					file_in >> coor_x >> coor_y;
 					std::cout << "id: " << map_buffer << " " << coor_x << " " << coor_y << std::endl;
@@ -82,7 +82,7 @@
 				else
 					break;
 			}
-			
+
 			std::cout << std::endl;
 			for(int i=0; i < node_map.size(); i++){
 				for(int j=0; j < node_map[i].size(); j++){
@@ -95,7 +95,7 @@
 			}
 	}
 	else{
-		printf("Error: file is not opened\n");	
+		printf("Error: file is not opened\n");
 	}
 
 	//load in shimmer texture:
@@ -119,7 +119,7 @@ void Map::LoadMap(int width, int height){
      for(int i=0; i < height; i++){
 			std::vector<Node*> width_v;
 			for(int j=0; j < width; j++){
-				Node* default_value = new Node(0); 
+				Node* default_value = new Node(0);
 				width_v.push_back(default_value);
 			}
 			node_map.push_back(width_v);
@@ -160,7 +160,7 @@ void Map::loadtextures(int x, int y, int radius){
 		}
 
 		std::cout << "node size: " << node_map.size() << " " << node_map[0].size() << std::endl;
-		
+
 		//i <- y
 		//j <- x
 		for(int i=0; i < node_map.size(); i++){
@@ -175,7 +175,7 @@ void Map::loadtextures(int x, int y, int radius){
 					texture->render(render,j*30,i*30);
 				}
 			}
-		}		
+		}
 }
 
 void Map::ClearMap(){
@@ -191,7 +191,7 @@ void Map::Redraw(int x, int y, int radius){
 	std::vector<Position> torender;
 	Position original; original.x = 0; original.y = 0;
 	torender.resize((2*radius+1)*(2*radius+1), original);
-	
+
 	int step_x = -1*(radius);
 	int step_y = -1*(radius);
 
@@ -218,14 +218,14 @@ void Map::Redraw(int x, int y, int radius){
 		LTexture* texture = textures[textures.size()-1];
 		texture->render(render, (step_x-1)*30,(step_y-1)*30);
 
-		if(node_map[step_y-1][step_x-1]->currItem != NULL){	
+		if(node_map[step_y-1][step_x-1]->currItem != NULL){
 			shimmer->render(render, (step_x-1)*30, (step_y-1)*30);
 		}
 	}
 
 	for(int i=0; i < torender.size(); i++){
 		Position resultpos;
-		resultpos.x = x+torender[i].x; 
+		resultpos.x = x+torender[i].x;
 		resultpos.y = y+torender[i].y;
 		if(resultpos.x >= 0 && resultpos.y >= 0 && resultpos.x < node_map[0].size() && resultpos.y < node_map.size()){
 			//std::cout << resultpos.x << " " << resultpos.y << std::endl;
@@ -269,7 +269,7 @@ Dot::Dot(const int SCREEN_WIDTH, const int SCREEN_HEIGHT, std::string texturePat
 	//Initialize the velocity
 	mVelX = 0;
 	mVelY = 0;
- 
+
 	controller = new Player(texturePath);
 
   //set screen size:
@@ -294,7 +294,7 @@ void Dot::handleEvent( SDL_Event& e)
 	}*/
 	//If a key was released
 	//else if( e.type == SDL_KEYUP && e.key.repeat == 0 )
-	
+
 	if(e.type == SDL_KEYUP && e.key.repeat == 0)
 	{
 		//controller->movesLeft--;
@@ -364,7 +364,7 @@ void Dot::move(Map*& map)
 	//printf("mposx: %i | mposy: %i | mvelx: %i | mvely: %i | dotheight: %i | screenheight %i\n", mPosX, mPosY, mVelX, mVelY, DOT_HEIGHT, SCREEN_HEIGHT);
 	//controller->printPos();
 	//printf("Real location is: %i %i\n", mPosX, mPosY);
-	
+
 	// Item detection:
 	// maybe move to seperate function:
 	if(map->GetNode(controller->pos.y, controller->pos.x)->currItem != NULL){
@@ -372,7 +372,7 @@ void Dot::move(Map*& map)
 		printf("item picked up!\n");
 	}
 
-	
+
 	mVelX = 0;
 	mVelY = 0;
 }
@@ -382,12 +382,12 @@ void Dot::itemPickup(Map*& map, int y, int x){
 	Item* item = map->GetNode(y,x)->currItem;
 	executeItem(item, controller);
 	controller->addItem(item);
-	
+
 	// TEMP:
-	if(item->type == "weapon")
-		controller->currWeap = item;
-	else if(item->type == "shield")
-		controller->currWeap = item;
+	//if(item->type == "weapon")
+	//	controller->currWeap = item;
+	//else if(item->type == "shield")
+	//	controller->currWeap = item;
 	map->RemoveItem(y,x);
 }
 
