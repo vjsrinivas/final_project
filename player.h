@@ -25,12 +25,14 @@ class Player{
 	public:
 		Player();
 		Player(std::string path);
+
 		int health = 100;
 		void printPos();
 		Position pos;
 		std::string texturePath;
 		void addItem(Item*);
 		int radius = 1;
+		std::vector<Item*> getItems();
 		Item* currWeap = NULL;
 		Item* currShield = NULL;
 

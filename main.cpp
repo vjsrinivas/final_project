@@ -4,6 +4,7 @@
 		//Using SDL, SDL_image, standard IO, and strings
 #include <stdio.h>
 #include <string>
+#include <vector>
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 #include "ltimer.h"
@@ -93,7 +94,7 @@ using namespace std;
 
 				if(controller->health <= 0){
 					printf("\n\nYou lost the game :(\n\n");
-					return false;	
+					return false;
 				}
 			}
 			return true;
@@ -125,8 +126,14 @@ using namespace std;
 			loadItemFile(render, filename, items);
 			loadEnemyFile("enemy.txt", enemies);
 			loadenemytextures();
+<<<<<<< HEAD
 			dmgFont = TTF_OpenFont("OpenSans-Bold.ttf", 10);
 			
+||||||| merged common ancestors
+			
+=======
+
+>>>>>>> master
 			for(int i=0; i < items.size(); i++){
 				cout << items[i]->itemName << endl;
 			}
@@ -149,6 +156,16 @@ using namespace std;
 		const int SCREEN_WIDTH = 1080;
 		const int SCREEN_HEIGHT = 1080;
 
+    const int BUTTON_WIDTH = 128;
+    const int BUTTON_HEIGHT = 128;
+    const int TOTAL_BUTTONS = 10;
+
+    enum LButtonSprite{
+      BUTTON_SPRITE_MOUSE_DOWN = 0,
+      BUTTON_SPRITE_MOUSE_UP = 1,
+      BUTTON_SPRITE_TOTAL = 2
+    };
+
 		//Starts up SDL and creates window
 		bool init();
 
@@ -160,16 +177,16 @@ using namespace std;
 
 		//The window we'll be rendering to
 		SDL_Window* gWindow = NULL;
-    //SDL_Window* bWindow = NULL;
+    SDL_Window* bWindow = NULL;
 
 		//The window renderer
 		SDL_Renderer* gRenderer = NULL;
-    //SDL_Renderer* bRenderer = NULL;
+    SDL_Renderer* bRenderer = NULL;
 
     //Scene textures
 		LTexture gDotTexture;
-    //LTexture shieldTexture;
-   // LTexture swordTexture;
+    LTexture shieldTexture;
+    LTexture swordTexture;
 
 		bool init()
 		{
@@ -192,9 +209,9 @@ using namespace std;
 
 				//Create window
 				gWindow = SDL_CreateWindow( "SDL Tutorial", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS );
-				//bWindow = SDL_CreateWindow( "Inventory", 0, 0, SCREEN_WIDTH-440, SCREEN_HEIGHT-600, SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS);
+				bWindow = SDL_CreateWindow( "Inventory", 0, 0, SCREEN_WIDTH-440, SCREEN_HEIGHT-600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
-        if( gWindow == NULL )//|| bWindow == NULL)
+        if( gWindow == NULL || bWindow == NULL)
 				{
 					printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
 					success = false;
@@ -203,10 +220,10 @@ using namespace std;
 				{
 					//Create vsynced renderer for window
 					gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
-					//bRenderer = SDL_CreateRenderer(bWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+					bRenderer = SDL_CreateRenderer(bWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 					//gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED);
 
-          if( gRenderer == NULL )//|| bRenderer == NULL )
+          if( gRenderer == NULL || bRenderer == NULL )
 					{
 						printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
 						success = false;
@@ -216,7 +233,7 @@ using namespace std;
 					{
 						//Initialize renderer color
 						SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
-            //SDL_SetRenderDrawColor(bRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+            SDL_SetRenderDrawColor(bRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
 						//Initialize PNG loading
 						int imgFlags = IMG_INIT_PNG;
@@ -254,8 +271,8 @@ using namespace std;
 	{
 		//Free loaded images
 		gDotTexture.free();
-    //shieldTexture.free();
-    //swordTexture.free();
+    shieldTexture.free();
+    swordTexture.free();
 
 		//Destroy window
 		SDL_DestroyRenderer( gRenderer );
@@ -263,16 +280,16 @@ using namespace std;
 		gWindow = NULL;
 		gRenderer = NULL;
 
-    //SDL_DestroyRenderer(bRenderer);
-    //SDL_DestroyWindow(bWindow);
-    //bWindow = NULL;
-    //bRenderer = NULL;
+    SDL_DestroyRenderer(bRenderer);
+    SDL_DestroyWindow(bWindow);
+    bWindow = NULL;
+    bRenderer = NULL;
 
 		//Quit SDL subsystems
 		IMG_Quit();
 		SDL_Quit();
 	}
-	
+
 
   bool checkBattle(Player* controller, Map*& map, vector<Position>& battle){
 		//compute which blocks to render:
@@ -280,10 +297,10 @@ using namespace std;
   	std::vector<Position> torender;
   	Position original; original.x = 0; original.y = 0;
   	torender.resize((2*radius+1)*(2*radius+1), original);
-  	
+
   	int step_x = -1*(radius);
   	int step_y = -1*(radius);
-  
+
   	for(int i=0; i < (2*radius+1); i++){
   		for(int j=0; j < (2*radius+1); j++){
   			Position pos; pos.x = step_x; pos.y = step_y;
@@ -293,14 +310,14 @@ using namespace std;
   		step_x = -1*radius;
   		step_y++;
   	}
-  
+
   	step_x=0;
   	step_y=1;
     bool havetobattle = false;
-   
+
      for(int i=0; i < torender.size(); i++){
   		Position resultpos;
-  		resultpos.x = controller->pos.x+torender[i].x; 
+  		resultpos.x = controller->pos.x+torender[i].x;
   		resultpos.y = controller->pos.y+torender[i].y;
   		if(resultpos.x >= 0 && resultpos.y >= 0 && resultpos.x < map->width && resultpos.y < map->height){
   			if(map->GetNode(resultpos.y, resultpos.x)->currChar != NULL){
@@ -309,7 +326,7 @@ using namespace std;
        }
   		}
   	}
-   
+
      return havetobattle;
   }
 
@@ -337,6 +354,123 @@ using namespace std;
     //place text over it:
     text_place.render(gRenderer, 910, 15+offset);
 	}
+
+  SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL];
+
+  //The mouse button
+  class LButton
+  {
+  public:
+	  //Initializes internal variables
+	  LButton();
+
+	  //Sets top left position
+	  void setPosition(int x, int y);
+
+	  //Handles mouse event
+	  void handleEvent(SDL_Event* e);
+
+	  //Shows button sprite
+	  void swordRender();
+
+    void shieldRender();
+
+  private:
+	  //Top left position
+	  SDL_Point mPosition;
+
+	  //Currently used global sprite
+	  LButtonSprite mCurrentSprite;
+  };
+
+  LButton::LButton()
+  {
+	  mPosition.x = 0;
+	  mPosition.y = 0;
+
+	  mCurrentSprite = BUTTON_SPRITE_MOUSE_UP; //was out
+  }
+
+  void LButton::setPosition(int x, int y)
+  {
+	  mPosition.x = x;
+	  mPosition.y = y;
+  }
+
+  void LButton::handleEvent(SDL_Event* e)
+  {
+	  //If mouse event happened
+	  if (e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP)
+	  {
+		  //Get mouse position
+		  int x, y;
+		  SDL_GetMouseState(&x, &y);
+
+		  //Check if mouse is in button
+		  bool inside = true;
+
+		  //Mouse is left of the button
+		  if (x < mPosition.x)
+		  {
+			  inside = false;
+		  }
+		//Mouse is right of the button
+		  else if (x > mPosition.x + BUTTON_WIDTH)
+		  {
+			  inside = false;
+		  }
+		  //Mouse above the button
+		  else if (y < mPosition.y)
+		  {
+			  inside = false;
+		  }
+		//Mouse below the button
+		  else if (y > mPosition.y + BUTTON_HEIGHT)
+		  {
+			  inside = false;
+		  }
+
+		  //Mouse is outside button
+		  if (!inside)
+		  {
+			  mCurrentSprite = BUTTON_SPRITE_MOUSE_UP; //was out
+		  }
+		  //Mouse is inside button
+		  else
+		  {
+
+			//Set mouse over sprite
+			  switch (e->type)
+			  {
+			//case SDL_MOUSEMOTION:
+				//mCurrentSprite = BUTTON_SPRITE_MOUSE_OVER_MOTION;
+				//break;
+
+			  case SDL_MOUSEBUTTONDOWN:
+				  mCurrentSprite = BUTTON_SPRITE_MOUSE_DOWN;
+				  break;
+
+			  case SDL_MOUSEBUTTONUP:
+          //call equip function here????
+				  mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
+          printf("item was equipped\n");
+				  break;
+			  }
+		  }
+	  }
+  }
+
+  void LButton::swordRender()
+  {
+	  //Show current button sprite
+	  swordTexture.render(bRenderer, mPosition.x, mPosition.y);//was gSpriteClips[mCurrentSprite]
+  }
+
+  void LButton::shieldRender(){
+    shieldTexture.render(bRenderer, mPosition.x, mPosition.y);
+  }
+
+  LButton gButtons[TOTAL_BUTTONS];
 
 	int main( int argc, char* args[] )
 	{
@@ -369,9 +503,27 @@ using namespace std;
 				if(!gDotTexture.loadFromFile(gRenderer, dot.controller->texturePath))
 					exit(-1);
 
-        //shieldTexture.loadFromFile(bRenderer, "./assets/items/shield.png");
+        shieldTexture.loadFromFile(bRenderer, "./assets/items/shield.png");
         //swordTexture.loadFromFile(bRenderer, "./assets/items/sword.png");
         //work on making them buttons
+
+        gSpriteClips[0].x = 0;
+        gSpriteClips[0].y = 0;
+        gSpriteClips[0].w = BUTTON_WIDTH;
+        gSpriteClips[0].h = BUTTON_HEIGHT;
+        gSpriteClips[1].x = 0;
+        gSpriteClips[1].y = 0;
+        gSpriteClips[1].w = BUTTON_WIDTH;
+        gSpriteClips[1].h = BUTTON_HEIGHT;
+
+        for(int i = 0; i < TOTAL_BUTTONS; i++){
+          if(i < 5){
+            gButtons[i].setPosition(BUTTON_WIDTH * i, 0);
+          }
+          else{
+            gButtons[i].setPosition(BUTTON_WIDTH * (i-5), BUTTON_HEIGHT * 2);
+          }
+        }
 
 				GameState* game = new GameState("items.txt", "enemies.txt", gRenderer);
 				game->isPlayOver = false;
@@ -399,9 +551,16 @@ using namespace std;
 								game->playing = false;
 							}
 
+              if(e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP){
+                for(int i = 0; i < TOTAL_BUTTONS; i++){
+                  gButtons[i].handleEvent(&e);
+                }
+              }
+              else{
 							//Handle input for the dot
-							dot.handleEvent( e );
-						}
+							  dot.handleEvent( e );
+						  }
+            }
 
 						//Move the dot
 						dot.move(map_struct);
@@ -409,20 +568,40 @@ using namespace std;
 
 					//Clear screen
 					SDL_RenderClear( gRenderer );
-          //SDL_RenderClear(bRenderer);
+          SDL_RenderClear(bRenderer);
 
 					map_struct->Redraw(dot.controller->pos.x, dot.controller->pos.y, dot.controller->radius);
 
 					//Render objects
 					dot.render(gDotTexture, gRenderer);
 		      //button render statement here
+<<<<<<< HEAD
 					}
+||||||| merged common ancestors
+
+=======
+          vector<Item*> playerstuff = dot.controller->getItems();
+
+          for(int i = 0; i < playerstuff.size(); i++){
+            if(playerstuff[i]->type == "weapon"){
+              swordTexture.loadFromFile(bRenderer, playerstuff[i]->texturePath);
+              gButtons[i].swordRender();
+            }
+          }
+
+>>>>>>> master
 					HUD("health: " + to_string(dot.controller->health), gFont);
 					HUD("score: " + to_string(game->score), gFont, 30);
 					//Update screen
 					SDL_RenderPresent( gRenderer );
+<<<<<<< HEAD
 					SDL_Delay(500);
 					//SDL_RenderPresent(bRenderer);
+||||||| merged common ancestors
+				  //SDL_RenderPresent(bRenderer);
+=======
+				  SDL_RenderPresent(bRenderer);
+>>>>>>> master
         }
 			delete game;
 		}
