@@ -13,13 +13,13 @@ func: None
 type: weapon
 Sword_of_Raj
 ./assets/items/sword_3.png
-dmg: 100
+dmg: 150
 def: 0
 func: None
 type: weapon
 Ultimate_Sword_of_John
 ./assets/items/sword_2.png
-dmg: 100
+dmg: 500
 def: 0
 func: None
 type: weapon

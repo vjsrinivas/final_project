@@ -3,19 +3,19 @@ Grunt
 ./assets/characters/enemy_2.png
 health: 50
 maxdmg: 25
-maxdef: 4
+maxdef: 0
 Excommunicator
 ./assets/characters/enemy_3.png
 health: 130
 maxdmg: 100
-maxdef: 30
+maxdef: 5
 Eye_of_Emrich
 ./assets/characters/enemy_4.png
 health: 1000
 maxdmg: 5
-maxdef: 100
+maxdef: 20
 Key_Boy
 ./assets/characters/enemy_5.png
 health: 20
 maxdmg: 90
-maxdef: 100
+maxdef: 10

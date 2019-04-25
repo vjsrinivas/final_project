@@ -557,7 +557,7 @@ using namespace std;
 							{
 								game->playing = false;
 							}
-                              
+
               vector<Item*> playerstuff = dot.controller->getItems();
 
               if(e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP){
@@ -601,7 +601,7 @@ using namespace std;
 					HUD("score: " + to_string(game->score), gFont, 30);
 					//Update screen
 					SDL_RenderPresent( gRenderer );
-					SDL_Delay(500);
+					//SDL_Delay(500);
 					//SDL_RenderPresent(bRenderer);
 				  //SDL_RenderPresent(bRenderer);
 				  SDL_RenderPresent(bRenderer);

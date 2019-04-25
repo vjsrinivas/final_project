@@ -87,13 +87,13 @@ Enemy::Enemy(Enemy* newspawn){
 
 void loadEnemyFile(std::string filename, std::vector<Enemy*>& enemy){
 	std::ifstream file(filename.c_str());
-	
+
 	if(file.is_open()){
 		int numofenemies;
 		std::string holder;
-		
+
 		file >> numofenemies;
-		
+
 		for(int i=0; i < numofenemies; i++){
 			Enemy* new_enemy = new Enemy();
 			file >> new_enemy->name;
@@ -144,9 +144,9 @@ void LightPotion(Player*& controller){
 
 void HealthPotion(Player*& controller){
 	if(controller->health <= 80)
-		controller->health += 20;
+		controller->health += 30;
 	else if(controller->health > 80 && controller->health <= 100)
-		controller->health = 100;
+		controller->health += 20;
 }
 
 
