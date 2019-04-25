@@ -89,6 +89,10 @@ using namespace std;
 						delete enemy_node->currChar;
 						enemy_node->currChar = NULL;
 						pos.erase(pos.begin()+i);
+						if(enemy_node->currChar->name == "Key_Boy"){
+							printf("You won! :)");
+							exit(-1);
+						}
 					}
 				}
 
