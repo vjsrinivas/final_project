@@ -1,4 +1,10 @@
-5
+9
+Stick
+./assets/items/sword_6.png
+dmg: 50
+def: 0
+func: None
+type: weapon
 Normal_Sword
 ./assets/items/sword_5.png
 dmg: 100
