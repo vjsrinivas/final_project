@@ -27,11 +27,30 @@ using namespace std;
 				vector<Item*> get_items();
 				vector<Enemy*> get_enemies();
 			private:
+        LTexture dmgPopup;
+				TTF_Font* dmgFont;
+				void damageIndicator(std::string dmg, int, int);
 				void loadenemytextures();
 				vector<Item*> items;
 				SDL_Renderer* render;
 				vector<Enemy*> enemies;
 		};
+
+		void GameState::damageIndicator(std::string dmg, int pos_x, int pos_y){
+			if(dmgFont == NULL)
+				printf("Error! could not read dmgFont\n");
+			else{
+				//Render text
+    		SDL_Color textColor = { 100, 0, 0 };
+    		if( !dmgPopup.loadFromRenderedText( render, dmg, textColor, dmgFont ) )
+    		{
+    			printf( "Failed to render text texture!\n" );
+    		}
+        //place text over it:
+        dmgPopup.render(render, pos_y, pos_x);
+  			printf("rendering...\n");
+			}
+		}
 
 		void GameState::loadenemytextures(){
 			for(int i=0; i < enemies.size(); i++){
@@ -50,7 +69,7 @@ using namespace std;
 					int damageBlocked = 0; //shield value
 					damageTaken -= damageBlocked;
 					controller->health -= damageTaken;
-
+					damageIndicator("-"+std::to_string(damageTaken), controller->pos.x, controller->pos.y+10);
 					//attack enemy:
 					if(controller->currWeap != NULL){
 						int damageGiven = controller->currWeap->damage;
@@ -58,8 +77,11 @@ using namespace std;
 							int damageLost = rand()%enemy_node->currChar->maxdef+1; //shield
 							damageGiven -= damageLost;
 						}
-						if(damageGiven != 0)
+						if(damageGiven != 0){
+							int original_health = enemy_node->currChar->health;
 							enemy_node->currChar->health -= rand()%damageGiven+1;
+							damageIndicator(std::to_string(enemy_node->currChar->health)+"/"+std::to_string(original_health), pos[i].x, pos[i].y + 10);
+						}
 					}
 
 					if(enemy_node->currChar->health <= 0){
@@ -67,7 +89,6 @@ using namespace std;
 						enemy_node->currChar = NULL;
 						pos.erase(pos.begin()+i);
 					}
-					SDL_Delay(500);
 				}
 
 				if(controller->health <= 0){
@@ -104,6 +125,7 @@ using namespace std;
 			loadItemFile(render, filename, items);
 			loadEnemyFile("enemy.txt", enemies);
 			loadenemytextures();
+			dmgFont = TTF_OpenFont("OpenSans-Bold.ttf", 10);
 			
 			for(int i=0; i < items.size(); i++){
 				cout << items[i]->itemName << endl;
@@ -354,7 +376,8 @@ using namespace std;
 				GameState* game = new GameState("items.txt", "enemies.txt", gRenderer);
 				game->isPlayOver = false;
 				TTF_Font* gFont = TTF_OpenFont("OpenSans-Bold.ttf", 14);
-        vector<Position> battle;
+				//TTF_Font* damageFont = TTF_OpenFont("OpenSans-Bold.ttf", 10);
+				vector<Position> battle;
 				map_struct = new Map(0,0,2,"test_map.txt", gRenderer, game->get_items(), game->get_enemies());
 
 				//While application is running
@@ -383,7 +406,6 @@ using namespace std;
 						//Move the dot
 						dot.move(map_struct);
 						game->isPlayOver = checkBattle(dot.controller, map_struct, battle);
-					}
 
 					//Clear screen
 					SDL_RenderClear( gRenderer );
@@ -394,12 +416,13 @@ using namespace std;
 					//Render objects
 					dot.render(gDotTexture, gRenderer);
 		      //button render statement here
-
+					}
 					HUD("health: " + to_string(dot.controller->health), gFont);
 					HUD("score: " + to_string(game->score), gFont, 30);
 					//Update screen
 					SDL_RenderPresent( gRenderer );
-				  //SDL_RenderPresent(bRenderer);
+					SDL_Delay(500);
+					//SDL_RenderPresent(bRenderer);
         }
 			delete game;
 		}
