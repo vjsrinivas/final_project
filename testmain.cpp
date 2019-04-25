@@ -426,6 +426,7 @@ using namespace std;
           //call equip function here????
 				  mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
           printf("item was equipped\n");
+				  //dot.controller->currWeap = something pass it?;
 				  break;
 			  }
 		  }
@@ -475,7 +476,7 @@ using namespace std;
 				if(!gDotTexture.loadFromFile(gRenderer, dot.controller->texturePath))
 					exit(-1);
 
-        shieldTexture.loadFromFile(bRenderer, "./assets/items/shield.png");
+        //shieldTexture.loadFromFile(bRenderer, "./assets/items/shield.png");
         //swordTexture.loadFromFile(bRenderer, "./assets/items/sword.png");
         //work on making them buttons
 
@@ -554,6 +555,10 @@ using namespace std;
               swordTexture.loadFromFile(bRenderer, playerstuff[i]->texturePath);
               gButtons[i].swordRender();
             }
+	    if(playerstufff[i]->type == "shield"){
+		swordTexture.loadFromFile(bRenderer, playerstuff[i]->texturePath);
+		gButtons[i].shieldRender();
+	    }
           }
 
 					HUD("health: " + to_string(dot.controller->health), gFont);
