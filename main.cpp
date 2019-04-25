@@ -4,6 +4,7 @@
 		//Using SDL, SDL_image, standard IO, and strings
 #include <stdio.h>
 #include <string>
+#include <vector>
 #include "ltimer.h"
 #include "ltexture.h"
 #include "map.h"
@@ -452,6 +453,8 @@ using namespace std;
 					//Render objects
 					dot.render(gDotTexture, gRenderer);
 		      //button render statement here
+          //vector<*Items> playerstuff = dot.controller->getItems();
+          
           for(int i = 0; i < TOTAL_BUTTONS; i++){
             if(i < 5){
               gButtons[i].swordRender();

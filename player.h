@@ -25,7 +25,7 @@ class Player{
 	public:
 		Player();
 		Player(std::string path);
-		
+
 		int health = 100;
 		void printPos();
 		Position pos;
@@ -34,6 +34,8 @@ class Player{
 
 		void addItem(Item*);
 		int radius = 1;
+		//vector<Item*> getItems();
+
 	private:
 		std::vector<Item*> items;
 };
@@ -45,3 +47,4 @@ void executeItem(Item* item, Player*& controller);
 
 // Functions for item catergories:
 void LightPotion(Player*& controller);
+
