@@ -14,14 +14,14 @@ class Node{
 		Node();
 		Node(int);
 		int terrain;
-		Player* currChar = NULL;
+		Enemy* currChar = NULL;
 		Item* currItem = NULL;
 };
 
 class Map{
 	public:
 		Map(int,int,SDL_Renderer*);
-		Map(int,int,int,std::string,SDL_Renderer*, std::vector<Item*>);
+		Map(int,int,int,std::string,SDL_Renderer*, std::vector<Item*>, std::vector<Enemy*>);
 		void ClearMap();
 		void LoadMap(int,int);
 		Node* GetNode(int,int);
@@ -33,6 +33,7 @@ class Map{
 	private:
 		void loadtextures();
 		void loadtextures(int,int,int);
+		
 		SDL_Renderer* render;
 		
 		std::vector< std::vector<Node*> > node_map;

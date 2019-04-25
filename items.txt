@@ -1,25 +1,49 @@
-4
+5
 Normal_Sword
-./assets/items/sword_1.png
+./assets/items/sword_5.png
 dmg: 100
 def: 0
 func: None
 type: weapon
 Sword_of_Raj
-./assets/items/sword_1.png
+./assets/items/sword_3.png
 dmg: 100
 def: 0
 func: None
 type: weapon
 Ultimate_Sword_of_John
-./assets/items/sword_1.png
+./assets/items/sword_2.png
 dmg: 100
 def: 0
 func: None
 type: weapon
+Bayonet_of_Bros
+./assets/items/sword_4.png
+dmg: 90
+def: 0
+func: None
+type: weapon
+Shield_1
+./assets/items/shield.png
+dmg: 0
+def: 60
+func: None
+type: shield
+Shield_2
+./assets/items/shield_1.png
+dmg: 0
+def: 100
+func: None
+type: shield
 Light_Potion
-./assets/items/cs317_potion.png
+./assets/items/light_potion.png
 dmg: -1
 def: -1
 func: LightPotion
+type: other
+Health_Potion
+./assets/items/health_potion.png
+dmg: -1
+def: -1
+func: HealthPotion
 type: other

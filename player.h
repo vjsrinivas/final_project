@@ -25,20 +25,46 @@ class Player{
 	public:
 		Player();
 		Player(std::string path);
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		int health = 100;
 		void printPos();
 		Position pos;
-		int movesLeft;
 		std::string texturePath;
-
 		void addItem(Item*);
 		int radius = 1;
+<<<<<<< HEAD
 		std::vector<Item*> getItems();
+
+=======
+		Item* currWeap = NULL;
+		Item* currShield = NULL;
 
 	private:
 		std::vector<Item*> items;
 };
+
+class Enemy{
+	public:
+		Enemy();
+		Enemy(Enemy*);
+		Enemy(std::string path);
+		void printPos();
+		Position pos;
+		int health = 10;
+		std::string name;
+		std::string texturePath;
+		LTexture* texture = new LTexture();
+		int maxdmg = 0;
+>>>>>>> master
+	private:
+		std::vector<Item*> items;
+};
+
+void loadEnemyFile(std::string, std::vector<Enemy*>&);
+
 
 // Function reads a file and adds to vector of items for retrieval later
 void loadItemFile(SDL_Renderer*, std::string filename, std::vector<Item*>& items);
@@ -47,4 +73,8 @@ void executeItem(Item* item, Player*& controller);
 
 // Functions for item catergories:
 void LightPotion(Player*& controller);
+<<<<<<< HEAD
 
+=======
+void HealthPotion(Player*& controller);
+>>>>>>> master
