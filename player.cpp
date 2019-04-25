@@ -77,6 +77,7 @@ Enemy::Enemy(Enemy* newspawn){
 	name = newspawn->name;
 	texturePath = newspawn->texturePath;
 	texture = newspawn->texture;
+	health = newspawn->health;
 }
 
 void loadEnemyFile(std::string filename, std::vector<Enemy*>& enemy){
@@ -84,7 +85,7 @@ void loadEnemyFile(std::string filename, std::vector<Enemy*>& enemy){
 	
 	if(file.is_open()){
 		int numofenemies;
-		std::string enemyname;
+		std::string holder;
 		
 		file >> numofenemies;
 		
@@ -92,6 +93,9 @@ void loadEnemyFile(std::string filename, std::vector<Enemy*>& enemy){
 			Enemy* new_enemy = new Enemy();
 			file >> new_enemy->name;
 			file >> new_enemy->texturePath;
+			if(file >> holder)
+				printf("looking for %s...", holder.c_str());
+			file >> new_enemy->health;
 			enemy.push_back(new_enemy);
 		}
 	}
