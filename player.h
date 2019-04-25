@@ -34,7 +34,7 @@ class Player{
 
 		void addItem(Item*);
 		int radius = 1;
-		//vector<Item*> getItems();
+		std::vector<Item*> getItems();
 
 	private:
 		std::vector<Item*> items;

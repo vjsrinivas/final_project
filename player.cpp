@@ -22,9 +22,9 @@ void Player::addItem(Item* currItem){
 	items.push_back(currItem);
 }
 
-//vector<Item*> Player::getItems(){
-//	return items;
-//}
+std::vector<Item*> Player::getItems(){
+	return items;
+}
 
 void loadItemFile(SDL_Renderer* render, std::string filename, std::vector<Item*>& items){
 	std::ifstream file(filename.c_str());

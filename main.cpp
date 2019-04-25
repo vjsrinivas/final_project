@@ -453,9 +453,9 @@ using namespace std;
 					//Render objects
 					dot.render(gDotTexture, gRenderer);
 		      //button render statement here
-          //vector<*Items> playerstuff = dot.controller->getItems();
+          vector<Item*> playerstuff = dot.controller->getItems();
           
-          for(int i = 0; i < TOTAL_BUTTONS; i++){
+          for(int i = 0; i < playerstuff.size(); i++){
             if(i < 5){
               gButtons[i].swordRender();
             }
