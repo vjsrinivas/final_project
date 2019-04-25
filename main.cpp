@@ -66,7 +66,9 @@ using namespace std;
 				for(int i=0; i < pos.size(); i++){
 					// attack player
 					Node* enemy_node = map->GetNode(pos[i].y, pos[i].x);
-					int damageTaken = rand()%enemy_node->currChar->maxdmg + 1;
+					int damageTaken;
+					if(enemy_node->currChar->maxdmg != 0)
+						damageTaken = rand()%enemy_node->currChar->maxdmg + 1;
 					int damageBlocked = 0; //shield value
 					damageTaken -= damageBlocked;
 					controller->health -= damageTaken;
@@ -75,8 +77,10 @@ using namespace std;
 					if(controller->currWeap != NULL){
 						int damageGiven = controller->currWeap->damage;
 						if(controller->currShield != NULL){
-							int damageLost = rand()%enemy_node->currChar->maxdef+1; //shield
-							damageGiven -= damageLost;
+							if(enemy_node->currChar->maxdef != 0){
+								int damageLost = rand()%enemy_node->currChar->maxdef+1; //shield
+								damageGiven -= damageLost;
+							}
 						}
 						if(damageGiven != 0){
 							int original_health = enemy_node->currChar->health;
@@ -86,13 +90,13 @@ using namespace std;
 					}
 
 					if(enemy_node->currChar->health <= 0){
+						if(enemy_node->currChar->name == "Key_Boy"){
+							printf("You won :-)\n");
+							exit(-1);
+						}
 						delete enemy_node->currChar;
 						enemy_node->currChar = NULL;
 						pos.erase(pos.begin()+i);
-						if(enemy_node->currChar->name == "Key_Boy"){
-							printf("You won! :)");
-							exit(-1);
-						}
 					}
 				}
 

@@ -130,6 +130,9 @@ void executeItem(Item* item, Player*& controller){
 			HealthPotion(controller);
 		}
 	}
+	else if(type=="shield"){
+		printf("picked up shield\n");
+	}
 	else{
 		printf("error! item type not right!\n");
 	}
