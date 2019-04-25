@@ -339,7 +339,7 @@ using namespace std;
 	  void setPosition(int x, int y);
 
 	  //Handles mouse event
-	  void handleEvent(SDL_Event* e);
+	  void handleEvent(SDL_Event* e, Item* item, Dot &dot);
 
 	  //Shows button sprite
 	  void swordRender();
@@ -368,7 +368,7 @@ using namespace std;
 	  mPosition.y = y;
   }
 
-  void LButton::handleEvent(SDL_Event* e)
+  void LButton::handleEvent(SDL_Event* e, Item* item, Dot &dot)
   {
 	  //If mouse event happened
 	  if (e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP)
@@ -424,6 +424,12 @@ using namespace std;
 			  case SDL_MOUSEBUTTONUP:
           //call equip function here????
 				  mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
+          if(item->type == "weapon"){                 
+            dot.controller->currWeap = item;
+          }
+          if(item->type == "shield"){
+            dot.controller->currShield = item;
+          }
           printf("item was equipped\n");
 				  break;
 			  }
@@ -474,7 +480,7 @@ using namespace std;
 				if(!gDotTexture.loadFromFile(gRenderer, dot.controller->texturePath))
 					exit(-1);
 
-        shieldTexture.loadFromFile(bRenderer, "./assets/items/shield.png");
+        //shieldTexture.loadFromFile(bRenderer, "./assets/items/shield.png");
         //swordTexture.loadFromFile(bRenderer, "./assets/items/sword.png");
         //work on making them buttons
 
@@ -521,9 +527,13 @@ using namespace std;
 								game->playing = false;
 							}
 
+              vector<Item*> playerstuff = dot.controller->getItems();
+              
               if(e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP){
-                for(int i = 0; i < TOTAL_BUTTONS; i++){
-                  gButtons[i].handleEvent(&e);
+                for(int i = 0; i < playerstuff.size(); i++){
+                  //if(playerstuff[i] != NULL){
+                    gButtons[i].handleEvent(&e, playerstuff[i], dot );
+                  //}
                 }
               }
               else{
@@ -546,12 +556,16 @@ using namespace std;
 					//Render objects
 					dot.render(gDotTexture, gRenderer);
 		      //button render statement here
-          vector<Item*> playerstuff = dot.controller->getItems();
+          vector<Item*> stuff = dot.controller->getItems();
 
-          for(int i = 0; i < playerstuff.size(); i++){
-            if(playerstuff[i]->type == "weapon"){
-              swordTexture.loadFromFile(bRenderer, playerstuff[i]->texturePath);
+          for(int i = 0; i < stuff.size(); i++){
+            if(stuff[i]->type == "weapon"){
+              swordTexture.loadFromFile(bRenderer, stuff[i]->texturePath);
               gButtons[i].swordRender();
+            }
+            else if(stuff[i]->type == "shield"){
+              shieldTexture.loadFromFile(bRenderer, stuff[i]->texturePath);
+              gButtons[i].shieldRender();
             }
           }
 
