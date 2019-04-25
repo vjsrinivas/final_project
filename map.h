@@ -33,6 +33,7 @@ class Map{
 	private:
 		void loadtextures();
 		void loadtextures(int,int,int);
+		
 		SDL_Renderer* render;
 		
 		std::vector< std::vector<Node*> > node_map;

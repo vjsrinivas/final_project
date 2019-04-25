@@ -38,6 +38,23 @@ class Player{
 		std::vector<Item*> items;
 };
 
+class Enemy{
+	public:
+		Enemy();
+		Enemy(std::string path);
+		void printPos();
+		Position pos;
+		int health=10;
+		std::string name;
+		std::string texturePath;
+		LTexture* texture = new LTexture();
+	private:
+		std::vector<Item*> items;
+};
+
+void loadEnemyFile(std::string, std::vector<Enemy*>&);
+
+
 // Function reads a file and adds to vector of items for retrieval later
 void loadItemFile(SDL_Renderer*, std::string filename, std::vector<Item*>& items);
 

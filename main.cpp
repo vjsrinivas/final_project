@@ -24,10 +24,17 @@ using namespace std;
 				void placeItem(int item_pos, int x, int y);
 				vector<Item*> get_items();
 			private:
+				void loadenemytextures();
 				vector<Item*> items;
 				SDL_Renderer* render;
-				vector<Dot*> enemies;
+				vector<Enemy*> enemies;
 		};
+
+		void GameState::loadenemytextures(){
+			for(int i=0; i < enemies.size(); i++){
+				enemies[i]->texture->loadFromFile(render, enemies[i]->texturePath);
+			}
+		}
 
 		vector<Item*> GameState::get_items(){
 			return items;
@@ -49,7 +56,9 @@ using namespace std;
 		GameState::GameState(string filename, string enemyFile, SDL_Renderer* gRenderer){
 			render = gRenderer;
 			loadItemFile(render, filename, items);
-			//render = gRenderer;
+			loadEnemyFile(filename, enemies);
+			loadenemytextures();
+			
 			for(int i=0; i < items.size(); i++){
 				cout << items[i]->itemName << endl;
 			}
@@ -62,7 +71,7 @@ using namespace std;
 		}
 
 		void GameState::addEnemy(string texturePath){
-			Dot* newEnemy = new Dot(1080,1080, texturePath);
+			Enemy* newEnemy = new Enemy(texturePath);
 			enemies.push_back(newEnemy);
 		}
 
