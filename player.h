@@ -25,20 +25,14 @@ class Player{
 	public:
 		Player();
 		Player(std::string path);
-<<<<<<< HEAD
 
-=======
->>>>>>> master
 		int health = 100;
 		void printPos();
 		Position pos;
 		std::string texturePath;
 		void addItem(Item*);
 		int radius = 1;
-<<<<<<< HEAD
 		std::vector<Item*> getItems();
-
-=======
 		Item* currWeap = NULL;
 		Item* currShield = NULL;
 
@@ -58,7 +52,6 @@ class Enemy{
 		std::string texturePath;
 		LTexture* texture = new LTexture();
 		int maxdmg = 0;
->>>>>>> master
 	private:
 		std::vector<Item*> items;
 };
@@ -73,8 +66,4 @@ void executeItem(Item* item, Player*& controller);
 
 // Functions for item catergories:
 void LightPotion(Player*& controller);
-<<<<<<< HEAD
-
-=======
 void HealthPotion(Player*& controller);
->>>>>>> master
