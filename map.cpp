@@ -297,7 +297,7 @@ void Dot::handleEvent( SDL_Event& e)
 	
 	if(e.type == SDL_KEYUP && e.key.repeat == 0)
 	{
-		controller->movesLeft--;
+		//controller->movesLeft--;
 		//std::cout << "key let go" << std::endl;
 		//Adjust the velocity
 		switch( e.key.keysym.sym )
@@ -353,7 +353,7 @@ void Dot::move(Map*& map)
 	if(!isBorder){
 		//std::cout << "trying at positon: " << controller->pos.y << ", " << controller->pos.x << std::endl;
 		Node* curr_node = map->GetNode(controller->pos.y, controller->pos.x);
-		if(curr_node->terrain == 2){
+		if(curr_node->terrain == 2 || curr_node->currChar != NULL){
 			mPosX -= mVelX;
 			controller->pos.x -= mVelX/30;
 
@@ -372,6 +372,7 @@ void Dot::move(Map*& map)
 		printf("item picked up!\n");
 	}
 
+	
 	mVelX = 0;
 	mVelY = 0;
 }
@@ -381,6 +382,12 @@ void Dot::itemPickup(Map*& map, int y, int x){
 	Item* item = map->GetNode(y,x)->currItem;
 	executeItem(item, controller);
 	controller->addItem(item);
+	
+	// TEMP:
+	if(item->type == "weapon")
+		controller->currWeap = item;
+	else if(item->type == "shield")
+		controller->currWeap = item;
 	map->RemoveItem(y,x);
 }
 

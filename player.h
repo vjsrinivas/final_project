@@ -25,15 +25,15 @@ class Player{
 	public:
 		Player();
 		Player(std::string path);
-		
 		int health = 100;
 		void printPos();
 		Position pos;
-		int movesLeft;
 		std::string texturePath;
-
 		void addItem(Item*);
 		int radius = 1;
+		Item* currWeap = NULL;
+		Item* currShield = NULL;
+
 	private:
 		std::vector<Item*> items;
 };
@@ -49,6 +49,7 @@ class Enemy{
 		std::string name;
 		std::string texturePath;
 		LTexture* texture = new LTexture();
+		int maxdmg = 0;
 	private:
 		std::vector<Item*> items;
 };

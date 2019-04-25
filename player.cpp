@@ -78,6 +78,7 @@ Enemy::Enemy(Enemy* newspawn){
 	texturePath = newspawn->texturePath;
 	texture = newspawn->texture;
 	health = newspawn->health;
+	maxdmg = newspawn->maxdmg;
 }
 
 void loadEnemyFile(std::string filename, std::vector<Enemy*>& enemy){
@@ -94,8 +95,11 @@ void loadEnemyFile(std::string filename, std::vector<Enemy*>& enemy){
 			file >> new_enemy->name;
 			file >> new_enemy->texturePath;
 			if(file >> holder)
-				printf("looking for %s...", holder.c_str());
+				printf("looking for %s...\n", holder.c_str());
 			file >> new_enemy->health;
+			if(file >> holder)
+				printf("looking for %s...\n", holder.c_str());
+			file >> new_enemy->maxdmg;
 			enemy.push_back(new_enemy);
 		}
 	}
