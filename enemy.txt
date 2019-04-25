@@ -1,4 +1,4 @@
-2
+4
 Grunt
 ./assets/characters/enemy_2.png
 health: 50
