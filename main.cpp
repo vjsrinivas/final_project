@@ -126,14 +126,7 @@ using namespace std;
 			loadItemFile(render, filename, items);
 			loadEnemyFile("enemy.txt", enemies);
 			loadenemytextures();
-<<<<<<< HEAD
 			dmgFont = TTF_OpenFont("OpenSans-Bold.ttf", 10);
-			
-||||||| merged common ancestors
-			
-=======
-
->>>>>>> master
 			for(int i=0; i < items.size(); i++){
 				cout << items[i]->itemName << endl;
 			}
@@ -575,11 +568,7 @@ using namespace std;
 					//Render objects
 					dot.render(gDotTexture, gRenderer);
 		      //button render statement here
-<<<<<<< HEAD
 					}
-||||||| merged common ancestors
-
-=======
           vector<Item*> playerstuff = dot.controller->getItems();
 
           for(int i = 0; i < playerstuff.size(); i++){
@@ -588,20 +577,14 @@ using namespace std;
               gButtons[i].swordRender();
             }
           }
-
->>>>>>> master
 					HUD("health: " + to_string(dot.controller->health), gFont);
 					HUD("score: " + to_string(game->score), gFont, 30);
 					//Update screen
 					SDL_RenderPresent( gRenderer );
-<<<<<<< HEAD
 					SDL_Delay(500);
 					//SDL_RenderPresent(bRenderer);
-||||||| merged common ancestors
 				  //SDL_RenderPresent(bRenderer);
-=======
 				  SDL_RenderPresent(bRenderer);
->>>>>>> master
         }
 			delete game;
 		}
