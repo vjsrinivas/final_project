@@ -41,10 +41,11 @@ class Player{
 class Enemy{
 	public:
 		Enemy();
+		Enemy(Enemy*);
 		Enemy(std::string path);
 		void printPos();
 		Position pos;
-		int health=10;
+		int health = 10;
 		std::string name;
 		std::string texturePath;
 		LTexture* texture = new LTexture();
@@ -62,3 +63,4 @@ void executeItem(Item* item, Player*& controller);
 
 // Functions for item catergories:
 void LightPotion(Player*& controller);
+void HealthPotion(Player*& controller);

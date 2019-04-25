@@ -23,6 +23,7 @@ using namespace std;
 				void removeEnemy(int position);
 				void placeItem(int item_pos, int x, int y);
 				vector<Item*> get_items();
+				vector<Enemy*> get_enemies();
 			private:
 				void loadenemytextures();
 				vector<Item*> items;
@@ -38,6 +39,10 @@ using namespace std;
 
 		vector<Item*> GameState::get_items(){
 			return items;
+		}
+
+		vector<Enemy*> GameState::get_enemies(){
+			return enemies;
 		}
 
 		void GameState::placeItem(int item_pos, int x, int y){
@@ -56,7 +61,7 @@ using namespace std;
 		GameState::GameState(string filename, string enemyFile, SDL_Renderer* gRenderer){
 			render = gRenderer;
 			loadItemFile(render, filename, items);
-			loadEnemyFile(filename, enemies);
+			loadEnemyFile("enemy.txt", enemies);
 			loadenemytextures();
 			
 			for(int i=0; i < items.size(); i++){
@@ -273,7 +278,7 @@ using namespace std;
 				game->isPlayOver = false;
 				TTF_Font* gFont = TTF_OpenFont("OpenSans-Bold.ttf", 14);
 
-				map_struct = new Map(0,0,2,"test_map.txt", gRenderer, game->get_items());
+				map_struct = new Map(0,0,2,"test_map.txt", gRenderer, game->get_items(), game->get_enemies());
 
 				//While application is running
 				while( game->playing )

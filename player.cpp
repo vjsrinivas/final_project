@@ -72,6 +72,13 @@ Enemy::Enemy(std::string path){
 
 }
 
+Enemy::Enemy(Enemy* newspawn){
+	printf("copying... %s", newspawn->name.c_str());
+	name = newspawn->name;
+	texturePath = newspawn->texturePath;
+	texture = newspawn->texture;
+}
+
 void loadEnemyFile(std::string filename, std::vector<Enemy*>& enemy){
 	std::ifstream file(filename.c_str());
 	
@@ -104,6 +111,9 @@ void executeItem(Item* item, Player*& controller){
 		if(item->func == "LightPotion"){
 			LightPotion(controller);
 		}
+		else if(item->func == "HealthPotion"){
+			HealthPotion(controller);
+		}
 	}
 	else{
 		printf("error! item type not right!\n");
@@ -113,3 +123,12 @@ void executeItem(Item* item, Player*& controller){
 void LightPotion(Player*& controller){
 	controller->radius += 1;
 }
+
+void HealthPotion(Player*& controller){
+	if(controller->health <= 80)
+		controller->health += 20;
+	else if(controller->health > 80 && controller->health <= 100)
+		controller->health = 100;
+}
+
+
