@@ -28,7 +28,7 @@ using namespace std;
 				vector<Item*> get_items();
 				vector<Enemy*> get_enemies();
 			private:
-        LTexture dmgPopup;
+				LTexture dmgPopup;
 				TTF_Font* dmgFont;
 				void damageIndicator(std::string dmg, int, int);
 				void loadenemytextures();
@@ -36,28 +36,29 @@ using namespace std;
 				SDL_Renderer* render;
 				vector<Enemy*> enemies;
 		};
+		//gamestate class holds most of the functions needed while the game is actually running
 
 		void GameState::damageIndicator(std::string dmg, int pos_x, int pos_y){
 			if(dmgFont == NULL)
 				printf("Error! could not read dmgFont\n");
 			else{
-				//Render text
-    		SDL_Color textColor = { 100, 0, 0 };
-    		if( !dmgPopup.loadFromRenderedText( render, dmg, textColor, dmgFont ) )
-    		{
-    			printf( "Failed to render text texture!\n" );
-    		}
-        //place text over it:
-        dmgPopup.render(render, pos_y, pos_x);
-  			printf("rendering...\n");
+				SDL_Color textColor = { 100, 0, 0 };
+
+				if( !dmgPopup.loadFromRenderedText( render, dmg, textColor, dmgFont ) )
+				{
+					printf( "Failed to render text texture!\n" );
+				}
+
+				dmgPopup.render(render, pos_y, pos_x);
+				printf("rendering...\n");
 			}
-		}
+		}//renders text to indicate when the player has taken damage
 
 		void GameState::loadenemytextures(){
 			for(int i=0; i < enemies.size(); i++){
 				enemies[i]->texture->loadFromFile(render, enemies[i]->texturePath);
 			}
-		}
+		}//calls render function for each enemy in the game
 
 		bool GameState::fightEnemies(Player*& controller, vector<Position>& pos, Map*& map){
 			//fight one and then the other:
@@ -87,7 +88,8 @@ using namespace std;
 							enemy_node->currChar->health -= rand()%damageGiven+1;
 							damageIndicator(std::to_string(enemy_node->currChar->health)+"/"+std::to_string(original_health), pos[i].x, pos[i].y + 10);
 						}
-					}
+					}//fighting is automated and based off a random value obtained from enemies max attack and defense
+					//their attacks can be lessened if user has a shield equipped
 
 					if(enemy_node->currChar->health <= 0){
 						if(enemy_node->currChar->name == "Key_Boy"){
@@ -125,7 +127,7 @@ using namespace std;
 				printf("Error! failed to load texture for: %s\n", items[item_pos]->itemName.c_str());
 			}
 
-		}
+		}//renders items at each location on the map
 
 		GameState::GameState() {}
 
@@ -138,7 +140,7 @@ using namespace std;
 			for(int i=0; i < items.size(); i++){
 				cout << items[i]->itemName << endl;
 			}
-		}
+		}//sets up renderer, enemies, and items from text files. Also sets the font from a ttf file
 
 		GameState::~GameState() {}
 
@@ -165,7 +167,7 @@ using namespace std;
       BUTTON_SPRITE_MOUSE_DOWN = 0,
       BUTTON_SPRITE_MOUSE_UP = 1,
       BUTTON_SPRITE_TOTAL = 2
-    };
+    };//setting size of buttons and the inputs they'll read
 
 		//Starts up SDL and creates window
 		bool init();
@@ -176,11 +178,11 @@ using namespace std;
 		//Frees media and shuts down SDL
 		void close();
 
-		//The window we'll be rendering to
+		//The windows we'll be rendering to
 		SDL_Window* gWindow = NULL;
     SDL_Window* bWindow = NULL;
 
-		//The window renderer
+		//The window renderers
 		SDL_Renderer* gRenderer = NULL;
     SDL_Renderer* bRenderer = NULL;
 
@@ -208,7 +210,7 @@ using namespace std;
 					printf( "Warning: Linear texture filtering not enabled!" );
 				}
 
-				//Create window
+				//Create windows
 				gWindow = SDL_CreateWindow( "SDL Tutorial", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS );
 				bWindow = SDL_CreateWindow( "Inventory", 0, 0, SCREEN_WIDTH-440, SCREEN_HEIGHT-600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
@@ -219,7 +221,7 @@ using namespace std;
 				}
 				else
 				{
-					//Create vsynced renderer for window
+					//Create vsynced renderers for windows
 					gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 					bRenderer = SDL_CreateRenderer(bWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 					//gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED);
@@ -275,7 +277,7 @@ using namespace std;
     shieldTexture.free();
     swordTexture.free();
 
-		//Destroy window
+		//Destroy windows
 		SDL_DestroyRenderer( gRenderer );
 		SDL_DestroyWindow( gWindow );
 		gWindow = NULL;
@@ -329,7 +331,7 @@ using namespace std;
   	}
 
      return havetobattle;
-  }
+  }//function decides if the player is close enough to an enemy to initiate combat, and also renders surrounding area
 
   void HUD(string str_say, TTF_Font* gFont, int offset=0){
     LTexture text_place;
@@ -389,14 +391,14 @@ using namespace std;
 	  mPosition.x = 0;
 	  mPosition.y = 0;
 
-	  mCurrentSprite = BUTTON_SPRITE_MOUSE_UP; //was out
+	  mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
   }
 
   void LButton::setPosition(int x, int y)
   {
 	  mPosition.x = x;
 	  mPosition.y = y;
-  }
+  }//places button at specified location
 
   void LButton::handleEvent(SDL_Event* e, Item* item, Dot dot)
   {
@@ -443,16 +445,12 @@ using namespace std;
 			//Set mouse over sprite
 			  switch (e->type)
 			  {
-			//case SDL_MOUSEMOTION:
-				//mCurrentSprite = BUTTON_SPRITE_MOUSE_OVER_MOTION;
-				//break;
 
 			  case SDL_MOUSEBUTTONDOWN:
 				  mCurrentSprite = BUTTON_SPRITE_MOUSE_DOWN;
 				  break;
 
 			  case SDL_MOUSEBUTTONUP:
-          //call equip function here????
 				  mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
           if(item->type == "weapon"){
             dot.controller->currWeap = item;
@@ -462,22 +460,21 @@ using namespace std;
           }
           printf("item was equipped\n");
 				  break;
-			  }
+			  }//equips weapon/shield if mouse goes back up over a button
 		  }
 	  }
   }
 
   void LButton::swordRender()
   {
-	  //Show current button sprite
-	  swordTexture.render(bRenderer, mPosition.x, mPosition.y);//was gSpriteClips[mCurrentSprite]
+	  swordTexture.render(bRenderer, mPosition.x, mPosition.y);
   }
 
   void LButton::shieldRender(){
-    shieldTexture.render(bRenderer, mPosition.x, mPosition.y);
-  }
+	  shieldTexture.render(bRenderer, mPosition.x, mPosition.y);
+  }//renders both item textures in player's inventory
 
-  LButton gButtons[TOTAL_BUTTONS];
+  LButton gButtons[TOTAL_BUTTONS];//creates the button array
 
 	int main( int argc, char* args[] )
 	{
@@ -510,10 +507,6 @@ using namespace std;
 				if(!gDotTexture.loadFromFile(gRenderer, dot.controller->texturePath))
 					exit(-1);
 
-        //shieldTexture.loadFromFile(bRenderer, "./assets/items/shield.png");
-        //swordTexture.loadFromFile(bRenderer, "./assets/items/sword.png");
-        //work on making them buttons
-
         gSpriteClips[0].x = 0;
         gSpriteClips[0].y = 0;
         gSpriteClips[0].w = BUTTON_WIDTH;
@@ -530,7 +523,7 @@ using namespace std;
           else{
             gButtons[i].setPosition(BUTTON_WIDTH * (i-5), BUTTON_HEIGHT * 2);
           }
-        }
+        }//sets ten buttons in two rows of five in inventory window
 
 				GameState* game = new GameState("items.txt", "enemies.txt", gRenderer);
 				game->isPlayOver = false;
@@ -560,22 +553,22 @@ using namespace std;
 
               vector<Item*> playerstuff = dot.controller->getItems();
 
-              if(e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP){
+              if(e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP){
                 for(int i = 0; i < playerstuff.size(); i++){
                   gButtons[i].handleEvent(&e, playerstuff[i], dot);
                 }
-              }
+              }//if the event is a mouse movement passes to button function for inventory
               else{
-							//Handle input for the dot
+							//Handles input for movement
 							  dot.handleEvent( e );
 						  }
             }
 
-						//Move the dot
+						//Move the player
 						dot.move(map_struct);
 						game->isPlayOver = checkBattle(dot.controller, map_struct, battle);
 
-					//Clear screen
+					//Clear screens
 					SDL_RenderClear( gRenderer );
           SDL_RenderClear(bRenderer);
 
@@ -596,7 +589,7 @@ using namespace std;
               shieldTexture.loadFromFile(bRenderer, stuff[i]->texturePath);
               gButtons[i].shieldRender();
             }
-          }
+          }//runs through player items vector and renders the relevant one to the inventory screen
 					HUD("health: " + to_string(dot.controller->health), gFont);
 					HUD("score: " + to_string(game->score), gFont, 30);
 					//Update screen
