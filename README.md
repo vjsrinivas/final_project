@@ -29,7 +29,7 @@
 | 4/25/2019  | 2 hours |
 
 
-#### Josh Spangler:
+#### Josh Spangler: 28.5 hours
 | Date (MM/DD/YY) | Time (hours) 	|
 |--------------------	|--------------------	|
 | 3/22/2019 | 4 hours |
