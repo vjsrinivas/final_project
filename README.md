@@ -16,7 +16,10 @@
 | 04/11/2019 | 5 hours |
 | 04/14/2019 | 5 hours |
 | 4/21/2019  | 5 hours |
-| 4/20/2019  | 4.5 hours |
+| 4/22/2019  | 4.5 hours |
+| 4/24/2019  | 6 hours |
+| 4/25/2019  | 2 hours |
+
 
 #### Josh Spangler:
 | Date (MM/DD/YY) | Time (hours) 	|
