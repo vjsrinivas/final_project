@@ -248,8 +248,8 @@ bool init()
         // Create windows
         gWindow = SDL_CreateWindow("SDL Tutorial", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
             SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS);
-        bWindow = SDL_CreateWindow("Inventory", 0, 0, SCREEN_WIDTH - 440, SCREEN_HEIGHT - 600,
-            SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+        bWindow = SDL_CreateWindow("Inventory", 0, 0, SCREEN_WIDTH-440, SCREEN_HEIGHT-600,
+            SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE);
 
         if (gWindow == NULL || bWindow == NULL)
         {
@@ -572,8 +572,8 @@ int main(int argc, char* args[])
         vector<Position> battle;
         map_struct
             = new Map(0, 0, 2, "test_map.txt", gRenderer, game->get_items(), game->get_enemies());
+	SDL_ShowWindow(bWindow);
 
-        bool first = true;
 	// While application is running
         while (game->playing)
         {
@@ -597,7 +597,7 @@ int main(int argc, char* args[])
 
                     vector<Item*> playerstuff = dot.controller->getItems();
 
-                    if ((bWindow != NULL && first == false) && (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP))
+                    if (bRenderer != NULL && (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP))
                     {
                         for (int i = 0; i < playerstuff.size(); i++)
                         {
@@ -627,7 +627,6 @@ int main(int argc, char* args[])
                 // button render statement here
             }
             vector<Item*> stuff = dot.controller->getItems();
-	    first = false;
 
             for (int i = 0; i < stuff.size(); i++)
             {
