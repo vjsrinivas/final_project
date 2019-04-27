@@ -1,3 +1,9 @@
+/* Final Project - Space Cowboys
+ * Created by: Vijay Rajagopal, Josh Spangler, John Pi
+ * File purpose: This is where the heapification and sorting
+ * of the inventory is supposed to happen (not implemented fully).
+ */
+
 #include<iostream>
 #include <climits>
 #include <vector>

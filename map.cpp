@@ -1,3 +1,10 @@
+/* Final Project - Space Cowboys
+ * Created by: Vijay Rajagopal, Josh Spangler, John Pi
+ * File purpose: This file is where the map, items, NPCs are read in
+ * and rendered onto screen. It is also where the controls are
+ * tracked and implemented.
+ */
+
 #include "map.h"
 
 	Node::Node(){}
