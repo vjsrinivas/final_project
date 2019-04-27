@@ -2,10 +2,10 @@
 ##### Created by: Vijay Rajagopal, Josh Spangler, John Pi
 -----------
 ## Table of Contents:
-- #### [Timelog]()
-- #### [Compiling/Running]()
-- #### [Code Documentation]()
-- #### [How to Play]()
+   - #### [Timelog](#timelog-1)
+   - #### [Compiling/Running](#compilingrunning-1)
+   - #### [Code Documentation](#code-documentation-1)
+   - #### [How to Play](#how-to-play-1)
 -----------
 ## Timelog:
 ### Members:
@@ -56,7 +56,9 @@
 |4/20/19     | 2 hours |
 |4/22/19     | 3 hours |
 |4/24/19     | 4 hours |
+
 -----------
+
 ## Compiling/Running
 ### Game Requirements:
 - SDL2 (Simple DirectMedia Layer) libraries
@@ -65,14 +67,63 @@
         - lSDL2_image (loading/rendering textures)
         - lSDL2_ttf (font rendering)
 - G++ compiler and C++11
-- 
+- Linux/UNIX computer with ``Make`` installed
+
 ### How to compile code:
-The ``Makefile`` should be included with GitHub repository.Simple type "make", and it will compile and create an executable called ``main``.
+The ``Makefile`` should be included with GitHub repository. Simply type "make" into your command console, and it will compile and create an executable called ``main``.
 
 ### How to run code:
-Simply type: ``./main `` to run the program
+Type: ``./main `` to run the program
 
+------
 ## Code Documentation
 ------
+
+### File structure:
+```
++-- assets
+|   +-- characters
+|       +-- ...
+|   +-- items 
+|       +-- ...
+|   +-- ...
++-- enemy.txt
++-- items.txt
++-- game.cpp/game.h
++-- ltexture.cpp/ltexture.h
++-- ltimer.cpp/ltimer.h
++-- player.cpp/player.h
++-- map.cpp/map.h
++-- heaps.cpp
++-- test_map.txt
++-- Makefile
++-- main.cpp
++-- OpenSans-Bold.ttf
+```
+
+### Legend:
+- characters (directory): all of the ingame characters' textures (player + enemies) included
+- items (directory): all of the ingame items' textures
+- assets/[non-directory-files]: all the different terrain texture files
+- enemy.txt (plaintext): contains all the metadata for each enemy type
+- items.txt (plaintext): contains all the metadata for each item type
+- game.cpp/game.h (code file): cpp and header file that calls the main SDL2 libraries
+- ltexture.cpp/ltexture.h (code file): cpp and header file that is a wrapper for SDL texture creation and rendering
+- ltimer.cpp/ltimer.h (code file): cpp and header file that is a wrapper for the SDL time function (relating to threading)
+- player.cpp/player.h (code file): cpp and header file that contains item struct/player class/enemy class/item functions
+- map.cpp/map.h (code file): cpp and header that contains the Map and Dot class; responsible for rendering map, player, NPCs, and items
+- heaps.cpp (code file): unfinished code that would allow us to sort the inventory of the player in realtime
+- test_map.txt (plaintext): simple file that contains the metadata for the only level in the game (contains terrain, item type/placement, and enemy type/placememnt)
+- Makefile (make): allows easy compilation of code
+- main.cpp (code file): cpp file that brings together all the game logic and data; runs entire game; contains GameState class
+- OpenSans-Bold.ttf (font file): main font used in this game
+
+### Known bugs:
+1. When mashing the movement keys, you can unintentionally "jump" over a wall that you're not supposed to (does not apply to the edges of the map).
+2. When mashing the up and left movement keys at the start of the gamae, you can unintentionally "leave" the map area
+
+------
+
 ## How to Play
+
 ------
