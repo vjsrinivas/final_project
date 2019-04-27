@@ -124,7 +124,8 @@ Type: ``./main `` to run the program
 ## How to Play
 
 ### At Launch:
-After launching the game, the player should be presented with two windows: the main map window and an inventory window. 
+After launching the game, the player should be presented with two windows: the main map window and an inventory window:
+![Window of Game](https://i.imgur.com/WGX5fug.png)
 
 ### Movement:
 You can move around and explore the dungeon area with the following keys:
