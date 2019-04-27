@@ -16,7 +16,7 @@ class Node{
 		int terrain;
 		Enemy* currChar = NULL;
 		Item* currItem = NULL;
-};
+};//node class for individual tiles on map
 
 class Map{
 	public:
@@ -33,15 +33,15 @@ class Map{
 	private:
 		void loadtextures();
 		void loadtextures(int,int,int);
-		
+
 		SDL_Renderer* render;
-		
+
 		std::vector< std::vector<Node*> > node_map;
 		std::map<int,std::string> terrain_key;
 		std::vector<LTexture*> textures;
-	
+
 		LTexture* shimmer = new LTexture();
-};
+};//map class that renders the play field
 
 
 //The dot that will move around on the screen
@@ -54,7 +54,7 @@ class Map{
 
 			//Maximum axis velocity of the dot
 			static const int DOT_VEL = 30;
-			
+
 			Player* controller;
 
 			//Initializes the variables
@@ -72,7 +72,7 @@ class Map{
 
 		private:
 			//The X and Y offsets of the dot
-			int mPosX, mPosY;	
+			int mPosX, mPosY;
 			//The velocity of the dot
 			int mVelX, mVelY;
 			int SCREEN_WIDTH;
