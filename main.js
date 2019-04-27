@@ -1,10 +1,13 @@
+var position = {type: 0, x: 0, y: 0};
 var actionitem = ['green','brown','water','nonarea'];
-var npcitems = ['grunt', 'excommunicator', 'eye', 'keyboy'];
+var npcs = ['grunt', 'ex', 'eye', 'key'];
+var items = [''];
 var lastClicked;
 var currentClass;
 var map = createArray(36,36);
+var enemy_list = Array();
+var item_list = Array();
 initMap();
-console.log(map);
 
 var grid = clickableGrid(36,36,function(el,row,col,i){
     console.log("You clicked on element:",el);
@@ -12,8 +15,41 @@ var grid = clickableGrid(36,36,function(el,row,col,i){
     console.log("You clicked on col:",col);
     console.log("You clicked on item #:",i);
 
-    if(currentClass)
-        el.className=currentClass;
+    if(currentClass){
+        var isFromTerrain = actionitem.find(function(element){return element == currentClass});
+        if(!isFromTerrain){
+            //no need to search for items because they need to replace each other anyways:
+            var classlist = el.classList;
+            var canBreak;
+            for(var i=0; i < classlist.length; i++){
+                canBreak = npcs.find(function(element){return element == classlist[i]});
+                if(canBreak)
+                    break;
+            }
+            
+            if(!canBreak){
+                //serach through items array:
+            }
+
+            el.classList.remove(canBreak);
+            el.classList.add(currentClass);
+        } 
+        else{
+            //knowing it's from terrain:
+            //find which existing terrain should be removed and replaced by currentClass (new terrain)
+            var classlist = el.classList;
+            var canBreak;
+            for(var i=0; i < classlist.length; i++){
+                canBreak = actionitem.find(function(element){return element == classlist[i]});
+                if(canBreak)
+                    break;
+            }
+
+            el.classList.remove(canBreak);
+            el.classList.add(currentClass);
+        }
+    }
+    
     if(currentClass == 'brown')
         map[col][row] = 0;
     else if(currentClass == 'green')
@@ -28,7 +64,7 @@ var grid = clickableGrid(36,36,function(el,row,col,i){
     //lastClicked = el;
 });
 
-var action = clickableActionbar(actionitem, function(el){
+var terrain = clickableActionbar(actionitem, function(el){
     console.log("You click on element:",el)
     currentClass = el.className;
     console.log(currentClass);
@@ -39,10 +75,14 @@ var action = clickableActionbar(actionitem, function(el){
     lastClicked = el;
 });
 
-var grid_parent = document.getElementById("grid_parent");
-grid_parent.appendChild(action);
-grid_parent.appendChild(grid);
-download("Test");
+var enemy = clickableActionbar(npcs, function(el){
+    currentClass = el.className;
+    el.className +=' active';
+    //console.log(lastClicked.className);
+    if (lastClicked) lastClicked.className = lastClicked.className.slice(0,-7);
+    //if (lastClicked) console.log(lastClicked.className);
+    lastClicked = el;
+});
 
 function clickableGrid( rows, cols, callback ){
     var i=0;
@@ -53,7 +93,8 @@ function clickableGrid( rows, cols, callback ){
         for (var c=0;c<cols;++c){
             var cell = tr.appendChild(document.createElement('td'));
             cell.className = "nonarea";
-
+            if(c == 0 && r == 0)
+                cell.className += " mc";
             cell.addEventListener('click',(function(el,r,c,i){
                 return function(){
                     callback(el,r,c,i);
@@ -115,8 +156,28 @@ function download(filename){
         }
         str_output += '\n';
     }
+    str_output +='-1\n';
+    
+    if(enemy_list.length != 0){
+
+    }
+    str_output += '-1\n';
+
+    if(item_list.length != 0){
+
+    }
+    str_output += '-1\n';
 
     console.log(str_output);
-    //var downloadbtn = document.createElement('a');
-    //downloadbtn.setAttribute('href', )
+    
+    var downloadbtn = document.createElement('a');
+    downloadbtn.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(str_output));
+    downloadbtn.setAttribute('download', filename);
+    return downloadbtn;
 }
+
+var grid_parent = document.getElementById("grid_parent");
+grid_parent.appendChild(terrain);
+grid_parent.appendChild(enemy);
+grid_parent.appendChild(grid);
+grid_parent.appendChild(download("test.txt"));

@@ -41,4 +41,24 @@
     margin-left: auto;
 }
 
+td.mc{
+    background-image: url("../img/mc.png");
+}
+
+td.ex{
+    background-image: url("../img/enemy_3.png");
+}
+
+td.eye{
+    background-image: url("../img/enemy_4.png");
+}
+
+td.key{
+    background-image: url("../img/enemy_5.png");
+}
+
+td.grunt{
+    background-image: url("../img/enemy_2.png");
+}
+
 .grid_action td.active{ border: 5px solid #000 !important; }
