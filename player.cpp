@@ -160,7 +160,7 @@ void LightPotion(Player*& controller){
 void HealthPotion(Player*& controller){
 	if(controller->health <= 80)
 		controller->health += 30;
-	else if(controller->health > 80 && controller->health <= 100)
+	else if(controller->health > 80)
 		controller->health += 20;
 }
 

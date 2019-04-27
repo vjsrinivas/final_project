@@ -42,6 +42,7 @@ class Player{
 		std::string texturePath;
 		void addItem(Item*);
 		int radius = 1;
+		int score = 0;
 		std::vector<Item*> getItems();
 		Item* currWeap = NULL;
 		Item* currShield = NULL;

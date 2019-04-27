@@ -21,7 +21,6 @@ public:
     GameState(string filename, string enemyFile, SDL_Renderer*);
     ~GameState();
     bool playing = 1;
-    int score = 0;
     bool fightEnemies(Player*& controller, vector<Position>& pos, Map*& map);
     bool isPlayOver;
     void addEnemy(string texturePath);
@@ -54,8 +53,7 @@ void GameState::damageIndicator(std::string dmg, int pos_x, int pos_y)
             printf("Failed to render text texture!\n");
         }
 
-        dmgPopup.render(render, pos_y, pos_x);
-        printf("rendering...\n");
+        dmgPopup.render(render, pos_y, pos_x); 
     }
 } // renders text to indicate when the player has taken damage
 
@@ -89,7 +87,8 @@ bool GameState::fightEnemies(Player*& controller, vector<Position>& pos, Map*& m
             }
 
             damageTaken -= damageBlocked;
-            controller->health -= damageTaken;
+			if(damageTaken >= 0)
+				controller->health -= damageTaken;
             damageIndicator("-" + std::to_string(damageTaken), controller->pos.x, controller->pos.y + 10);
 
             // attack enemy:
@@ -114,7 +113,8 @@ bool GameState::fightEnemies(Player*& controller, vector<Position>& pos, Map*& m
 
             if (enemy_node->currChar->health <= 0)
             {
-                if (enemy_node->currChar->name == "Key_Boy")
+				controller->score += 10;
+				if (enemy_node->currChar->name == "Key_Boy")
                 {
                     printf("You won :-)\n");
                     exit(-1);
@@ -644,7 +644,7 @@ int main(int argc, char* args[])
 
             // Updates the HUD of the game:
             HUD("health: " + to_string(dot.controller->health), gFont);
-            HUD("score: " + to_string(game->score), gFont, 30);
+            HUD("score: " + to_string(dot.controller->score), gFont, 30);
 
             // Update screen
             SDL_RenderPresent(gRenderer);
