@@ -1,5 +1,13 @@
-# CS302/307 Data Structures and Algorithms - Final Project 2019
-
+# CS302/307 Final Project - Space Cowboys
+##### Created by: Vijay Rajagopal, Josh Spangler, John Pi
+-----------
+## Table of Contents:
+- #### [Timelog]()
+- #### [Compiling/Running]()
+- #### [Code Documentation]()
+- #### [How to Play]()
+-----------
+## Timelog:
 ### Members:
 - Vijay Rajagopal [[Milestone](https://github.com/vjsrinivas/final_project/blob/vijay_wip/milestone_VR.txt)] [[Branch](https://github.com/vjsrinivas/final_project/tree/vijay_wip)]
 - Josh Spangler [[Milestone](LINK)] [[Branch](https://github.com/vjsrinivas/final_project/tree/josh_wip)]
@@ -48,3 +56,23 @@
 |4/20/19     | 2 hours |
 |4/22/19     | 3 hours |
 |4/24/19     | 4 hours |
+-----------
+## Compiling/Running
+### Game Requirements:
+- SDL2 (Simple DirectMedia Layer) libraries
+    - Specific libraries:
+        - lSDL2 (main SDL2 library)
+        - lSDL2_image (loading/rendering textures)
+        - lSDL2_ttf (font rendering)
+- G++ compiler and C++11
+- 
+### How to compile code:
+The ``Makefile`` should be included with GitHub repository.Simple type "make", and it will compile and create an executable called ``main``.
+
+### How to run code:
+Simply type: ``./main `` to run the program
+
+## Code Documentation
+------
+## How to Play
+------
