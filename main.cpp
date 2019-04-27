@@ -2,7 +2,7 @@
  * Created by: Vijay Rajagopal, Josh Spangler, John Pi
  * This is the main file that launches the game
  */
- 
+
 #include <stdio.h>
 #include <string>
 #include <vector>
@@ -82,12 +82,12 @@ bool GameState::fightEnemies(Player*& controller, vector<Position>& pos, Map*& m
             // Determine damage against player based on the maxdmg of enemy
             if (enemy_node->currChar->maxdmg != 0)
                 damageTaken = rand() % enemy_node->currChar->maxdmg + 1;
-                
+
             // Player's shield taking some damage off:
             if(controller->currShield != NULL){
               damageBlocked = rand() % controller->currShield->defense;
             }
-            
+
             damageTaken -= damageBlocked;
             controller->health -= damageTaken;
             damageIndicator("-" + std::to_string(damageTaken), controller->pos.x, controller->pos.y + 10);
@@ -351,7 +351,7 @@ bool checkBattle(Player* controller, Map*& map, vector<Position>& battle)
 
     step_x = 0;
     step_y = 1;
-    
+
     bool havetobattle = false;
 
     // This is the main code snippet that checks whether there's an enemy within that block
@@ -448,7 +448,7 @@ void LButton::setPosition(int x, int y)
 void LButton::handleEvent(SDL_Event* e, Item* item, Dot dot)
 {
     // If mouse event happened
-    if (e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN
+    if (e->type == SDL_MOUSEBUTTONDOWN
         || e->type == SDL_MOUSEBUTTONUP)
     {
         // Get mouse position
@@ -573,7 +573,8 @@ int main(int argc, char* args[])
         map_struct
             = new Map(0, 0, 2, "test_map.txt", gRenderer, game->get_items(), game->get_enemies());
 
-        // While application is running
+        bool first = true;
+	// While application is running
         while (game->playing)
         {
             // Handle events on queue
@@ -596,7 +597,7 @@ int main(int argc, char* args[])
 
                     vector<Item*> playerstuff = dot.controller->getItems();
 
-                    if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP)
+                    if ((bWindow != NULL && first == false) && (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP))
                     {
                         for (int i = 0; i < playerstuff.size(); i++)
                         {
@@ -626,6 +627,7 @@ int main(int argc, char* args[])
                 // button render statement here
             }
             vector<Item*> stuff = dot.controller->getItems();
+	    first = false;
 
             for (int i = 0; i < stuff.size(); i++)
             {
@@ -640,11 +642,11 @@ int main(int argc, char* args[])
                     gButtons[i].shieldRender();
                 }
             } // runs through player items vector and renders the relevant one to the inventory screen
-            
+
             // Updates the HUD of the game:
             HUD("health: " + to_string(dot.controller->health), gFont);
             HUD("score: " + to_string(game->score), gFont, 30);
-            
+
             // Update screen
             SDL_RenderPresent(gRenderer);
             SDL_RenderPresent(bRenderer);
