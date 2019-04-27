@@ -103,21 +103,21 @@ Type: ``./main `` to run the program
 ```
 
 ### Legend:
-- characters (directory): all of the ingame characters' textures (player + enemies) included
-- items (directory): all of the ingame items' textures
-- assets/[non-directory-files]: all the different terrain texture files
-- enemy.txt (plaintext): contains all the metadata for each enemy type
-- items.txt (plaintext): contains all the metadata for each item type
-- game.cpp/game.h (code file): cpp and header file that calls the main SDL2 libraries
-- ltexture.cpp/ltexture.h (code file): cpp and header file that is a wrapper for SDL texture creation and rendering
-- ltimer.cpp/ltimer.h (code file): cpp and header file that is a wrapper for the SDL time function (relating to threading)
-- player.cpp/player.h (code file): cpp and header file that contains item struct/player class/enemy class/item functions
-- map.cpp/map.h (code file): cpp and header that contains the Map and Dot class; responsible for rendering map, player, NPCs, and items
-- heaps.cpp (code file): unfinished code that would allow us to sort the inventory of the player in realtime
-- test_map.txt (plaintext): simple file that contains the metadata for the only level in the game (contains terrain, item type/placement, and enemy type/placememnt)
-- Makefile (make): allows easy compilation of code
-- main.cpp (code file): cpp file that brings together all the game logic and data; runs entire game; contains GameState class
-- OpenSans-Bold.ttf (font file): main font used in this game
+- **characters (directory)**: all of the ingame characters' textures (player + enemies) included
+- **items (directory)**: all of the ingame items' textures
+- **assets/[non-directory-files]**: all the different terrain texture files
+- **enemy.txt (plaintext)**: contains all the metadata for each enemy type
+- **items.txt (plaintext)**: contains all the metadata for each item type
+- **game.cpp/game.h (code file)**: cpp and header file that calls the main SDL2 libraries
+- **ltexture.cpp/ltexture.h (code file)**: cpp and header file that is a wrapper for SDL texture creation and rendering
+- **ltimer.cpp/ltimer.h (code file)**: cpp and header file that is a wrapper for the SDL time function (relating to threading)
+- **player.cpp/player.h (code file)**: cpp and header file that contains item struct/player class/enemy class/item functions
+- **map.cpp/map.h (code file)**: cpp and header that contains the Map and Dot class; responsible for rendering map, player, NPCs, and items
+- **heaps.cpp (code file)**: unfinished code that would allow us to sort the inventory of the player in realtime
+- **test_map.txt (plaintext)**: simple file that contains the metadata for the only level in the game (contains terrain, item type/placement, and enemy type/placememnt)
+- **Makefile (make)**: allows easy compilation of code
+- **main.cpp (code file)**: cpp file that brings together all the game logic and data; runs entire game; contains GameState class
+- **OpenSans-Bold.ttf (font file)**: main font used in this game
 
 ### Known bugs:
 1. When mashing the movement keys, you can unintentionally "jump" over a wall that you're not supposed to (does not apply to the edges of the map).
