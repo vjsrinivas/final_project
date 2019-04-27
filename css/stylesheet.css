@@ -1,0 +1,44 @@
+.grid { margin:1em auto; border-collapse:collapse }
+.grid td {
+    cursor:pointer;
+    width:30px; height:30px;
+    border:1px solid #ccc;
+    text-align:center;
+    font-family:sans-serif; font-size:13px
+}
+.grid td.clicked {
+    background-color:yellow;
+    font-weight:bold; color:red;
+}
+
+.grid_action { margin:1em auto; border-collapse:collapse }
+.grid_action td {
+    cursor:pointer;
+    width:30px; height:30px;
+    border:1px solid #ccc;
+    text-align:center;
+    font-family:sans-serif; font-size:13px
+}
+.grid_action td.clicked {
+    background-color:yellow;
+    font-weight:bold; color:red;
+}
+
+.green{ background-color: #008000; }
+
+.brown{ background-color: #8B4513; }
+
+.water{ background-color: #40a4df; }
+
+.nonarea{ background-color: #acacac; }
+
+#chooser{
+}
+
+.center{
+    width: 1080px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.grid_action td.active{ border: 5px solid #000 !important; }
