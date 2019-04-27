@@ -123,10 +123,10 @@ Type: ``./main `` to run the program
 
 ## How to Play
 
-#### At Launch:
+### At Launch:
 After launching the game, the player should be presented with two windows: the main map window and an inventory window. 
 
-#### Movement:
+### Movement:
 You can move around and explore the dungeon area with the following keys:
 - ↑ `up arrow` - allows player to move one cell up
 - ↓ `down arrow` - allows player to move one cell down
@@ -137,7 +137,8 @@ Other tips while traveling through the map:
 - You can traverse through any type of terrain other than the grey blocks.
 - **To fight**: simply move next to an enemy and the enemies within a block radius will automatically start engaging you. You will also automatically fight back. The fighting is based on random damages with influence from max/min damages from weapons and max defense from shields.
 
-#### Items:
+
+### Items:
 Items are extremely important in fighting and surviving through the map. You can pick up items by simply moving over them. The items that are picked up will show up on the inventory window. **Items do not automatically equip**, and you will have to manually click on the type of sword and shield you want to fight with. **Potions, such as light and health potions, will be automatically used when picked up**.
 
 ![alt text][stick]  **Stick**: Just a stick of wood. First weapon you will encounter, but it's pretty weak so find another weapon quickly!
@@ -158,7 +159,8 @@ Items are extremely important in fighting and surviving through the map. You can
 
 ![alt text][health]**Health Potion**: This potion will give back 30+ health if your health is below 100. If your health is at 100, then you will be "supercharged" by 20 health points each time you pick a health potion up.
 
-#### Characters:
+
+### Characters:
 ![alt text][mc]  **Robot Cowboy** (You): A rouge robot cowboy trying to escape a dungeon made by his creator
 
 ![alt text][grunt]  **Grunt**: A common enemy you will find around the game. He is considered an easy target to take down if you have the right weapon/shield
