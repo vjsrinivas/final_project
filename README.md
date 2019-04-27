@@ -135,6 +135,7 @@ You can move around and explore the dungeon area with the following keys:
 
 Other tips while traveling through the map:
 - You can traverse through any type of terrain other than the grey blocks.
+- **To fight**: simply move next to an enemy and the enemies within a block radius will automatically start engaging you. You will also automatically fight back. The fighting is based on random damages with influence from max/min damages from weapons and max defense from shields.
 
 #### Items:
 Items are extremely important in fighting and surviving through the map. You can pick up items by simply moving over them. The items that are picked up will show up on the inventory window. **Items do not automatically equip**, and you will have to manually click on the type of sword and shield you want to fight with. **Potions, such as light and health potions, will be automatically used when picked up**.
