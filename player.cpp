@@ -1,31 +1,43 @@
+/* Final Project - Space Cowboys
+ * Created by: Vijay Rajagopal, Josh Spangler, John Pi
+ * File purpose: player.cpp is the implementation of 
+ * prototypes of functions found in player.h
+ */
+
 #include "player.h"
 
+// Item constructor makes sure that item textures are loaded in before anything else
 Item::Item(SDL_Renderer* gRenderer, std::string path){
 	if(!texture->loadFromFile(gRenderer, path))
 		printf("Error loading texture!\n");
-	//if(texture == NULL) { printf("Error loading texture!\n");
 }
 
+// Debug function to figure out where the player is
 void Player::printPos(){
 	printf("Player is at: [x=%i, y=%i]\n",pos.x, pos.y);
 }
 
+// Player constructor that assigns default texture
 Player::Player(){
 	texturePath = "./assets/characters/cs317_enemy_1.png";
 }
 
+// Optional constructor that allows you to change main char's texture
 Player::Player(std::string path){
 	texturePath = path;
 }
 
+// Helper function to add item to player's inventory
 void Player::addItem(Item* currItem){
 	items.push_back(currItem);
 }
 
+// Helper function that returns the 
 std::vector<Item*> Player::getItems(){
 	return items;
 }
 
+// Implementation from header file - reads item file, creates new item objects, and puts them in given vector
 void loadItemFile(SDL_Renderer* render, std::string filename, std::vector<Item*>& items){
 	std::ifstream file(filename.c_str());
 
@@ -42,6 +54,8 @@ void loadItemFile(SDL_Renderer* render, std::string filename, std::vector<Item*>
 			new_item->itemName = name;
 			new_item->texturePath = holder;
 
+			// file >> holder is used to get rid of the descriptors in the txt file
+			// (ex): dmg: 30 (file >> holder) gets rid of dmg from the stream
 			if(file >> holder)
 				printf("Entering %s of %s\n", holder.c_str(), new_item->itemName.c_str());
 			file >> new_item->damage;
@@ -62,22 +76,20 @@ void loadItemFile(SDL_Renderer* render, std::string filename, std::vector<Item*>
 	}
 }
 
-void Enemy::printPos(){
-		//printf("Enemy is at: [x=%i, y=%i]\n",pos.x, pos.y);
-}
-
+// Enemy constructor to default to a certain texture
 Enemy::Enemy(){
 	texturePath="./assets/characters/cs317_enemy_2.png";
 
 }
 
+// Enemy constructor that allows you to assign a specific texture path for Enemy objects
 Enemy::Enemy(std::string path){
 	texturePath=path;
 
 }
 
+// Construct that copies details from another Enemy object (used during enemy creation)
 Enemy::Enemy(Enemy* newspawn){
-	printf("copying... %s", newspawn->name.c_str());
 	name = newspawn->name;
 	texturePath = newspawn->texturePath;
 	texture = newspawn->texture;
@@ -85,6 +97,7 @@ Enemy::Enemy(Enemy* newspawn){
 	maxdmg = newspawn->maxdmg;
 }
 
+// Similar function to loadItemsFile but for enemies (will contain a certain amount of enemy types to later be called)
 void loadEnemyFile(std::string filename, std::vector<Enemy*>& enemy){
 	std::ifstream file(filename.c_str());
 
@@ -119,10 +132,10 @@ void executeItem(Item* item, Player*& controller){
 	std::string type = item->type;
 
 	if(type == "weapon"){
-		//do nothing? maybe add
+		// Do nothing? maybe add inventory functionality
 	}
 	else if(type == "other"){
-		//execute function immediately
+		// Execute function immediately
 		if(item->func == "LightPotion"){
 			LightPotion(controller);
 		}
@@ -131,17 +144,19 @@ void executeItem(Item* item, Player*& controller){
 		}
 	}
 	else if(type=="shield"){
-		printf("picked up shield\n");
+		printf("Picked up shield\n");
 	}
 	else{
 		printf("error! item type not right!\n");
 	}
 }
 
+// Light potion increases the viewability of a player
 void LightPotion(Player*& controller){
 	controller->radius += 1;
 }
 
+// Health potion increases health (if already at 100, it gives you extra 20 instead of 30)
 void HealthPotion(Player*& controller){
 	if(controller->health <= 80)
 		controller->health += 30;
