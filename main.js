@@ -1,26 +1,32 @@
+// Global variables:
+// Types of terrain:
 var actionitem = ['brown','green','nonarea','water'];
+// Types of enemies:
 var npcs = ['grunt', 'ex', 'eye', 'key'];
+// Types of usable items:
 var items = ['stick','normal','raj','john','lance','shield_1', 'shield_2','light', 'health'];
 var lastClicked;
+// What type of item to be place in the grid
 var currentClass;
+// Main matrix to store the terrain data:
 var map = createArray(36,36);
+// A map structure that stores the items/enemies coordinates and types:
 var extra_list = new Map();
 var radius = 1;
 
 initMap();
 
 var grid = clickableGrid(36,36,function(el,row,col,i){
-    console.log("You clicked on element:",el);
-    console.log("You clicked on row:",row);
-    console.log("You clicked on col:",col);
-    console.log("You clicked on item #:",i);
-
     if(currentClass){
+        // Trying to find out if currentClass wants to input terrain or items/enemies:
         var isFromTerrain = actionitem.find(function(element){return element == currentClass});
+
+        // If currentClass wants to input a item or enemy, find existing item/enemy and remove:
         if(!isFromTerrain){
-            //no need to search for items because they need to replace each other anyways:
+            // No need to search for items because they need to replace each other anyways:
             var classlist = el.classList;
             var canBreak;
+
             for(var i=0; i < classlist.length; i++){
                 canBreak = npcs.find(function(element){return element == classlist[i]});
                 if(canBreak){
@@ -28,8 +34,9 @@ var grid = clickableGrid(36,36,function(el,row,col,i){
                 }
             }
             
+            // If canBreak is false, then no enemy was detected at cell; search through items
             if(!canBreak){
-                //search through items array:
+                // Search through items array:
                 for(var i=0; i < classlist.length; i++){
                     canBreak = items.find(function(element){return element == classlist[i]});
                     if(canBreak)
@@ -37,16 +44,19 @@ var grid = clickableGrid(36,36,function(el,row,col,i){
                 }
             }
 
+            // Remove existing item/enemy from screen
             if(canBreak)
                 el.classList.remove(canBreak);
 
-            console.log(canBreak + " " + currentClass);
+            // If currentClass and previous item/enemy being removed is the same, then consider a delete instead of replace:
             if(canBreak == currentClass){
                 el.classList.remove(currentClass);
+                // Find coordinate entry in map of existing item/enemy and remove:
                 var coor_string = col.toString() + "," + row.toString();
                 extra_list.delete(coor_string);
             }
             else{       
+                // Add new item/enemy to screen and to the map
                 el.classList.add(currentClass);
                 var coor_string = col.toString() + "," + row.toString();
                 var new_item = {type: 0, x: 0, y: 0};
@@ -57,8 +67,8 @@ var grid = clickableGrid(36,36,function(el,row,col,i){
             }
         } 
         else{
-            //knowing it's from terrain:
-            //find which existing terrain should be removed and replaced by currentClass (new terrain)
+            // Knowing it's from terrain:
+            // Find which existing terrain should be removed and replaced by currentClass (new terrain)
             var classlist = el.classList;
             var canBreak;
             for(var i=0; i < classlist.length; i++){
@@ -72,31 +82,29 @@ var grid = clickableGrid(36,36,function(el,row,col,i){
         }
     }
     
+    // Assign new terrain value to map matrix:
     var itemindex =  actionitem.findIndex(function(element){return element == currentClass;});
     if(itemindex != -1)
         fillInMap(row,col,itemindex);
 });
 
+// Responsible for displaying an 'active' selection when a terrain on the action bar is clicked
 var terrain = clickableActionbar(actionitem, function(el){
-    console.log("You click on element:",el)
     currentClass = el.className;
-    console.log(currentClass);
     el.className +=' active';
-    //console.log(lastClicked.className);
     if (lastClicked) lastClicked.className = lastClicked.className.slice(0,-7);
-    //if (lastClicked) console.log(lastClicked.className);
     lastClicked = el;
 });
 
+// Responsible for displaying an 'active' selection when an item on the action bar is clicked
 var enemy = clickableActionbar(npcs, function(el){
     currentClass = el.className;
     el.className +=' active';
-    //console.log(lastClicked.className);
     if (lastClicked) lastClicked.className = lastClicked.className.slice(0,-7);
-    //if (lastClicked) console.log(lastClicked.className);
     lastClicked = el;
 });
 
+// Responsible for displaying an 'active' selection when an enemy on the action bar is clicked
 var item_bar = clickableActionbar(items, function(el){
     currentClass = el.className;
     el.className +=' active';
@@ -110,34 +118,33 @@ function fillInMap(row,col,itemindex){
     var tmprad = radius-1;
     if(tmprad == 0){
         map[row][col] = itemindex;
-        console.log("hit");
     }
     else{
-        console.log("size: "+tmprad);
         var box = [];
-        var width = (2*tmprad)+1;
+
+        // Generate a box of coordinate offsets to add to the "center" (the cell that was clicked)
         for(var i=-1*tmprad; i <= tmprad; i++){
             for(var j=-1*tmprad; j <= tmprad; j++){
                 var coordinate = {x:i,y:j};
                 box.push(coordinate);
             }
         }
-        console.log(box);
-        console.log(col);
-        //after generating box, assign values to map
+
+        // After generating box, assign values to map
         for(var i=0; i < box.length; i++){
-            //if(box[i].x + parseInt(col) >= 0 && box[i].y + parseInt(row) >= 0 && box[i].x + parseInt(col) < 36 && box[i].y + parseInt(row) < 36){
+            // If the coordinate result is negative or above 36,36, ignore that cell:
             if(box[i].x + col >= 0 && box[i].y + row >= 0 && box[i].x + col < 36 && box[i].y + row < 36){
                 map[box[i].y+row][box[i].x+col] = itemindex;
             }
         }
 
-        //render it (slowish):
+        // Render the entire table again (slowish):
         var grid = document.getElementsByClassName('grid')[0];
         for(var i=0; i < grid.childNodes.length; i++){
             var tmp = grid.childNodes[i].childNodes;
             for(var j=0; j < tmp.length; j++){
-                //remove old terrain:
+                
+                // Remove old terrain:
                 for(var x = 0; x < actionitem.length; x++){
                     if(tmp[j].classList.length == 0)
                         break;
@@ -148,10 +155,10 @@ function fillInMap(row,col,itemindex){
                 tmp[j].classList.add(actionitem[map[i][j]]);
             }
         }
-        console.log(map);
     }
 }   
 
+// Function creates a table that represents the grid of the map:
 function clickableGrid( rows, cols, callback ){
     var i=0;
     var grid = document.createElement('table');
@@ -160,9 +167,15 @@ function clickableGrid( rows, cols, callback ){
         var tr = grid.appendChild(document.createElement('tr'));
         for (var c=0;c<cols;++c){
             var cell = tr.appendChild(document.createElement('td'));
+
+            // Every cell is defaulted to "nonarea"
             cell.className = "nonarea";
+            
+            // Special case: first cell is where the player's character is
+            // Render player's character:
             if(c == 0 && r == 0)
                 cell.className += " mc";
+
             cell.addEventListener('click',(function(el,r,c,i){
                 return function(){
                     callback(el,r,c,i);
@@ -173,6 +186,7 @@ function clickableGrid( rows, cols, callback ){
     return grid;
 }
 
+// Similar to clickableGrid, but used to apply new terrain/items to map
 function clickableActionbar(item, callback){
     var grid = document.createElement('table');
     grid.className = 'grid_action';
@@ -189,6 +203,7 @@ function clickableActionbar(item, callback){
     return grid;
 }
 
+// Fill map matrix will 2s
 function initMap(){
     for(var i=0; i < map.length; i++){
         for(var j=0; j < 36; j++){
@@ -198,6 +213,7 @@ function initMap(){
 }
 
 // Taken from: https://bit.ly/2GEi9Pd
+// Helper function that can create 2D arrays
 function createArray(length) {
     var arr = new Array(length || 2),
         i = length;
@@ -210,10 +226,12 @@ function createArray(length) {
     return arr;
 }
 
+// Function that takes 
 function download(filename){
+    // Given textures of terrain (always constant):
     var str_output ='0 ./assets/dirt.png\r\n1 ./assets/grass.jpg\r\n2 ./assets/nonarea.jpg\r\n3 ./assets/water.jpg\r\n4 ./assets/dark.png\r\n-1\r\n36 36\r\n';
     
-    //stringify entire map array
+    // Stringify entire map array
     for(var i=0; i < map.length; i++){
         for(var j=0; j < map[i].length; j++){
             if(j != map[i].length-1){
@@ -226,7 +244,7 @@ function download(filename){
     }
     str_output +='-1\r\n';
     
-
+    // Go through extra_list map and add item/enemy type/x-coordinate/y-coordinate
     var enemy_list = [];
     if(extra_list.size != 0){
         for(const k of extra_list.values()){
@@ -234,12 +252,14 @@ function download(filename){
                 str_output += k.type-4 + " " + k.y + " " + k.x + "\r\n";
             }
             else{
+               // If type is greater than 4, then it has to be an enemy:
                enemy_list.push(k);
             }
         }
     }
     str_output += '-1\r\n';
 
+    // Add enemy type, x-coordinate, y-coordinate:
     if(enemy_list.length != 0){
         for(var i=0; i < enemy_list.length; i++){
             str_output += enemy_list[i].type + " " + enemy_list[i].y + " " + enemy_list[i].x + "\r\n";
@@ -247,9 +267,8 @@ function download(filename){
     }
     str_output += '-1\r\n';
 
-    //console.log(str_output);
-    
     // Taken from: https://bit.ly/2oKP2ll
+    // These statements create a link label and adds the exported map string as link; allows browser to auto-download
     var downloadbtn = document.createElement('a');
     downloadbtn.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(str_output));
     downloadbtn.setAttribute('download', filename);
@@ -260,6 +279,7 @@ function download(filename){
     document.body.removeChild(downloadbtn);
 }
 
+// Helper function that helps organize items and enemies inside a single map:
 function determineID(id){
     switch(id){
         case "grunt":
@@ -314,8 +334,6 @@ function import_file(data){
     while(split_data[trav_i] != "-1"){
         var split_row = split_data[trav_i].split(" ");
         for(var j=0; j < split_row.length; j++){
-            //console.log("grid: "+i+", "+j);
-            //console.log(split_row[j]);
             map[i][j] = parseInt(split_row[j]);
         }
         trav_i++;
@@ -324,8 +342,9 @@ function import_file(data){
 
     trav_i++;
     var two_times = 0;
-    //Get data from items:
-    //clear old items:
+
+    // Get data from items:
+    // Clear old items:
     extra_list.clear();
     while(two_times < 2){
         if(split_data[trav_i] == "-1")
@@ -333,21 +352,17 @@ function import_file(data){
         else{
             var split_row = split_data[trav_i].split(" ");
             
-            //add to extralist:
-            //for(var i=0; i < split_row.length; i++){
-                var combined_key = split_row[1]+","+split_row[2];
-                var tmp;
-                if(two_times == 0)
-                    tmp = {type: parseInt(split_row[0])+4, x: parseInt(split_row[2]), y: parseInt(split_row[1])};
-                else
-                    tmp = {type: parseInt(split_row[0]), x: parseInt(split_row[2]), y: parseInt(split_row[1])};
-                extra_list.set(combined_key,tmp);
-            //}
+            // Add to extralist:
+            var combined_key = split_row[1]+","+split_row[2];
+            var tmp;
+            if(two_times == 0)
+                tmp = {type: parseInt(split_row[0])+4, x: parseInt(split_row[2]), y: parseInt(split_row[1])};
+            else
+                tmp = {type: parseInt(split_row[0]), x: parseInt(split_row[2]), y: parseInt(split_row[1])};
+            extra_list.set(combined_key,tmp);
         }
         trav_i++;
     }
-    console.log(map);
-    console.log(extra_list);
 }
 
 function force_redraw(){
@@ -356,7 +371,7 @@ function force_redraw(){
     for(var i=0; i < grid.childNodes.length; i++){
         var tmp = grid.childNodes[i].childNodes;
         for(var j=0; j < tmp.length; j++){
-            //remove old terrain:
+            // Remove old terrain:
             for(var x = 0; x < actionitem.length; x++){
                 if(tmp[j].classList.length == 0)
                     break;
@@ -366,7 +381,7 @@ function force_redraw(){
             }
             tmp[j].classList.add(actionitem[map[i][j]]);
             
-            // remove all enemies
+            // Remove all enemies
             for(var x = 0; x < npcs.length; x++){
                 if(tmp[j].classList.length == 1)
                     break;
@@ -375,7 +390,7 @@ function force_redraw(){
                 }
             }
             
-            // if there's still something, then it must be items, remove that:
+            // If there's still something, then it must be items, remove that:
             if(tmp[j].classList.length != 1){
                 for(var x = 0; x < items.length; x++){
                     if(tmp[j].classList.length == 1)
@@ -386,10 +401,10 @@ function force_redraw(){
                 }
             }
 
-            //add the extra stuff: 
+            // Add the extra stuff: 
             for(var x of extra_list.values()){
                 if(x.x ==i && x.y == j){
-                    //draw it:
+                    // Draw it:
                     if(x.type < 4){
                         tmp[j].classList.add(npcs[x.type]);
                     }
@@ -402,6 +417,7 @@ function force_redraw(){
     }
 }
 
+// Helper function that reads in a selected file as a single string:
 // Taken from: http://researchhubs.com/post/computing/javascript/open-a-local-file-with-javascript.html
 function readSingleFile(e) {
     var file = e.target.files[0];
@@ -409,8 +425,10 @@ function readSingleFile(e) {
       return;
     }
     var reader = new FileReader();
+    //readAsText is an async function, but triggers onload() when it is done:
     reader.onload = function(e) {
       var contents = e.target.result;
+
       // Run reading here:
       import_file(contents);
       force_redraw();
@@ -421,6 +439,7 @@ function readSingleFile(e) {
 var grid_parent = document.getElementById("grid_parent");
 var increment = document.getElementById('brush');
 
+// Add grid and all the action bars to a parent div which can center them:
 grid_parent.appendChild(terrain);
 grid_parent.appendChild(enemy);
 grid_parent.appendChild(item_bar);
@@ -430,5 +449,6 @@ document.getElementById("exportme").addEventListener("click", function(){
     download(filename);
 }, false);
 
+// Listen for any change in value for the increment input's value:
 document.getElementById('file-input').addEventListener('change', readSingleFile, false);
 increment.addEventListener('change', function(){radius = increment.value}, false)
