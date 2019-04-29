@@ -1,6 +1,6 @@
 var actionitem = ['brown','green','nonarea','water'];
 var npcs = ['grunt', 'ex', 'eye', 'key'];
-var items = ['shield_1', 'shield_2', 'stick', 'normal', 'raj', 'lance', 'john','light', 'health'];
+var items = ['stick','normal','raj','john','lance','shield_1', 'shield_2','light', 'health'];
 var lastClicked;
 var currentClass;
 var map = createArray(36,36);
@@ -17,13 +17,11 @@ var grid = clickableGrid(36,36,function(el,row,col,i){
         var isFromTerrain = actionitem.find(function(element){return element == currentClass});
         if(!isFromTerrain){
             //no need to search for items because they need to replace each other anyways:
-            var isEnemy = 0;
             var classlist = el.classList;
             var canBreak;
             for(var i=0; i < classlist.length; i++){
                 canBreak = npcs.find(function(element){return element == classlist[i]});
                 if(canBreak){
-                    isEnemy = 1;
                     break;
                 }
             }
@@ -65,10 +63,8 @@ var grid = clickableGrid(36,36,function(el,row,col,i){
     }
     
     var itemindex =  actionitem.findIndex(function(element){return element == currentClass;});
-    console.log(itemindex);
     if(itemindex != -1)
         map[row][col] = itemindex;
-    console.log(map);
 });
 
 var terrain = clickableActionbar(actionitem, function(el){
@@ -241,19 +237,6 @@ function determineID(id){
     }
 }
 
-function determineTerrainID(id){
-    if(id == 'brown')
-        return 0;
-    else if(id == 'green')
-        return 1;
-    else if(id == 'nonarea')
-        return 2;
-    else if(id == 'water')
-        return 3;
-    else
-        return 2;
-}
-
 function import_file(data){
     var split_data = data.split('\r\n');
     var trav_i = 0; 
@@ -267,30 +250,93 @@ function import_file(data){
     trav_i++;
     var i = 0;
 
-    console.log(split_data);
+    //Get data for grid:
     while(split_data[trav_i] != "-1"){
         var split_row = split_data[trav_i].split(" ");
-        console.log(split_row);
         
         for(var j=0; j < split_row.length; j++){
-            console.log("grid: "+i+", "+j);
-            console.log(split_row[j]);
+            //console.log("grid: "+i+", "+j);
+            //console.log(split_row[j]);
             map[i][j] = parseInt(split_row[j]);
         }
         trav_i++;
         i++;
     }
+    
+    trav_i++;
+    var two_times = 0;
+    //Get data from items:
+    //clear old items:
+    extra_list.clear();
+    while(two_times < 2){
+        if(split_data[trav_i] == "-1")
+            two_times++;
+        else{
+            var split_row = split_data[trav_i].split(" ");
+            
+            //add to extralist:
+            //for(var i=0; i < split_row.length; i++){
+                var combined_key = split_row[1]+","+split_row[2];
+                var tmp;
+                if(two_times == 0)
+                    tmp = {type: parseInt(split_row[0])+4, x: parseInt(split_row[2]), y: parseInt(split_row[1])};
+                else
+                    tmp = {type: parseInt(split_row[0]), x: parseInt(split_row[2]), y: parseInt(split_row[1])};
+                extra_list.set(combined_key,tmp);
+            //}
+        }
+        trav_i++;
+    }
     console.log(map);
+    console.log(extra_list);
 }
 
 function force_redraw(){
     var grid = document.getElementsByClassName("grid")[0];
-    
+
     for(var i=0; i < grid.childNodes.length; i++){
         var tmp = grid.childNodes[i].childNodes;
         for(var j=0; j < tmp.length; j++){
-            //console.log(grid.childNodes[i]);
-            tmp[j].classList.add();
+            //remove old terrain:
+            for(var x = 0; x < actionitem.length; x++){
+                if(tmp[j].classList.length == 0)
+                    break;
+                else{
+                    tmp[j].classList.remove(actionitem[x]);
+                }
+            }
+            tmp[j].classList.add(actionitem[map[i][j]]);
+            
+            for(var x = 0; x < npcs.length; x++){
+                if(tmp[j].classList.length == 1)
+                    break;
+                else{
+                    tmp[j].classList.remove(npcs[x]);
+                }
+            }
+            
+            if(tmp[j].classList.length != 1){
+                for(var x = 0; x < items.length; x++){
+                    if(tmp[j].classList.length == 1)
+                        break;
+                    else{
+                        tmp[j].classList.remove(npcs[x]);
+                    }
+                }
+            }
+
+            //add the extra stuff: 
+            for(var x of extra_list.values()){
+                if(x.x ==i && x.y == j){
+                    //draw it:
+                    if(x.type < 4){
+                        tmp[j].classList.add(npcs[x.type]);
+                    }
+                    else{
+                        tmp[j].classList.add(items[x.type-4]);
+                    }   
+                }
+            }
         }
     }
 }
