@@ -37,14 +37,22 @@ var grid = clickableGrid(36,36,function(el,row,col,i){
 
             if(canBreak)
                 el.classList.remove(canBreak);
-            el.classList.add(currentClass);
-            
-            var coor_string = col.toString() + "," + row.toString();
-            var new_item = {type: 0, x: 0, y: 0};
-            new_item.type = determineID(currentClass);
-            new_item.x = row;
-            new_item.y = col;
-            extra_list.set(coor_string,new_item);
+
+            console.log(canBreak + " " + currentClass);
+            if(canBreak == currentClass){
+                el.classList.remove(currentClass);
+                var coor_string = col.toString() + "," + row.toString();
+                extra_list.delete(coor_string);
+            }
+            else{       
+                el.classList.add(currentClass);
+                var coor_string = col.toString() + "," + row.toString();
+                var new_item = {type: 0, x: 0, y: 0};
+                new_item.type = determineID(currentClass);
+                new_item.x = row;
+                new_item.y = col;
+                extra_list.set(coor_string,new_item);
+            }
         } 
         else{
             //knowing it's from terrain:
