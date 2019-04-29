@@ -5,6 +5,8 @@ var lastClicked;
 var currentClass;
 var map = createArray(36,36);
 var extra_list = new Map();
+var radius = 1;
+
 initMap();
 
 var grid = clickableGrid(36,36,function(el,row,col,i){
@@ -72,7 +74,7 @@ var grid = clickableGrid(36,36,function(el,row,col,i){
     
     var itemindex =  actionitem.findIndex(function(element){return element == currentClass;});
     if(itemindex != -1)
-        map[row][col] = itemindex;
+        fillInMap(row,col,itemindex);
 });
 
 var terrain = clickableActionbar(actionitem, function(el){
@@ -103,6 +105,52 @@ var item_bar = clickableActionbar(items, function(el){
     //if (lastClicked) console.log(lastClicked.className);
     lastClicked = el;
 });
+
+function fillInMap(row,col,itemindex){
+    var tmprad = radius-1;
+    if(tmprad == 0){
+        map[row][col] = itemindex;
+        console.log("hit");
+    }
+    else{
+        console.log("size: "+tmprad);
+        var box = [];
+        var width = (2*tmprad)+1;
+        for(var i=-1*tmprad; i <= tmprad; i++){
+            for(var j=-1*tmprad; j <= tmprad; j++){
+                var coordinate = {x:i,y:j};
+                box.push(coordinate);
+            }
+        }
+        console.log(box);
+        console.log(col);
+        //after generating box, assign values to map
+        for(var i=0; i < box.length; i++){
+            //if(box[i].x + parseInt(col) >= 0 && box[i].y + parseInt(row) >= 0 && box[i].x + parseInt(col) < 36 && box[i].y + parseInt(row) < 36){
+            if(box[i].x + col >= 0 && box[i].y + row >= 0 && box[i].x + col < 36 && box[i].y + row < 36){
+                map[box[i].y+row][box[i].x+col] = itemindex;
+            }
+        }
+
+        //render it (slowish):
+        var grid = document.getElementsByClassName('grid')[0];
+        for(var i=0; i < grid.childNodes.length; i++){
+            var tmp = grid.childNodes[i].childNodes;
+            for(var j=0; j < tmp.length; j++){
+                //remove old terrain:
+                for(var x = 0; x < actionitem.length; x++){
+                    if(tmp[j].classList.length == 0)
+                        break;
+                    else{
+                        tmp[j].classList.remove(actionitem[x]);
+                    }
+                }
+                tmp[j].classList.add(actionitem[map[i][j]]);
+            }
+        }
+        console.log(map);
+    }
+}   
 
 function clickableGrid( rows, cols, callback ){
     var i=0;
@@ -315,6 +363,7 @@ function force_redraw(){
             }
             tmp[j].classList.add(actionitem[map[i][j]]);
             
+            // remove all enemies
             for(var x = 0; x < npcs.length; x++){
                 if(tmp[j].classList.length == 1)
                     break;
@@ -323,6 +372,7 @@ function force_redraw(){
                 }
             }
             
+            // if there's still something, then it must be items, remove that:
             if(tmp[j].classList.length != 1){
                 for(var x = 0; x < items.length; x++){
                     if(tmp[j].classList.length == 1)
@@ -366,6 +416,8 @@ function readSingleFile(e) {
   }
 
 var grid_parent = document.getElementById("grid_parent");
+var increment = document.getElementById('brush');
+
 grid_parent.appendChild(terrain);
 grid_parent.appendChild(enemy);
 grid_parent.appendChild(item_bar);
@@ -376,3 +428,4 @@ document.getElementById("exportme").addEventListener("click", function(){
 }, false);
 
 document.getElementById('file-input').addEventListener('change', readSingleFile, false);
+increment.addEventListener('change', function(){radius = increment.value}, false)
