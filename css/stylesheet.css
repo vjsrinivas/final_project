@@ -1,3 +1,7 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 .grid { margin:1em auto; border-collapse:collapse }
 .grid td {
     cursor:pointer;
@@ -59,6 +63,46 @@ td.key{
 
 td.grunt{
     background-image: url("../img/enemy_2.png");
+}
+
+td.shield_1{
+    background-image: url("../img/shield_1.png");
+}
+
+td.shield_2{
+    background-image: url("../img/shield_2.png");
+}
+
+td.stick{
+    background-image: url("../img/sword_6.png");
+}
+
+td.normal{
+    background-image: url("../img/sword_5.png");    
+}
+
+td.raj{
+    background-image: url("../img/sword_3.png");
+}
+
+td.lance{
+    background-image: url("../img/sword_4.png");
+}
+
+td.john{
+    background-image: url("../img/sword_2.png");
+}
+
+td.light{
+    background-image: url("../img/light_potion.png");
+}
+
+td.health{
+    background-image: url("../img/health_potion.png");
+}
+
+.map_action{
+    margin-top: 5px;
 }
 
 .grid_action td.active{ border: 5px solid #000 !important; }
