@@ -294,7 +294,11 @@ function determineID(id){
 }
 
 function import_file(data){
+    console.log("Getting data from items...");
     var split_data = data.split('\r\n');
+    if(split_data.length == 1){
+        split_data = data.split('\n');
+    }
     var trav_i = 0; 
     while(split_data[trav_i] != '-1'){trav_i++;};
     trav_i++;
@@ -305,11 +309,10 @@ function import_file(data){
     
     trav_i++;
     var i = 0;
-
+    console.log(split_data);
     //Get data for grid:
     while(split_data[trav_i] != "-1"){
         var split_row = split_data[trav_i].split(" ");
-        
         for(var j=0; j < split_row.length; j++){
             //console.log("grid: "+i+", "+j);
             //console.log(split_row[j]);
@@ -318,7 +321,7 @@ function import_file(data){
         trav_i++;
         i++;
     }
-    
+
     trav_i++;
     var two_times = 0;
     //Get data from items:
